@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'social_django',       # Add this Line
     'googleauth',   # Add your application 
+    'main', 
 ]
 
 # Add this section 
@@ -70,6 +71,8 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'
 SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = 'http://127.0.0.1:8000/social-auth/complete/google-oauth2/'
 
 ROOT_URLCONF = 'mysite.urls'
+
+AUTH_USER_MODEL = 'main.CustomUser'
 
 TEMPLATES = [
     {

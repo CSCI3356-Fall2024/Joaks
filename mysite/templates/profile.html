@@ -5,4 +5,5 @@
 {% block content %}
 <h1>Profile</h1>
 <p>Welcome to the profile page, @{{ request.user }}.</p>
+<p>Your current role is: {{ user.role }}</p> 
 {% endblock %}

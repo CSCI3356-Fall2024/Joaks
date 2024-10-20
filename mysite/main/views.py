@@ -22,10 +22,11 @@ def rewards_view(request, *args, **kwargs):
 def profile_view(request, *args, **kwargs):
     print(args, kwargs)
     print(request.user)
-    return render(request, 'profile.html', {})
+    return render(request, 'profile.html', {'user' : request.user})
 
 
 def campaigns_view(request, *args, **kwargs):
     print(args, kwargs)
     print(request.user)
     return render(request, 'campaigns.html', {})
+
