@@ -1,8 +1,127 @@
 {% extends 'base.html' %}
+{% load static %}
 
-{% block title %} Actions {% endblock %}
+{% block title %}
+Actions
+{% endblock %}
 
 {% block content %}
-<h1>Actions</h1>
-<p>Welcome to the actions page, @{{ request.user }}.</p>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f0fff0;
+    }
+    .container {
+        display: flex;
+        min-height: 100vh;
+    }
+    .sidebar {
+        width: 200px;
+        background-color: #4caf50;
+        padding: 20px;
+    }
+    .logo {
+        width: 100px;
+        height: 100px;
+        background-color: white;
+        border-radius: 50%;
+        margin: 0 auto 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .nav-button {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        background-color: #ffd700;
+        border: none;
+        border-radius: 5px;
+        text-align: center;
+        text-decoration: none;
+        color: black;
+        font-weight: bold;
+    }
+    .main-content {
+        flex-grow: 1;
+        padding: 20px;
+    }
+    .challenges {
+        margin-bottom: 40px;
+    }
+    .challenge-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+    }
+    .challenge-card {
+        border: 2px solid #000;
+        border-radius: 10px;
+        padding: 15px;
+        text-align: center;
+    }
+    .challenge-image {
+        width: 100%;
+        height: 150px;
+        background-color: #ddd;
+        margin-bottom: 10px;
+    }
+    h1 {
+        border-bottom: 2px solid #000;
+        padding-bottom: 10px;
+    }
+    h2 {
+        margin-top: 0;
+    }
+</style>
+
+<div class="container">
+    <div class="sidebar">
+        <div class="logo">
+            <!-- Replace with your actual logo -->
+            <img
+                src="{% static 'path/to/your/logo.png' %}"
+                alt="Logo"
+                style="max-width: 80px; max-height: 80px"
+            />
+        </div>
+        <a href="{% url 'home' %}" class="nav-button">Home</a>
+        <a href="{% url 'actions' %}" class="nav-button">Actions</a>
+        <a href="{% url 'profile' %}" class="nav-button">Profile</a>
+    </div>
+    <div class="main-content">
+        <h1>ACTIONS</h1>
+
+        <div class="challenges">
+            <h2>This Week's Challenges</h2>
+            <div class="challenge-grid">
+                {% for i in '123'|make_list %}
+                <div class="challenge-card">
+                    <div class="challenge-image"></div>
+                    <h3>Title of Challenge</h3>
+                    <p>Points: __</p>
+                    <p>Expires: ____</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="challenges">
+            <h2>Year-Round Challenges</h2>
+            <div class="challenge-grid">
+                {% for i in '123'|make_list %}
+                <div class="challenge-card">
+                    <div class="challenge-image"></div>
+                    <h3>Title of Challenge</h3>
+                    <p>Points: __</p>
+                    <p>Expires: ____</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
