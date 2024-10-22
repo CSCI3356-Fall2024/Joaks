@@ -15,4 +15,4 @@ class CustomUser(AbstractUser):
     double_major = models.CharField(max_length=50, blank=True)
     referral = models.CharField(max_length=50, blank=True)
     profile_picture = models.ImageField(upload_to='profile_pictures/', blank=True, null=True)
-
+    finished_profile = models.BooleanField(default=False)
