@@ -3,7 +3,7 @@
 {% block title %} Edit Profile {% endblock %}
 
 {% block content %}
-Edit Profile
+
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{form.as_p}}
