@@ -20,6 +20,7 @@
     <!-- User Info -->
     <h2 style="font-size: 24px; margin-bottom: 5px;">{{ request.user.get_full_name }}</h2>
     <p style="color: #666; margin-bottom: 30px;">{{ request.user.email }}</p>
+    <p style="color: #666; margin-bottom: 30px;">{{ request.user.role }}</p>
 
     <!-- Form Fields Container -->
     <form method="post">
