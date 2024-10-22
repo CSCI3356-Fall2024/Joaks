@@ -2,7 +2,7 @@ from django import forms
 from .models import CustomUser
 from .majors import MAJORS
 
-class EditProfile(forms.Form):
+class EditProfile(forms.ModelForm):
     class Meta:
         model = CustomUser
         fields = ['class_year', 'school', 'major', 'double_major', 'referral']

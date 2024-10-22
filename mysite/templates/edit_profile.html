@@ -4,9 +4,9 @@
 
 {% block content %}
 Edit Profile
-<form method="post" action="/create/">
+<form method="post">
     {% csrf_token %}
-    {{form}}
-    <button type="submit", name="save">Create New</button>
+    {{form.as_p}}
+    <button type="submit", name="save">Update</button>
 </form>
 {% endblock %}
