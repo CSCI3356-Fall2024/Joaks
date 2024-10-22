@@ -31,6 +31,7 @@ def campaigns_view(request, *args, **kwargs):
     print(request.user)
     return render(request, 'campaigns.html', {})
 
+
 def edit_profile_view(request, *args, **kwargs):
     print(args, kwargs)
     print(request.user)
