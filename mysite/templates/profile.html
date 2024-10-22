@@ -19,77 +19,79 @@
 
     <!-- User Info -->
     <h2 style="font-size: 24px; margin-bottom: 5px;">{{ request.user.get_full_name }}</h2>
-    <p style="color: #666; margin-bottom: 30px;">{{ request.user.email }}</p>
+    <p style="color: #666; margin-bottom: 10px;">{{ request.user.email }}</p>
     <p style="color: #666; margin-bottom: 30px;">{{ request.user.role }}</p>
 
-    <!-- Form Fields Container -->
-    <form method="post">
-        {% csrf_token %}
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 800px;">
-            <!-- Class Year Field -->
-            <div style="border: 2px solid #ddd; border-radius: 10px;">
-                <div style="background-color: #ffd97d; padding: 8px; border-radius: 8px 8px 0 0;">
-                    CLASS YEAR
-                </div>
-                <input type="text" placeholder="Enter text" 
-                       style="width: calc(100% - 16px); padding: 8px; border: none; background: none;"
-                       value="{{ user.class_year }}">
+    
+<!-- Form Fields Container -->
+<form method="post">
+    {% csrf_token %}
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 800px;">
+        <!-- Class Year Field -->
+        <div style="border: 2px solid #ddd; border-radius: 10px;">
+            <div style="background-color: #ffd97d; padding: 8px; border-radius: 8px 8px 0 0;">
+                CLASS YEAR
             </div>
-
-            <!-- School Field -->
-            <div style="border: 2px solid #ddd; border-radius: 10px;">
-                <div style="background-color: #ffd97d; padding: 8px; border-radius: 8px 8px 0 0;">
-                    SCHOOL
-                </div>
-                <input type="text" placeholder="Enter text" 
-                       style="width: calc(100% - 16px); padding: 8px; border: none; background: none;"
-                       value="{{ user.school }}">
-            </div>
-
-            <!-- Major(s) Field -->
-            <div style="border: 2px solid #ddd; border-radius: 10px;">
-                <div style="background-color: #ffd97d; padding: 8px; border-radius: 8px 8px 0 0;">
-                    MAJOR(S)
-                </div>
-                <input type="text" placeholder="Enter text" 
-                       style="width: calc(100% - 16px); padding: 8px; border: none; background: none; margin-bottom: 4px;"
-                       value="{{ user.major }}">
-                <input type="text" placeholder="Optional text" 
-                       style="width: calc(100% - 16px); padding: 8px; border: none; background: none;"
-                       value="{{ user.double_major }}">
-            </div>
-
-                        <!-- Minor(s) Field -->
-            <div style="border: 2px solid #ddd; border-radius: 10px;">
-                <div style="background-color: #ffd97d; padding: 8px; border-radius: 8px 8px 0 0;">
-                    MINOR(S)
-                </div>
-                <input type="text" placeholder="Optional text" 
-                       style="width: calc(100% - 16px); padding: 8px; border: none; background: none; margin-bottom: 4px;"
-                       value="{{ user.minor }}">
-                <input type="text" placeholder="Optional text" 
-                       style="width: calc(100% - 16px); padding: 8px; border: none; background: none;"
-                       value="{{ user.double_minor }}">
-            </div>
-
-            <!-- Email of Referrer Field -->
-            <div style="border: 2px solid #ddd; border-radius: 10px;">
-                <div style="background-color: #ffd97d; padding: 8px; border-radius: 8px 8px 0 0;">
-                    EMAIL OF REFERRER
-                </div>
-                <input type="email" placeholder="Optional text" 
-                       style="width: calc(100% - 16px); padding: 8px; border: none; background: none;"
-                       value="{{ user.referrer_email }}">
+            <div style="padding: 8px;">
+                {{ user.class_year }}
             </div>
         </div>
 
-        <!-- Save Button -->
-        <div style="text-align: right; margin-top: 20px;">
-            <a href="/edit-profile/" 
-               style="background-color: #4CAF50; color: white; padding: 8px 20px; border: none; border-radius: 5px; text-decoration: none;">
-                Edit Profile
-            </a>
+        <!-- School Field -->
+        <div style="border: 2px solid #ddd; border-radius: 10px;">
+            <div style="background-color: #ffd97d; padding: 8px; border-radius: 8px 8px 0 0;">
+                SCHOOL
+            </div>
+            <div style="padding: 8px;">
+                {{ user.school }}
+            </div>
         </div>
-    </form>
+
+        <!-- Major(s) Field -->
+        <div style="border: 2px solid #ddd; border-radius: 10px;">
+            <div style="background-color: #ffd97d; padding: 8px; border-radius: 8px 8px 0 0;">
+                MAJOR(S)
+            </div>
+            <div style="padding: 8px;">
+                {{ user.major }}
+            </div>
+            <div style="padding: 8px;">
+                {{ user.double_major }}
+            </div>
+        </div>
+
+        <!-- Minor(s) Field -->
+        <div style="border: 2px solid #ddd; border-radius: 10px;">
+            <div style="background-color: #ffd97d; padding: 8px; border-radius: 8px 8px 0 0;">
+                MINOR(S)
+            </div>
+            <div style="padding: 8px;">
+                {{ user.minor }}
+            </div>
+            <div style="padding: 8px;">
+                {{ user.double_minor }}
+            </div>
+        </div>
+
+        <!-- Email of Referrer Field -->
+        <div style="border: 2px solid #ddd; border-radius: 10px;">
+            <div style="background-color: #ffd97d; padding: 8px; border-radius: 8px 8px 0 0;">
+                EMAIL OF REFERRER
+            </div>
+            <div style="padding: 8px;">
+                {{ user.referral }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Save Button -->
+    <div style="text-align: right; margin-top: 20px;">
+        <a href="/edit-profile/" 
+           style="background-color: #4CAF50; color: white; padding: 8px 20px; border: none; border-radius: 5px; text-decoration: none;">
+            Edit Profile
+        </a>
+    </div>
+</form>
+
 </div>
 {% endblock %}
