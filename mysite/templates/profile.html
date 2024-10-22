@@ -1,9 +1,47 @@
 {% extends 'base.html' %}
 
-{% block title %} Profile {% endblock %}
+{% block title %}Profile{% endblock %}
 
 {% block content %}
-<h1>Profile</h1>
-<p>Welcome to the profile page, @{{ request.user }}.</p>
-<p>Your current role is: {{ user.role }}</p> 
+<div class="profile-container">
+    <h1>PROFILE</h1>
+    
+    <div class="profile-photo">
+        <div style="text-align: center;">
+            <div style="font-size: 80px; color: #ccc;">👤</div>
+            <div style="color: #666;">Add optional photo</div>
+        </div>
+    </div>
+
+    <h2>{{ request.user.get_full_name }}</h2>
+    <p>{{ request.user.email }}</p>
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="profile-grid">
+            <div class="input-group">
+                <label>CLASS YEAR</label>
+                <input type="text" name="class_year" value="{{ user.class_year }}">
+            </div>
+            
+            <div class="input-group">
+                <label>SCHOOL</label>
+                <input type="text" name="school" value="{{ user.school }}">
+            </div>
+            
+            <div class="input-group">
+                <label>MAJOR(S)</label>
+                <input type="text" name="major" value="{{ user.major }}">
+                <input type="text" name="major2" value="{{ user.major2 }}" placeholder="Optional text">
+            </div>
+            
+            <div class="input-group">
+                <label>EMAIL OF REFERRER</label>
+                <input type="email" name="referrer_email" value="{{ user.referrer_email }}" placeholder="Optional text">
+            </div>
+        </div>
+
+        <button type="submit" class="save-button">Save</button>
+    </form>
+</div>
 {% endblock %}
