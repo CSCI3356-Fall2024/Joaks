@@ -36,7 +36,7 @@ def edit_profile_view(request, *args, **kwargs):
     print(request.user)
     user = request.user
     if request.method == "POST":
-        form = EditProfile(request.POST, instance=user)
+        form = EditProfile(request.POST, request.FILES, instance=user)
         if form.is_valid():
             form.save()
             return redirect('profile')

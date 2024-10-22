@@ -5,7 +5,7 @@ from .majors import MAJORS
 class EditProfile(forms.ModelForm):
     class Meta:
         model = CustomUser
-        fields = ['class_year', 'school', 'major', 'double_major', 'referral']
+        fields = ['class_year', 'school', 'major', 'double_major', 'referral', 'profile_picture']
     CLASS_YEARS = [
         ('2025', '2025'), 
         ('2026', '2026'), 
@@ -30,3 +30,4 @@ class EditProfile(forms.ModelForm):
     major = forms.ChoiceField(choices=MAJORS, required=True)
     double_major = forms.ChoiceField(choices=[('', '')] + list(MAJORS), required=False)
     referral = forms.CharField(max_length=50, required=False)
+    profile_picture = forms.ImageField(required=False)
