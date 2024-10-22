@@ -1,21 +1,96 @@
 {% extends 'base.html' %}
 
-{% block title %} Home {% endblock %}
+{% block title %}Home{% endblock %}
 
 {% block content %}
-<h1>Home</h1>
-<h2>Leaderboard</h2>
-<ul>
-    <li>
-        Joe Smith - 50
-    </li>
-    <li>
-        John Doe - 30
-    </li>
-    <li>
-        Sally Sullivan - 10
-    </li>
-</ul>
+<div class="home-container">
+    <h1 style="border-bottom: 2px solid black; padding-bottom: 10px;">HOME</h1>
 
-<a href="{% url 'logout' %}">Log out</a>
+    <div style="display: flex; justify-content: space-between; margin-bottom: 40px;">
+        <!-- Planet Pioneers Section -->
+        <div style="width: 48%;">
+            <h2 style="font-size: 2em; margin-bottom: 20px;">Planet Pioneers</h2>
+            <div style="border: 2px solid #ccc; border-radius: 15px; padding: 20px; background-color: white;">
+                <div style="background-color: #ffd97d; padding: 10px; border-radius: 5px; margin-bottom: 15px;">
+                    <strong>Total Points Accumulated</strong>
+                </div>
+                <div style="margin-left: 10px;">
+                    <p style="display: flex; justify-content: space-between; margin: 10px 0;">
+                        <span><span style="color: #4CAF50;">1</span> Jennifer Smith</span>
+                        <span>57</span>
+                    </p>
+                    <p style="display: flex; justify-content: space-between; margin: 10px 0;">
+                        <span><span style="color: #4CAF50;">2</span> Robert Davis</span>
+                        <span>51</span>
+                    </p>
+                    <p style="display: flex; justify-content: space-between; margin: 10px 0;">
+                        <span><span style="color: #4CAF50;">3</span> Elizabeth Wilson</span>
+                        <span>39</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Eco Evangelists Section -->
+        <div style="width: 48%;">
+            <h2 style="font-size: 2em; margin-bottom: 20px;">Eco Evangelists</h2>
+            <div style="border: 2px solid #ccc; border-radius: 15px; padding: 20px; background-color: white;">
+                <div style="background-color: #ffd97d; padding: 10px; border-radius: 5px; margin-bottom: 15px;">
+                    <strong>Total Users Referred</strong>
+                </div>
+                <div style="margin-left: 10px;">
+                    <p style="display: flex; justify-content: space-between; margin: 10px 0;">
+                        <span><span style="color: #4CAF50;">1</span> William Taylor</span>
+                        <span>20</span>
+                    </p>
+                    <p style="display: flex; justify-content: space-between; margin: 10px 0;">
+                        <span><span style="color: #4CAF50;">2</span> Mary Johnson</span>
+                        <span>19</span>
+                    </p>
+                    <p style="display: flex; justify-content: space-between; margin: 10px 0;">
+                        <span><span style="color: #4CAF50;">3</span> James Wilson</span>
+                        <span>16</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- The Daily Green Section -->
+    <h2 style="font-size: 2em; margin: 40px 0 20px;">The Daily Green</h2>
+    <div style="display: flex; justify-content: space-between;">
+        <!-- This Week's Challenges -->
+        <div style="width: 31%; border: 2px solid #ccc; border-radius: 15px; padding: 20px; background-color: white;">
+            <h3 style="font-size: 1.2em; margin-bottom: 15px;">This Week's Challenges</h3>
+            <ul style="list-style-type: disc; margin-left: 20px;">
+                <li>Lorem ipsum dolor sit amet.</li>
+                <li>Consectetur adipiscing elit.</li>
+                <li>Sed do eiusmod tempor.</li>
+                <li>Incididunt ut labore et...</li>
+            </ul>
+        </div>
+
+        <!-- Upcoming Events -->
+        <div style="width: 31%; border: 2px solid #ccc; border-radius: 15px; padding: 20px; background-color: white;">
+            <h3 style="font-size: 1.2em; margin-bottom: 15px;">Upcoming Events</h3>
+            <ul style="list-style-type: disc; margin-left: 20px;">
+                <li>Lorem ipsum dolor sit amet.</li>
+                <li>Consectetur adipiscing elit.</li>
+                <li>Sed do eiusmod tempor.</li>
+                <li>Incididunt ut labore et...</li>
+            </ul>
+        </div>
+
+        <!-- BC Milestones -->
+        <div style="width: 31%; border: 2px solid #ccc; border-radius: 15px; padding: 20px; background-color: white;">
+            <h3 style="font-size: 1.2em; margin-bottom: 15px;">BC Milestones</h3>
+            <ul style="list-style-type: disc; margin-left: 20px;">
+                <li>Lorem ipsum dolor sit amet.</li>
+                <li>Consectetur adipiscing elit.</li>
+                <li>Sed do eiusmod tempor.</li>
+                <li>Incididunt ut labore et...</li>
+            </ul>
+        </div>
+    </div>
+</div>
 {% endblock %}
