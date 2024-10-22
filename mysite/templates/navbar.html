@@ -1,19 +1,32 @@
-<nav>
-    <ul>
-        <li>
-            <a href="{% url 'home' %}">Home</a>
+<nav style="position: fixed; width: 250px; height: 100%; background-color: #4CAF50; padding: 20px; box-sizing: border-box;">
+    <div style="text-align: center; margin-bottom: 30px;">
+        <img src="/static/logo.png" alt="Logo" style="width: 100px; height: 100px; background: white; border-radius: 50%;">
+    </div>
+    <ul style="list-style: none; padding: 0;">
+        <li style="margin-bottom: 10px;">
+            <a href="{% url 'home' %}" style="display: block; padding: 10px; background-color: #ffd97d; color: black; text-decoration: none; border-radius: 5px; {% if request.path == '/home/' %} border: 2px solid #8b4513; {% endif %}">
+                Home
+            </a>
         </li>
-        <li>
-            <a href="{% url 'actions' %}">Actions</a>
+        <li style="margin-bottom: 10px;">
+            <a href="{% url 'actions' %}" style="display: block; padding: 10px; background-color: #ffd97d; color: black; text-decoration: none; border-radius: 5px; {% if request.path == '/actions/' %} border: 2px solid #8b4513; {% endif %}">
+                Actions
+            </a>
         </li>
-        <li>
-            <a href="{% url 'rewards' %}">My Rewards</a>
+        <li style="margin-bottom: 10px;">
+            <a href="{% url 'rewards' %}" style="display: block; padding: 10px; background-color: #ffd97d; color: black; text-decoration: none; border-radius: 5px; {% if request.path == '/rewards/' %} border: 2px solid #8b4513; {% endif %}">
+                My Rewards
+            </a>
         </li>
-        <li>
-            <a href="{% url 'profile' %}">Profile</a>
+        <li style="margin-bottom: 10px;">
+            <a href="{% url 'profile' %}" style="display: block; padding: 10px; background-color: #ffd97d; color: black; text-decoration: none; border-radius: 5px; {% if request.path == '/profile/' %} border: 2px solid #8b4513; {% endif %}">
+                Profile
+            </a>
         </li>
-        <li>
-            <a href="{% url 'campaigns' %}">Campaigns</a>
+        <li style="margin-bottom: 10px;">
+            <a href="{% url 'campaigns' %}" style="display: block; padding: 10px; background-color: #ffd97d; color: black; text-decoration: none; border-radius: 5px; {% if request.path == '/campaigns/' %} border: 2px solid #8b4513; {% endif %}">
+                Campaigns
+            </a>
         </li>
     </ul>
 </nav>
