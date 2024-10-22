@@ -3,45 +3,79 @@
 {% block title %}Profile{% endblock %}
 
 {% block content %}
-<div class="profile-container">
-    <h1>PROFILE</h1>
-    
-    <div class="profile-photo">
-        <div style="text-align: center;">
-            <div style="font-size: 80px; color: #ccc;">👤</div>
-            <div style="color: #666;">Add optional photo</div>
-        </div>
+<div style="padding: 20px;">
+    <!-- Profile Header -->
+    <h1 style="border-bottom: 2px solid black; margin-bottom: 30px;">PROFILE</h1>
+
+    <!-- Profile Photo Container -->
+    <div style="width: 200px; height: 200px; border: 2px solid #ccc; border-radius: 10px; margin-bottom: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+        <!-- Simple user icon using SVG -->
+        <svg width="60" height="60" viewBox="0 0 60 60">
+            <circle cx="30" cy="20" r="15" stroke="black" stroke-width="2" fill="none"/>
+            <path d="M5 60 C5 45, 55 45, 55 60" stroke="black" stroke-width="2" fill="none"/>
+        </svg>
+        <p style="color: #666; margin-top: 10px;">Add optional photo</p>
     </div>
 
-    <h2>{{ request.user.get_full_name }}</h2>
-    <p>{{ request.user.email }}</p>
+    <!-- User Info -->
+    <h2 style="font-size: 24px; margin-bottom: 5px;">{{ request.user.get_full_name }}</h2>
+    <p style="color: #666; margin-bottom: 30px;">{{ request.user.email }}</p>
 
+    <!-- Form Fields Container -->
     <form method="post">
         {% csrf_token %}
-        <div class="profile-grid">
-            <div class="input-group">
-                <label>CLASS YEAR</label>
-                <input type="text" name="class_year" value="{{ user.class_year }}">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 800px;">
+            <!-- Class Year Field -->
+            <div style="border: 2px solid #ddd; border-radius: 10px;">
+                <div style="background-color: #ffd97d; padding: 8px; border-radius: 8px 8px 0 0;">
+                    CLASS YEAR
+                </div>
+                <input type="text" placeholder="Enter text" 
+                       style="width: calc(100% - 16px); padding: 8px; border: none; background: none;"
+                       value="{{ user.class_year }}">
             </div>
-            
-            <div class="input-group">
-                <label>SCHOOL</label>
-                <input type="text" name="school" value="{{ user.school }}">
+
+            <!-- School Field -->
+            <div style="border: 2px solid #ddd; border-radius: 10px;">
+                <div style="background-color: #ffd97d; padding: 8px; border-radius: 8px 8px 0 0;">
+                    SCHOOL
+                </div>
+                <input type="text" placeholder="Enter text" 
+                       style="width: calc(100% - 16px); padding: 8px; border: none; background: none;"
+                       value="{{ user.school }}">
             </div>
-            
-            <div class="input-group">
-                <label>MAJOR(S)</label>
-                <input type="text" name="major" value="{{ user.major }}">
-                <input type="text" name="major2" value="{{ user.major2 }}" placeholder="Optional text">
+
+            <!-- Major(s) Field -->
+            <div style="border: 2px solid #ddd; border-radius: 10px;">
+                <div style="background-color: #ffd97d; padding: 8px; border-radius: 8px 8px 0 0;">
+                    MAJOR(S)
+                </div>
+                <input type="text" placeholder="Enter text" 
+                       style="width: calc(100% - 16px); padding: 8px; border: none; background: none; margin-bottom: 4px;"
+                       value="{{ user.major1 }}">
+                <input type="text" placeholder="Optional text" 
+                       style="width: calc(100% - 16px); padding: 8px; border: none; background: none;"
+                       value="{{ user.major2 }}">
             </div>
-            
-            <div class="input-group">
-                <label>EMAIL OF REFERRER</label>
-                <input type="email" name="referrer_email" value="{{ user.referrer_email }}" placeholder="Optional text">
+
+            <!-- Email of Referrer Field -->
+            <div style="border: 2px solid #ddd; border-radius: 10px;">
+                <div style="background-color: #ffd97d; padding: 8px; border-radius: 8px 8px 0 0;">
+                    EMAIL OF REFERRER
+                </div>
+                <input type="email" placeholder="Optional text" 
+                       style="width: calc(100% - 16px); padding: 8px; border: none; background: none;"
+                       value="{{ user.referrer_email }}">
             </div>
         </div>
 
-        <button type="submit" class="save-button">Save</button>
+        <!-- Save Button -->
+        <div style="text-align: right; margin-top: 20px;">
+            <button type="submit" 
+                    style="background-color: #4CAF50; color: white; padding: 8px 20px; border: none; border-radius: 5px; cursor: pointer;">
+                Save
+            </button>
+        </div>
     </form>
 </div>
 {% endblock %}
