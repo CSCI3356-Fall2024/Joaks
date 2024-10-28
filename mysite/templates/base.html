@@ -32,7 +32,13 @@
 </head>
 <body>
     <a href="/logout" class="logout-button">Logout</a>
-    {% include 'navbar.html' %}
+    
+    {% if user.role == "supervisor" %}
+        {% include 'supervisor_navbar.html' %}
+    {% else %}
+        {% include 'student_navbar.html' %}
+    {% endif %}
+    
     <div class="content-area">
         {% block content %}{% endblock %}
     </div>
