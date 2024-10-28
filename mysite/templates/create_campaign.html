@@ -4,6 +4,20 @@
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{form.as_p}}
+
+    <!-- Render all form fields except locations -->
+    {{ form.name.as_p }}
+    {{ form.description.as_p }}
+    {{ form.start_date.as_p }}
+    {{ form.end_date.as_p }}
+    {{ form.points.as_p }}
+    {{ form.show_news.as_p }}
+    {{ form.integration_method.as_p }}
+
+    <!-- Add the "Select All Green2Go Locations" checkbox above the locations checkboxes -->
+    {{ form.select_green2go.as_p }}
+    {{ form.locations.as_p }}
+
     <button type="submit", name="save">Save</button>
 </form>
 

@@ -36,6 +36,18 @@ class EditProfile(forms.ModelForm):
     profile_picture = forms.ImageField(required=False)
 
 class CreateCampaign(forms.ModelForm):
+
+    LOCATION_CHOICES = Campaign.LOCATION_CHOICES
+    locations = forms.MultipleChoiceField(
+        choices=LOCATION_CHOICES,
+        widget=forms.CheckboxSelectMultiple,
+        required=False
+    )
+    select_green2go = forms.BooleanField(
+        required=False,
+        label="OR Select All Green2Go Locations"
+    )
+
     class Meta:
         model = Campaign
         fields = ['name', 'description', 'start_date', 'end_date', 'locations', 'points', 'show_news', 'integration_method']
@@ -43,3 +55,6 @@ class CreateCampaign(forms.ModelForm):
             'start_date': forms.DateInput(attrs={'type': 'date'}),  # HTML5 date picker
             'end_date': forms.DateInput(attrs={'type': 'date'}),
         }
+
+        def clean_locations(self):
+            return ', '.join(self.cleaned_data['locations'])

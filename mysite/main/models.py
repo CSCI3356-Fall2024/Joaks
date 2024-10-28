@@ -20,6 +20,25 @@ class CustomUser(AbstractUser):
     finished_profile = models.BooleanField(default=False)
 
 class Campaign(models.Model):
+    LOCATION_CHOICES = (
+        ('BEAN', 'The Bean Counter'),
+        ('CARNEY', 'Carney Dining Room'),
+        ('CAFE129', 'Café 129'),
+        ('CHOC', 'Chocolate Bar'),
+        ('CORO', 'CoRo Café & Market'),
+        ('EAGLES', "Eagle's Nest"),
+        ('HILLSIDE', 'Hillside Café'),
+        ('LEGAL', 'Legal Grounds'),
+        ('ADDIES', "The Loft @ Addie's"),
+        ('LOWER', 'Lower Live'),
+        ('LYONS', 'Lyons Hall'),
+        ('STUART', 'Stuart Dining Hall'),
+        ('BAKERY', 'BC Bakery'),
+        ('CONCESSIONS', 'Concessions'),
+        ('MARKET', 'The Market'),
+        ('TULLY', 'Tully Cafe'),
+        ('BROOK', 'Brookline Campus Dining Hall'),
+    )
     name = models.CharField(max_length=100)  # Name of the campaign
     description = models.TextField()  # Detailed description of the campaign
     start_date = models.DateField()  # Campaign start date
@@ -28,6 +47,8 @@ class Campaign(models.Model):
     points = models.IntegerField()  # Points associated with the campaign
     show_news = models.BooleanField(default=True)  # Boolean field to indicate if the campaign should be showed in the news feed
     integration_method = models.CharField(max_length=255)
+    created_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='campaigns')
+
 
     def __str__(self):
         return self.name
