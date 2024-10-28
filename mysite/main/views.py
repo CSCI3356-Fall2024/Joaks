@@ -8,7 +8,11 @@ from datetime import date
 def home_view(request, *args, **kwargs):
     print(args, kwargs)
     print(request.user)
-    return render(request, 'home.html', {})
+    campaigns = Campaign.objects.all()
+    context = {
+        'campaigns' : campaigns
+    }
+    return render(request, 'home.html', context)
 
 
 def actions_view(request, *args, **kwargs):
