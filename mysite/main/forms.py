@@ -33,3 +33,6 @@ class EditProfile(forms.ModelForm):
     double_minor = forms.ChoiceField(choices=[('', '')] + list(MAJORS), required=False)
     referral = forms.CharField(max_length=50, required=False)
     profile_picture = forms.ImageField(required=False)
+
+class CreateCampaign(forms.ModelForm):
+    
