@@ -61,15 +61,21 @@ def create_campaign_view(request):
     if request.method == "POST":
         form = CreateCampaign(request.POST)
         if form.is_valid():
-            campaign = form.save(commit=False)  # Create instance but don’t save to DB yet
-            campaign.created_by = request.user # Set the current user as the creator
-            form.save()
+            campaign = form.save(commit=False)
+            campaign.created_by = request.user
+
+            # Check `select_green2go` using cleaned_data after form validation
+            if form.cleaned_data.get('select_green2go'):
+                # Set the Green2Go locations if the checkbox is checked
+                green2go_locations = ['LOWER', 'CARNEY', 'STUART', 'ADDIES', 'EAGLES']
+                campaign.locations = ', '.join(green2go_locations)
+            else:
+                # Save the user-selected locations
+                campaign.locations = ', '.join(form.cleaned_data['locations'])
+
+            campaign.save()
             return redirect('campaigns')
     else:
-        # Initialize the form with Green2Go locations if requested
-        initial_data = {}
-        if request.GET.get('select_green2go') == '1':  # Set Green2Go locations
-            initial_data['locations'] = ['NY', 'SF', 'HOU']  # Set based on Green2Go locations
-        form = CreateCampaign(initial=initial_data)
+        form = CreateCampaign()
 
     return render(request, 'create_campaign.html', {'form': form})

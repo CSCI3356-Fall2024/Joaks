@@ -41,11 +41,13 @@ class CreateCampaign(forms.ModelForm):
     locations = forms.MultipleChoiceField(
         choices=LOCATION_CHOICES,
         widget=forms.CheckboxSelectMultiple,
-        required=False
+        required=False,
+        label="OR Manually input locations",  # Custom label here
     )
+
     select_green2go = forms.BooleanField(
         required=False,
-        label="OR Select All Green2Go Locations"
+        label="Select All Green2Go Locations"
     )
 
     class Meta:
