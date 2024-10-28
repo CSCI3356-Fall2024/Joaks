@@ -5,4 +5,11 @@
 {% block content %}
 <h1>Campaigns</h1>
 <p>Welcome to the campaigns page, @{{ request.user }}.</p>
+
+<div style="text-align: right; margin-top: 20px;">
+    <a href="/create-campaign/" 
+       style="background-color: #9a1113; color: white; padding: 8px 20px; border: none; border-radius: 5px; text-decoration: none;">
+        Create New Campaign
+    </a>
+</div>
 {% endblock %}

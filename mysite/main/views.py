@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .forms import EditProfile
+from .forms import EditProfile, CreateCampaign
 
 # Create your views here.
 def home_view(request, *args, **kwargs):
@@ -55,3 +55,15 @@ def edit_profile_view(request, *args, **kwargs):
         form = EditProfile(instance=user)  # Prepopulate form with current user data
 
     return render(request, 'edit_profile.html', {"form": form})
+
+
+def create_campaign_view(request):
+    if request.method == "POST":
+        form = CreateCampaign(request.POST)
+        if form.is_valid():
+            form.save()  # Save the form data to create a new campaign
+            return redirect('campaigns')  # Redirect to a success page
+    else:
+        form = CreateCampaign()  # Render an empty form
+
+    return render(request, 'create_campaign.html', {'form': form})
