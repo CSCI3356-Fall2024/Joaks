@@ -1,6 +1,7 @@
 from django import forms
 from .models import CustomUser
 from .majors import MAJORS
+from .models import Campaign
 
 class EditProfile(forms.ModelForm):
     class Meta:
@@ -35,4 +36,10 @@ class EditProfile(forms.ModelForm):
     profile_picture = forms.ImageField(required=False)
 
 class CreateCampaign(forms.ModelForm):
-    
+    class Meta:
+        model = Campaign
+        fields = ['name', 'description', 'start_date', 'end_date', 'locations', 'points', 'show_news', 'integration_method']
+        widgets = {
+            'start_date': forms.DateInput(attrs={'type': 'date'}),  # HTML5 date picker
+            'end_date': forms.DateInput(attrs={'type': 'date'}),
+        }
