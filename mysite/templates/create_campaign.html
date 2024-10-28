@@ -1,0 +1,17 @@
+<title>Create Campaign</title>
+<h2>Create Campaign</h2>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{form.as_p}}
+    <button type="submit", name="save">Update</button>
+</form>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 20;
+        padding: 0;
+        background-color: #f0fff0;
+    }
+</style>
