@@ -1,5 +1,8 @@
 from django.shortcuts import render, redirect
 from .forms import EditProfile, CreateCampaign
+from .models import Campaign
+from datetime import date
+
 
 # Create your views here.
 def home_view(request, *args, **kwargs):
@@ -25,11 +28,6 @@ def profile_view(request, *args, **kwargs):
     print(request.user)
     return render(request, 'profile.html', {'user' : request.user})
 
-
-def campaigns_view(request, *args, **kwargs):
-    print(args, kwargs)
-    print(request.user)
-    return render(request, 'campaigns.html', {})
 
 
 
@@ -79,3 +77,20 @@ def create_campaign_view(request):
         form = CreateCampaign()
 
     return render(request, 'create_campaign.html', {'form': form})
+
+
+def campaigns_view(request, *args, **kwargs):
+    print(args, kwargs)
+    print(request.user)
+    today = date.today()  # Get today's date
+    # Filter campaigns based on date
+    active_campaigns = Campaign.objects.filter(start_date__lte=today, end_date__gte=today)
+    inactive_campaigns = Campaign.objects.exclude(id__in=active_campaigns)
+
+    print("Today's Date:", today)
+    print("Active Campaigns Count:", active_campaigns.count())
+    print("Inactive Campaigns Count:", inactive_campaigns.count())
+    return render(request, 'campaigns.html', {
+        'active_campaigns': active_campaigns,
+        'inactive_campaigns': inactive_campaigns
+    })
