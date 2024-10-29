@@ -2,6 +2,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .forms import EditProfile, CreateCampaign
 from .models import Campaign
 from datetime import date
+import logging
+
+logger = logging.getLogger('campaign_logger')
 
 
 # Create your views here.
@@ -75,6 +78,8 @@ def create_campaign_view(request):
                 # Save the user-selected locations
                 campaign.locations = ', '.join(form.cleaned_data['locations'])
 
+            # Log the create action
+            logger.debug(f"Campaign created by {request.user.username}: {campaign.name}")
             campaign.save()
             return redirect('campaigns')
     else:
@@ -117,6 +122,9 @@ def edit_campaign_view(request, id):
                 # Save the user-selected locations
                 campaign.locations = ', '.join(form.cleaned_data['locations'])
 
+            # Log the edit action
+            logger.debug(f"Campaign edited by {request.user.username}: {campaign.name}")
+
             campaign.save()
             return redirect('campaigns')
     else:
@@ -128,6 +136,8 @@ def delete_campaign_view(request, id):
     campaign = get_object_or_404(Campaign, id=id)
 
     if request.method == "POST":
+        # Log the delete action before deletion
+        logger.debug(f"Campaign deleted by {request.user.username}: {campaign.name}")
         campaign.delete()
         return redirect('campaigns')
 
