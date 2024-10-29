@@ -6,7 +6,19 @@
     <h2>Edit Campaign: {{ campaign.name }}</h2>
     <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}
+         <!-- Render each form field individually to control the order -->
+        <p>{{ form.name.label_tag }} {{ form.name }}</p>
+        <p>{{ form.description.label_tag }} {{ form.description }}</p>
+        <p>{{ form.start_date.label_tag }} {{ form.start_date }}</p>
+        <p>{{ form.end_date.label_tag }} {{ form.end_date }}</p>
+        <p>{{ form.points.label_tag }} {{ form.points }}</p>
+        <p>{{ form.show_news.label_tag }} {{ form.show_news }}</p>
+        <p>{{ form.integration_method.label_tag }} {{ form.integration_method }}</p>
+
+        <!-- Place the Green2Go checkbox above the locations field -->
+        <p>{{ form.select_green2go.label_tag }} {{ form.select_green2go }}</p>
+        <p>{{ form.locations.label_tag }} {{ form.locations }}</p>
+
         <button type="submit">Save Changes</button>
     </form>
     <a href="{% url 'campaigns' %}">Back to All Campaigns</a>
