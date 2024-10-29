@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import EditProfile, CreateCampaign
 from .models import Campaign
 from datetime import date
@@ -98,3 +98,37 @@ def campaigns_view(request, *args, **kwargs):
         'active_campaigns': active_campaigns,
         'inactive_campaigns': inactive_campaigns
     })
+
+def edit_campaign_view(request, id):
+    campaign = get_object_or_404(Campaign, id=id)
+
+    if request.method == "POST":
+        form = CreateCampaign(request.POST, instance=campaign)
+        if form.is_valid():
+            campaign = form.save(commit=False)
+            campaign.created_by = request.user
+
+            # Check `select_green2go` using cleaned_data after form validation
+            if form.cleaned_data.get('select_green2go'):
+                # Set the Green2Go locations if the checkbox is checked
+                green2go_locations = ['LOWER', 'CARNEY', 'STUART', 'ADDIES', 'EAGLES']
+                campaign.locations = ', '.join(green2go_locations)
+            else:
+                # Save the user-selected locations
+                campaign.locations = ', '.join(form.cleaned_data['locations'])
+
+            campaign.save()
+            return redirect('campaigns')
+    else:
+        form = CreateCampaign(instance=campaign)
+
+    return render(request, 'edit_campaign.html', {'form': form, 'campaign': campaign})
+
+def delete_campaign_view(request, id):
+    campaign = get_object_or_404(Campaign, id=id)
+
+    if request.method == "POST":
+        campaign.delete()
+        return redirect('campaigns')
+
+    return render(request, 'delete_campaign.html', {'campaign': campaign})

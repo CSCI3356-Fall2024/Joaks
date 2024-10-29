@@ -1,0 +1,13 @@
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Campaign</title>
+</head>
+<body>
+    <h2>Edit Campaign: {{ campaign.name }}</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Save Changes</button>
+    </form>
+    <a href="{% url 'campaigns' %}">Back to All Campaigns</a>
+</body>
