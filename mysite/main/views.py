@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import EditProfile, CreateCampaign
 from .models import Campaign
+from .decorators import supervisor_required
 from datetime import date
 import logging
 
@@ -61,7 +62,7 @@ def edit_profile_view(request, *args, **kwargs):
 
     return render(request, 'edit_profile.html', {"form": form})
 
-
+@supervisor_required
 def create_campaign_view(request):
     if request.method == "POST":
         form = CreateCampaign(request.POST)
@@ -87,7 +88,7 @@ def create_campaign_view(request):
 
     return render(request, 'create_campaign.html', {'form': form})
 
-
+@supervisor_required
 def campaigns_view(request, *args, **kwargs):
     print(args, kwargs)
     print(request.user)
@@ -104,6 +105,7 @@ def campaigns_view(request, *args, **kwargs):
         'inactive_campaigns': inactive_campaigns
     })
 
+@supervisor_required
 def edit_campaign_view(request, id):
     campaign = get_object_or_404(Campaign, id=id)
 
@@ -132,6 +134,7 @@ def edit_campaign_view(request, id):
 
     return render(request, 'edit_campaign.html', {'form': form, 'campaign': campaign})
 
+@supervisor_required
 def delete_campaign_view(request, id):
     campaign = get_object_or_404(Campaign, id=id)
 
