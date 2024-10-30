@@ -166,3 +166,6 @@ venv/
 
 # Ignore log files
 campaign_activity.log
+
+
+.DS_Store
