@@ -1,7 +1,6 @@
 # Joaks
 
 Things we need to do from previous deliveries feedback:  
-- you should add a picture to the campaign, this way it would be easier to show in the lists you are using in rewards.
 - edit profile: show what fields are mandatory and what are optional clearly
 - make the look and feel of ALL pages consistent (ie edit-profile and create/add/delete-campaign) 
 
