@@ -65,7 +65,7 @@ def edit_profile_view(request, *args, **kwargs):
 @supervisor_required
 def create_campaign_view(request):
     if request.method == "POST":
-        form = CreateCampaign(request.POST)
+        form = CreateCampaign(request.POST, request.FILES)
         if form.is_valid():
             campaign = form.save(commit=False)
             campaign.created_by = request.user
@@ -110,7 +110,7 @@ def edit_campaign_view(request, id):
     campaign = get_object_or_404(Campaign, id=id)
 
     if request.method == "POST":
-        form = CreateCampaign(request.POST, instance=campaign)
+        form = CreateCampaign(request.POST, request.FILES, instance=campaign)
         if form.is_valid():
             campaign = form.save(commit=False)
             campaign.created_by = request.user

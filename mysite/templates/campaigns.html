@@ -38,6 +38,7 @@
                 <th>Locations</th>
                 <th>Points</th>
                 <th>Created By</th>
+                <th>Image</th> <!-- New column for the image -->
                 <th>Actions</th>  <!-- New column for actions -->
             </tr>
         </thead>
@@ -51,6 +52,14 @@
                 <td>{{ campaign.locations }}</td>
                 <td>{{ campaign.points }}</td>
                 <td>{{ campaign.created_by.username }}</td>
+                <td>
+                    {% if campaign.image %}
+                        <!-- Display a smaller version of the image, e.g., 50x50 pixels -->
+                        <img src="{{ campaign.image.url }}" width="50" height="50" alt="Campaign Image">
+                    {% else %}
+                        No Image
+                    {% endif %}
+                </td>
                 <td>
                     <a href="{% url 'edit_campaign' campaign.id %}">Edit</a> |
                     <a href="{% url 'delete_campaign' campaign.id %}">Delete</a>
@@ -73,6 +82,7 @@
                 <th>Locations</th>
                 <th>Points</th>
                 <th>Created By</th>
+                <th>Image</th> <!-- New column for the image -->
                 <th>Actions</th>  <!-- New column for actions -->
             </tr>
         </thead>
@@ -86,6 +96,14 @@
                 <td>{{ campaign.locations }}</td>
                 <td>{{ campaign.points }}</td>
                 <td>{{ campaign.created_by.username }}</td>
+                <td>
+                    {% if campaign.image %}
+                        <!-- Display a smaller version of the image, e.g., 50x50 pixels -->
+                        <img src="{{ campaign.image.url }}" width="50" height="50" alt="Campaign Image">
+                    {% else %}
+                        No Image
+                    {% endif %}
+                </td>
                 <td>
                     <a href="{% url 'edit_campaign' campaign.id %}">Edit</a> |
                     <a href="{% url 'delete_campaign' campaign.id %}">Delete</a>
