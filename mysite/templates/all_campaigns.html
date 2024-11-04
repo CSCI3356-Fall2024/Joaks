@@ -3,7 +3,7 @@
 {% block title %} Campaigns {% endblock %}
 
 {% block content %}
-<h1 style="font-size: 3em; border-bottom: 2px solid black; font-family: 'Oswald', sans-serif; font-optical-sizing: auto; font-style: normal; font-weight: 400; padding-bottom: 10px; ">CAMPAIGNS</h1>
+<h1 style="font-size: 3em; border-bottom: 2px solid black; font-family: 'Oswald', sans-serif; font-optical-sizing: auto; font-style: normal; font-weight: 400; padding-bottom: 10px; ">ALL CAMPAIGNS</h1>
 
 <head>
     <meta charset="UTF-8">
@@ -36,9 +36,7 @@
                 <th>End Date</th>
                 <th>Locations</th>
                 <th>Points</th>
-                <th>Created By</th>
                 <th>Image</th> <!-- New column for the image -->
-                <th>Actions</th>  <!-- New column for actions -->
             </tr>
         </thead>
         <tbody>
@@ -50,7 +48,6 @@
                 <td>{{ campaign.end_date }}</td>
                 <td>{{ campaign.locations }}</td>
                 <td>{{ campaign.points }}</td>
-                <td>{{ campaign.created_by.username }}</td>
                 <td>
                     {% if campaign.image %}
                         <!-- Display a smaller version of the image, e.g., 50x50 pixels -->
@@ -58,10 +55,6 @@
                     {% else %}
                         No Image
                     {% endif %}
-                </td>
-                <td>
-                    <a href="{% url 'edit_campaign' campaign.id %}">Edit</a> |
-                    <a href="{% url 'delete_campaign' campaign.id %}">Delete</a>
                 </td>
             </tr>
             {% empty %}
@@ -81,9 +74,7 @@
                 <th>End Date</th>
                 <th>Locations</th>
                 <th>Points</th>
-                <th>Created By</th>
                 <th>Image</th> <!-- New column for the image -->
-                <th>Actions</th>  <!-- New column for actions -->
             </tr>
         </thead>
         <tbody>
@@ -95,7 +86,6 @@
                 <td>{{ campaign.end_date }}</td>
                 <td>{{ campaign.locations }}</td>
                 <td>{{ campaign.points }}</td>
-                <td>{{ campaign.created_by.username }}</td>
                 <td>
                     {% if campaign.image %}
                         <!-- Display a smaller version of the image, e.g., 50x50 pixels -->
@@ -103,10 +93,6 @@
                     {% else %}
                         No Image
                     {% endif %}
-                </td>
-                <td>
-                    <a href="{% url 'edit_campaign' campaign.id %}">Edit</a> |
-                    <a href="{% url 'delete_campaign' campaign.id %}">Delete</a>
                 </td>
             </tr>
             {% empty %}
@@ -117,10 +103,4 @@
 </body>
 
 
-<div style="text-align: right; margin-top: 20px;">
-    <a href="/create-campaign/" 
-       style="background-color: #9a1113; color: white; padding: 8px 20px; border: none; border-radius: 5px; text-decoration: none;">
-        Create New Campaign
-    </a>
-</div>
 {% endblock %}
