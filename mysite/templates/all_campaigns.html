@@ -1,1 +1,126 @@
-<h1>All Campaigns</h1>
+{% extends 'base.html' %}
+
+{% block title %} Campaigns {% endblock %}
+
+{% block content %}
+<h1 style="font-size: 3em; border-bottom: 2px solid black; font-family: 'Oswald', sans-serif; font-optical-sizing: auto; font-style: normal; font-weight: 400; padding-bottom: 10px; ">CAMPAIGNS</h1>
+
+<head>
+    <meta charset="UTF-8">
+    <title>All Campaigns</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h2>Active Campaigns</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Locations</th>
+                <th>Points</th>
+                <th>Created By</th>
+                <th>Image</th> <!-- New column for the image -->
+                <th>Actions</th>  <!-- New column for actions -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for campaign in active_campaigns %}
+            <tr>
+                <td>{{ campaign.name }}</td>
+                <td>{{ campaign.description }}</td>
+                <td>{{ campaign.start_date }}</td>
+                <td>{{ campaign.end_date }}</td>
+                <td>{{ campaign.locations }}</td>
+                <td>{{ campaign.points }}</td>
+                <td>{{ campaign.created_by.username }}</td>
+                <td>
+                    {% if campaign.image %}
+                        <!-- Display a smaller version of the image, e.g., 50x50 pixels -->
+                        <img src="{{ campaign.image.url }}" width="50" height="50" alt="Campaign Image">
+                    {% else %}
+                        No Image
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{% url 'edit_campaign' campaign.id %}">Edit</a> |
+                    <a href="{% url 'delete_campaign' campaign.id %}">Delete</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="7">No active campaigns available.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+
+    <h2>Inactive Campaigns</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Locations</th>
+                <th>Points</th>
+                <th>Created By</th>
+                <th>Image</th> <!-- New column for the image -->
+                <th>Actions</th>  <!-- New column for actions -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for campaign in inactive_campaigns %}
+            <tr>
+                <td>{{ campaign.name }}</td>
+                <td>{{ campaign.description }}</td>
+                <td>{{ campaign.start_date }}</td>
+                <td>{{ campaign.end_date }}</td>
+                <td>{{ campaign.locations }}</td>
+                <td>{{ campaign.points }}</td>
+                <td>{{ campaign.created_by.username }}</td>
+                <td>
+                    {% if campaign.image %}
+                        <!-- Display a smaller version of the image, e.g., 50x50 pixels -->
+                        <img src="{{ campaign.image.url }}" width="50" height="50" alt="Campaign Image">
+                    {% else %}
+                        No Image
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{% url 'edit_campaign' campaign.id %}">Edit</a> |
+                    <a href="{% url 'delete_campaign' campaign.id %}">Delete</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="7">No inactive campaigns available.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+
+
+<div style="text-align: right; margin-top: 20px;">
+    <a href="/create-campaign/" 
+       style="background-color: #9a1113; color: white; padding: 8px 20px; border: none; border-radius: 5px; text-decoration: none;">
+        Create New Campaign
+    </a>
+</div>
+{% endblock %}

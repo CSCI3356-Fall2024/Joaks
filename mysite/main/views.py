@@ -36,7 +36,18 @@ def rewards_view(request, *args, **kwargs):
 def all_campaigns_view(request, *args, **kwargs):
     print(args, kwargs)
     print(request.user)
-    return render(request, 'all_campaigns.html', {})
+    today = date.today()  # Get today's date
+    # Filter campaigns based on date
+    active_campaigns = Campaign.objects.filter(start_date__lte=today, end_date__gte=today)
+    inactive_campaigns = Campaign.objects.exclude(id__in=active_campaigns)
+
+    print("Today's Date:", today)
+    print("Active Campaigns Count:", active_campaigns.count())
+    print("Inactive Campaigns Count:", inactive_campaigns.count())
+    return render(request, 'campaigns.html', {
+        'active_campaigns': active_campaigns,
+        'inactive_campaigns': inactive_campaigns
+    })
 
 
 def profile_view(request, *args, **kwargs):
