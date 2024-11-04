@@ -71,11 +71,12 @@
         <div style="width: 31%; border: 2px solid #ccc; border-radius: 15px; padding: 20px; background-color: white;">
             <h3 style="font-size: 1.2em; margin-bottom: 15px;">This Week's Challenges</h3>
             <ul style="list-style-type: disc; margin-left: 20px;">
-                <li>Lorem ipsum dolor sit amet.</li>
-                <li>Consectetur adipiscing elit.</li>
-                <li>Sed do eiusmod tempor.</li>
-                <li>Incididunt ut labore et...</li>
-            </ul>
+                {% for campaign in campaigns %}
+                    <li> {{ campaign.name }} - {{ campaign.description }} </li>
+                {% empty %}
+                    <li>No current challenges.</li>
+                {% endfor %}
+            </ul> 
         </div>
 
         <!-- Upcoming Events -->

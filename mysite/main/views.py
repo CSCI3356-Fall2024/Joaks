@@ -34,7 +34,6 @@ def profile_view(request, *args, **kwargs):
 
 
 
-
 def edit_profile_view(request, *args, **kwargs):
     print(args, kwargs)
     print(request.user)
