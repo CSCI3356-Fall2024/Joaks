@@ -25,7 +25,7 @@
     <!-- User Info -->
     <h2 style="font-size: 24px; margin-bottom: 5px;">{{ request.user.get_full_name }}</h2>
     <p style="color: #666; margin-bottom: 10px;">{{ request.user.email }}</p>
-    <p style="color: #666; margin-bottom: 30px;">{{ request.user.role }}</p>
+    <p style="color: #666; margin-bottom: 30px;">{{ request.user.get_role_display }}</p>
 
     
 <!-- Form Fields Container -->
@@ -58,10 +58,10 @@
                 MAJOR(S)
             </div>
             <div style="padding: 8px;">
-                {{ user.major }}
+                {{ user.get_major_display }}
             </div>
             <div style="padding: 8px;">
-                {{ user.double_major }}
+                {{ user.get_double_major_display }}
             </div>
         </div>
 
@@ -71,10 +71,10 @@
                 MINOR(S)
             </div>
             <div style="padding: 8px;">
-                {{ user.minor }}
+                {{ user.get_minor_display }}
             </div>
             <div style="padding: 8px;">
-                {{ user.double_minor }}
+                {{ user.get_double_minor_display }}
             </div>
         </div>
 

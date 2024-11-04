@@ -1,19 +1,69 @@
+{% extends 'base.html' %}
+{% block title %}Edit Profile{% endblock %}
+{% block content %}
+<div style="padding: 20px;">
+    <!-- Profile Header -->
+    <h1 style="border-bottom: 2px solid black; margin-bottom: 30px;">EDIT PROFILE</h1>
 
+    <form method="post" enctype="multipart/form-data" style="max-width: 800px;">
+        {% csrf_token %}
+        
+        <!-- Profile Photo Section -->
+        <div style="width: 200px; height: 200px; border: 2px solid #ccc; border-radius: 10px; margin-bottom: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; background-color: white;">
+            {% if request.user.profile_picture %}
+            <img src="{{ request.user.profile_picture.url }}" alt="Profile Picture" style="width: 100%; height: 100%; object-fit: cover; border-radius: 10px;">
+            {% else %}
+            <svg width="60" height="60" viewBox="0 0 60 60">
+                <circle cx="30" cy="20" r="15" stroke="black" stroke-width="2" fill="none"/>
+                <path d="M5 60 C5 45, 55 45, 55 60" stroke="black" stroke-width="2" fill="none"/>
+            </svg>
+            <p style="color: #666; margin-top: 10px;">Add optional photo</p>
+            {% endif %}
+        </div>
 
-<title>Edit Profile</title>
-<h2>Edit Profile</h2>
+        <!-- Form Fields Container -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            {% for field in form %}
+            <div style="border: 2px solid #ddd; border-radius: 10px; background-color: white;">
+                <div style="background-color: #ffd97d; padding: 8px; border-radius: 8px 8px 0 0;">
+                    {{ field.label|upper }}
+                    {% if field.field.required %}
+                    <span style="color: #d32f2f; margin-left: 4px;">*</span>
+                    {% endif %}
+                </div>
+                <div style="padding: 12px;">
+                    {{ field }}
+                    {% if field.help_text %}
+                    <p style="color: #666; font-size: 0.875rem; margin-top: 4px;">{{ field.help_text }}</p>
+                    {% endif %}
+                    {% if field.errors %}
+                    <p style="color: #d32f2f; font-size: 0.875rem; margin-top: 4px;">{{ field.errors|join:", " }}</p>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
 
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{form.as_p}}
-    <button type="submit", name="save">Update</button>
-</form>
+        <!-- Required Fields Note -->
+        <div style="margin-top: 20px; color: #666;">
+            <span style="color: #d32f2f;">*</span> Required fields
+        </div>
 
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        margin: 20;
-        padding: 0;
-        background-color: #f0fff0;
-    }
-</style>
+        <!-- Save Button -->
+        <div style="text-align: right; margin-top: 20px;">
+            <button type="submit" name="save" style="
+                background-color: #4CAF50;
+                color: white;
+                padding: 10px 24px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 16px;
+                transition: background-color 0.3s;
+            ">
+                Save Changes
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}
