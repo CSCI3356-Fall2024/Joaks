@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .forms import EditProfile, CreateCampaign
 from .models import Campaign
 from .models import CustomUser
+from .models import UpcomingEvents
 from .decorators import supervisor_required
 from datetime import date
 import logging
