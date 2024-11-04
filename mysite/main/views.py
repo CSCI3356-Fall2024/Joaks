@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import EditProfile, CreateCampaign
-from .models import Campaign, UpcomingEvents
+from .models import Campaign
 from .models import CustomUser
 from .decorators import supervisor_required
 from datetime import date
@@ -13,11 +13,9 @@ logger = logging.getLogger('campaign_logger')
 def home_view(request, *args, **kwargs):
     print(args, kwargs)
     print(request.user)
-    top_users = CustomUser.objects.order_by('-points')[:10]
     campaigns = Campaign.objects.all()
     context = {
         'campaigns' : campaigns,
-        'top_users' : top_users,
     }
     return render(request, 'home.html', context)
 

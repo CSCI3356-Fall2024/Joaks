@@ -31,7 +31,8 @@ def login(request):
 def home(request):
     if request.user.is_authenticated:
         current_date = timezone.now().date()
-        top_users = CustomUser.objects.order_by('-points')[:5]
+        top_users = CustomUser.objects.filter(role='student').order_by('-points')[:5]
+        top_referrers = CustomUser.objects.filter(role='student').order_by('-referral_points')[:5]
         
         # Filter for active campaigns with show_news=True
         active_campaigns = Campaign.objects.filter(
@@ -43,6 +44,7 @@ def home(request):
         context = {
             'campaigns': active_campaigns,
             'top_users': top_users,
+            'top_referrers': top_referrers,
         }
         return render(request, 'home_logged_in.html', context)  # Template for logged-in users
     else:

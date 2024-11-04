@@ -37,20 +37,18 @@
                 <div style="background-color: #ffd97d; padding: 10px; border-radius: 5px; margin-bottom: 15px;">
                     <strong>Total Users Referred</strong>
                 </div>
-                <div style="margin-left: 10px;">
-                    <p style="display: flex; justify-content: space-between; margin: 10px 0;">
-                        <span><span style="color: #4CAF50;">1</span> William Taylor</span>
-                        <span>20</span>
-                    </p>
-                    <p style="display: flex; justify-content: space-between; margin: 10px 0;">
-                        <span><span style="color: #4CAF50;">2</span> Mary Johnson</span>
-                        <span>19</span>
-                    </p>
-                    <p style="display: flex; justify-content: space-between; margin: 10px 0;">
-                        <span><span style="color: #4CAF50;">3</span> James Wilson</span>
-                        <span>16</span>
-                    </p>
-                </div>
+                {% if top_referrers %}
+                    <ol style="margin-left: 10px;">
+                        {% for user in top_referrers %}
+                            <li style="display: flex; justify-content: space-between; margin: 10px 0;">
+                                <span>{{ forloop.counter }}. {{ user.username }}</span>
+                                <span>{{ user.referral_points }} users</span>
+                            </li>
+                        {% endfor %}
+                    </ol>
+                {% else %}
+                    <p>No users available for the leaderboard.</p>
+                {% endif %}
             </div>
         </div>
     </div>

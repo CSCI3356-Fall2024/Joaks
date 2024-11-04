@@ -9,17 +9,18 @@ class CustomUser(AbstractUser):
         ('student', 'Student'), 
         ('supervisor', 'Supervisor'),
     )
-    role = models.CharField(max_length=20, choices=CHOICES, default='student')
-    class_year = models.CharField(max_length=50, blank=True)
-    school = models.CharField(max_length=50, blank=True)
-    major = models.CharField(max_length=50, choices=MAJORS, blank=True)
-    double_major = models.CharField(max_length=50, choices=MAJORS, blank=True)
-    minor = models.CharField(max_length=50, choices=MAJORS, blank=True)
-    double_minor = models.CharField(max_length=50, choices=MAJORS, blank=True)
-    referral = models.CharField(max_length=50, blank=True)
-    profile_picture = models.ImageField(upload_to='profile_pictures/', blank=True, null=True)
-    finished_profile = models.BooleanField(default=False)
-    points = models.IntegerField(default=0)
+    role = models.CharField(max_length=20, choices=CHOICES, default='student')  # Student or Supervisor
+    class_year = models.CharField(max_length=50, blank=True)  # Graduation Year
+    school = models.CharField(max_length=50, blank=True)  # Their School within BC
+    major = models.CharField(max_length=50, choices=MAJORS, blank=True)  # First Major (req)
+    double_major = models.CharField(max_length=50, choices=MAJORS, blank=True)  # Double Major
+    minor = models.CharField(max_length=50, choices=MAJORS, blank=True)  # Minor
+    double_minor = models.CharField(max_length=50, choices=MAJORS, blank=True)  # Double Minor
+    referral = models.CharField(max_length=50, blank=True)  # The email of the user who referred them
+    profile_picture = models.ImageField(upload_to='profile_pictures/', blank=True, null=True)  # Profile photo image
+    finished_profile = models.BooleanField(default=False)  # Allows a new user to move on from edit profile page
+    points = models.IntegerField(default=0)  # The amount of points the user has
+    referral_points = models.IntegerField(default=0)  # The amount of times the user has been entered as a referral
 
 class UpcomingEvents(models.Model):
     LOCATION_CHOICES = (
