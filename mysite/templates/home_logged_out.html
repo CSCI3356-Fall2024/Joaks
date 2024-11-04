@@ -4,5 +4,5 @@
 
 {% block content %}
 <h1>Welcome, Guest!</h1>
-<p>Please <a href="{% url 'social:begin' 'google-oauth2' %}?next={{ request.path }}">log in  or sign up with Google</a> to access more features.</p>
+<p>Please <a href="{% url 'social:begin' 'google-oauth2' %}?next={% url 'login' %}">log in  or sign up with Google</a> to access more features.</p>
 {% endblock %}
