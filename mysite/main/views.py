@@ -33,6 +33,11 @@ def rewards_view(request, *args, **kwargs):
     print(request.user)
     return render(request, 'rewards.html', {})
 
+def all_campaigns_view(request, *args, **kwargs):
+    print(args, kwargs)
+    print(request.user)
+    return render(request, 'all_campaigns.html', {})
+
 
 def profile_view(request, *args, **kwargs):
     print(args, kwargs)
