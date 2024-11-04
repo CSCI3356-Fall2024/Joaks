@@ -27,79 +27,41 @@
 </head>
 <body>
     <h2>Active Campaigns</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Start Date</th>
-                <th>End Date</th>
-                <th>Locations</th>
-                <th>Points</th>
-                <th>Image</th> <!-- New column for the image -->
-            </tr>
-        </thead>
-        <tbody>
-            {% for campaign in active_campaigns %}
-            <tr>
-                <td>{{ campaign.name }}</td>
-                <td>{{ campaign.description }}</td>
-                <td>{{ campaign.start_date }}</td>
-                <td>{{ campaign.end_date }}</td>
-                <td>{{ campaign.locations }}</td>
-                <td>{{ campaign.points }}</td>
-                <td>
-                    {% if campaign.image %}
-                        <!-- Display a smaller version of the image, e.g., 50x50 pixels -->
-                        <img src="{{ campaign.image.url }}" width="50" height="50" alt="Campaign Image">
-                    {% else %}
-                        No Image
-                    {% endif %}
-                </td>
-            </tr>
-            {% empty %}
-            <tr><td colspan="7">No active campaigns available.</td></tr>
-            {% endfor %}
-        </tbody>
-    </table>
+        {% for campaign in active_campaigns %}
+            <a href="{% url 'campaign_detail' campaign.id %}" style="text-decoration: none; color: inherit;">
+                <div style="display: flex; align-items: center; border: 1px solid #ddd; border-radius: 10px; padding: 15px; background-color: #f9f9f9; width: 100%">
+                    <div style="flex-grow: 1;">
+                        <h4 style="font-size: 1.1em; margin: 5px 0 10px;">{{ campaign.name }}</h4>
+                        <p style="margin: 0;">{{ campaign.description }}</p>
+                        <p style="margin: 10px 0 0; font-weight: bold; color: #333;">Points: {{ campaign.points }}</p>
+                    </div>
 
+                    <div style="width: 80px; height: 80px; margin-left: 15px;">
+                        <img src="{{ campaign.image.url }}" alt="{{ campaign.name }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;">
+                    </div>
+                </div>
+            </a>
+        {% empty %}
+            <p> No active campaigns available.</p>
+        {% endfor %}
 
     <h2>Inactive Campaigns</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Start Date</th>
-                <th>End Date</th>
-                <th>Locations</th>
-                <th>Points</th>
-                <th>Image</th> <!-- New column for the image -->
-            </tr>
-        </thead>
-        <tbody>
-            {% for campaign in inactive_campaigns %}
-            <tr>
-                <td>{{ campaign.name }}</td>
-                <td>{{ campaign.description }}</td>
-                <td>{{ campaign.start_date }}</td>
-                <td>{{ campaign.end_date }}</td>
-                <td>{{ campaign.locations }}</td>
-                <td>{{ campaign.points }}</td>
-                <td>
-                    {% if campaign.image %}
-                        <!-- Display a smaller version of the image, e.g., 50x50 pixels -->
-                        <img src="{{ campaign.image.url }}" width="50" height="50" alt="Campaign Image">
-                    {% else %}
-                        No Image
-                    {% endif %}
-                </td>
-            </tr>
-            {% empty %}
-            <tr><td colspan="7">No inactive campaigns available.</td></tr>
-            {% endfor %}
-        </tbody>
-    </table>
+        {% for campaign in inactive_campaigns %}
+            <div style="display: flex; align-items: center; border: 1px solid #ddd; border-radius: 10px; padding: 15px; background-color: #f9f9f9; width: 100%">
+                <div style="flex-grow: 1;">
+                    <h4 style="font-size: 1.1em; margin: 5px 0 10px;">{{ campaign.name }}</h4>
+                    <p style="margin: 0;">{{ campaign.description }}</p>
+                    <p style="margin: 10px 0 0; font-weight: bold; color: #333;">Points: {{ campaign.points }}</p>
+                </div>
+
+                <div style="width: 80px; height: 80px; margin-left: 15px;">
+                    <img src="{{ campaign.image.url }}" alt="{{ campaign.name }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;">
+                </div>
+            </div>
+        {% empty %}
+            <p> No inactive campaigns available.</p>
+        {% endfor %}
+    
 </body>
 
 
