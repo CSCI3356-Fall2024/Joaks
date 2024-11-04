@@ -31,7 +31,7 @@ def login(request):
 def home(request):
     if request.user.is_authenticated:
         current_date = timezone.now().date()
-        top_users = CustomUser.objects.order_by('-points')[:5]
+        top_users = CustomUser.objects.filter(role='student').order_by('-points')[:5]
         
         # Filter for active campaigns with show_news=True
         active_campaigns = Campaign.objects.filter(
