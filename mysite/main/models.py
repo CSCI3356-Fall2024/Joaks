@@ -48,6 +48,8 @@ class Campaign(models.Model):
     show_news = models.BooleanField(default=True)  # Boolean field to indicate if the campaign should be showed in the news feed
     integration_method = models.CharField(max_length=255)
     created_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='campaigns')
+    image = models.ImageField(upload_to='campaign_images/', null=False, blank=False)  # Mandatory image field
+
 
 
     def __str__(self):

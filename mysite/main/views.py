@@ -1,7 +1,11 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import EditProfile, CreateCampaign
 from .models import Campaign
+from .decorators import supervisor_required
 from datetime import date
+import logging
+
+logger = logging.getLogger('campaign_logger')
 
 
 # Create your views here.
@@ -57,10 +61,10 @@ def edit_profile_view(request, *args, **kwargs):
 
     return render(request, 'edit_profile.html', {"form": form})
 
-
+@supervisor_required
 def create_campaign_view(request):
     if request.method == "POST":
-        form = CreateCampaign(request.POST)
+        form = CreateCampaign(request.POST, request.FILES)
         if form.is_valid():
             campaign = form.save(commit=False)
             campaign.created_by = request.user
@@ -74,6 +78,8 @@ def create_campaign_view(request):
                 # Save the user-selected locations
                 campaign.locations = ', '.join(form.cleaned_data['locations'])
 
+            # Log the create action
+            logger.debug(f"Campaign created by {request.user.username}: {campaign.name}")
             campaign.save()
             return redirect('campaigns')
     else:
@@ -81,7 +87,7 @@ def create_campaign_view(request):
 
     return render(request, 'create_campaign.html', {'form': form})
 
-
+@supervisor_required
 def campaigns_view(request, *args, **kwargs):
     print(args, kwargs)
     print(request.user)
@@ -97,3 +103,44 @@ def campaigns_view(request, *args, **kwargs):
         'active_campaigns': active_campaigns,
         'inactive_campaigns': inactive_campaigns
     })
+
+@supervisor_required
+def edit_campaign_view(request, id):
+    campaign = get_object_or_404(Campaign, id=id)
+
+    if request.method == "POST":
+        form = CreateCampaign(request.POST, request.FILES, instance=campaign)
+        if form.is_valid():
+            campaign = form.save(commit=False)
+            campaign.created_by = request.user
+
+            # Check `select_green2go` using cleaned_data after form validation
+            if form.cleaned_data.get('select_green2go'):
+                # Set the Green2Go locations if the checkbox is checked
+                green2go_locations = ['LOWER', 'CARNEY', 'STUART', 'ADDIES', 'EAGLES']
+                campaign.locations = ', '.join(green2go_locations)
+            else:
+                # Save the user-selected locations
+                campaign.locations = ', '.join(form.cleaned_data['locations'])
+
+            # Log the edit action
+            logger.debug(f"Campaign edited by {request.user.username}: {campaign.name}")
+
+            campaign.save()
+            return redirect('campaigns')
+    else:
+        form = CreateCampaign(instance=campaign)
+
+    return render(request, 'edit_campaign.html', {'form': form, 'campaign': campaign})
+
+@supervisor_required
+def delete_campaign_view(request, id):
+    campaign = get_object_or_404(Campaign, id=id)
+
+    if request.method == "POST":
+        # Log the delete action before deletion
+        logger.debug(f"Campaign deleted by {request.user.username}: {campaign.name}")
+        campaign.delete()
+        return redirect('campaigns')
+
+    return render(request, 'delete_campaign.html', {'campaign': campaign})

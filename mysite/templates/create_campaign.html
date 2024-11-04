@@ -17,7 +17,13 @@
     <p>{{ form.select_green2go.label_tag }} {{ form.select_green2go }}</p>
     <p>{{ form.locations.label_tag }} {{ form.locations }}</p>
 
+    <!-- Add the image upload field -->
+    <p>{{ form.image.label_tag }} {{ form.image }}</p>
+
+    
+
     <button type="submit", name="save">Save</button>
+    <a href="{% url 'campaigns' %}">Cancel</a>
 </form>
 
 <style>
