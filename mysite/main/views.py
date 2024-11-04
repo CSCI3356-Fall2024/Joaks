@@ -41,7 +41,7 @@ def all_campaigns_view(request, *args, **kwargs):
     print("Today's Date:", today)
     print("Active Campaigns Count:", active_campaigns.count())
     print("Inactive Campaigns Count:", inactive_campaigns.count())
-    return render(request, 'campaigns.html', {
+    return render(request, 'all_campaigns.html', {
         'active_campaigns': active_campaigns,
         'inactive_campaigns': inactive_campaigns
     })
@@ -160,3 +160,7 @@ def delete_campaign_view(request, id):
         return redirect('campaigns')
 
     return render(request, 'delete_campaign.html', {'campaign': campaign})
+
+def campaign_detail(request, campaign_id):
+    campaign = get_object_or_404(Campaign, id=campaign_id)
+    return render(request, 'campaign_detail.html', {'campaign': campaign})

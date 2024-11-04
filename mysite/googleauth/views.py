@@ -31,12 +31,18 @@ def login(request):
 def home(request):
     if request.user.is_authenticated:
         current_date = timezone.now().date()
-        top_users = CustomUser.objects.order_by('-points')[:5]
-        active_campaigns = Campaign.objects.filter(start_date__lte=current_date, end_date__gte=current_date)
+        top_users = CustomUser.objects.filter(role='student').order_by('-points')[:5]
+        
+        # Filter for active campaigns with show_news=True
+        active_campaigns = Campaign.objects.filter(
+            start_date__lte=current_date,
+            end_date__gte=current_date,
+            show_news=True  # Only campaigns with show_news set to True
+        )
 
         context = {
-            'campaigns' : active_campaigns,
-            'top_users' : top_users,
+            'campaigns': active_campaigns,
+            'top_users': top_users,
         }
         return render(request, 'home_logged_in.html', context)  # Template for logged-in users
     else:

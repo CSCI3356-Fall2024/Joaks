@@ -1,8 +1,7 @@
 # Joaks
 
 Things we need to do from previous deliveries feedback:  
-- edit profile: show what fields are mandatory and what are optional clearly
-- make the look and feel of ALL pages consistent (ie edit-profile and create/add/delete-campaign) 
+- make the look and feel of ALL pages consistent (ie edit-profile and create/add/delete-campaign); show what fields are mandatory clearly
 
 
 every time activate virtual environment. on mac:  
