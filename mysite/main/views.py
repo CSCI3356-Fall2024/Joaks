@@ -56,6 +56,7 @@ def profile_view(request, *args, **kwargs):
 
 
 
+
 def edit_profile_view(request, *args, **kwargs):
     print(args, kwargs)
     print(request.user)
@@ -66,6 +67,25 @@ def edit_profile_view(request, *args, **kwargs):
         form = EditProfile(request.POST, request.FILES, instance=user)  # Use the EditProfile form
 
         if form.is_valid():
+            # Check if this is the user's first login
+            if user.is_first_login:
+                referral_email = form.cleaned_data.get('referral')
+                
+                if referral_email:
+                    # Extract the username from the referral email
+                    referral_username = referral_email.split('@')[0]
+                    
+                    # Find the referring user by username
+                    referring_user = CustomUser.objects.filter(username=referral_username).first()
+                    
+                    if referring_user:
+                        # Increment referral_points for the referring user
+                        referring_user.referral_points += 1
+                        referring_user.save()
+                
+                # Mark as not first login
+                user.is_first_login = False
+
             form.save()  # Save the updated profile data
 
             # Check if the user's profile is incomplete, then mark it as finished
@@ -78,6 +98,7 @@ def edit_profile_view(request, *args, **kwargs):
         form = EditProfile(instance=user)  # Prepopulate form with current user data
 
     return render(request, 'edit_profile.html', {"form": form})
+
 
 @supervisor_required
 def create_campaign_view(request):
