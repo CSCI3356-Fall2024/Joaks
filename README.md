@@ -2,7 +2,7 @@
 
 Things we need to do from previous deliveries feedback:  
 - make the look and feel of ALL pages consistent (ie edit-profile and create/add/delete-campaign); show what fields are mandatory clearly
-- eventually need to restrict leaderboard to students (no supervisors)  
+- eventually need to restrict leaderboard to only student accounts (no supervisors)  
 
 
 every time activate virtual environment. on mac:  
