@@ -14,20 +14,19 @@
                 <div style="background-color: #ffd97d; padding: 10px; border-radius: 5px; margin-bottom: 15px;">
                     <strong>Total Points Accumulated</strong>
                 </div>
-                <div style="margin-left: 10px;">
-                    <p style="display: flex; justify-content: space-between; margin: 10px 0;">
-                        <span><span style="color: #4CAF50;">1</span> Jennifer Smith</span>
-                        <span>57</span>
-                    </p>
-                    <p style="display: flex; justify-content: space-between; margin: 10px 0;">
-                        <span><span style="color: #4CAF50;">2</span> Robert Davis</span>
-                        <span>51</span>
-                    </p>
-                    <p style="display: flex; justify-content: space-between; margin: 10px 0;">
-                        <span><span style="color: #4CAF50;">3</span> Elizabeth Wilson</span>
-                        <span>39</span>
-                    </p>
-                </div>
+                <!-- Leaderboard List -->
+                {% if top_users %}
+                    <ol style="margin-left: 10px;">
+                        {% for user in top_users %}
+                            <li style="display: flex; justify-content: space-between; margin: 10px 0;">
+                                <span>{{ forloop.counter }}. {{ user.username }}</span>
+                                <span>{{ user.points }} points</span>
+                            </li>
+                        {% endfor %}
+                    </ol>
+                {% else %}
+                    <p>No users available for the leaderboard.</p>
+                {% endif %}
             </div>
         </div>
 
