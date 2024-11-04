@@ -26,7 +26,17 @@
     </style>
 </head>
 <body>
-    <h2>Active Campaigns</h2>
+
+
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px; padding-bottom: 10px;">
+        <h2 style="margin: 0;">Active Campaigns</h2>
+        <a href="/create-campaign/" 
+           style="background-color: #9a1113; color: white; padding: 8px 20px; border: none; border-radius: 5px; text-decoration: none;">
+            Create New Campaign
+        </a>
+    </div>
+    
+
     <table>
         <thead>
             <tr>
@@ -115,8 +125,17 @@
         </tbody>
     </table>
 
+
     <h1 style="font-size: 3em; border-bottom: 2px solid black; font-family: 'Oswald', sans-serif; font-optical-sizing: auto; font-style: normal; font-weight: 400; padding-bottom: 10px; ">UPCOMING EVENTS</h1>
-    <h2>Active Events</h2>
+    
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px; padding-bottom: 10px;">
+        <h2 style="margin: 0;">Active Events</h2>
+        <a href="/create-event/" 
+           style="background-color: #9a1113; color: white; padding: 8px 20px; border: none; border-radius: 5px; text-decoration: none;">
+            Create New Event
+        </a>
+    </div>
+
     <table>
         <thead>
             <tr>
@@ -138,7 +157,6 @@
                 <td>{{ event.start_date }}</td>
                 <td>{{ event.end_date }}</td>
                 <td>{{ event.locations }}</td>
-                <td>{{ event.points }}</td>
                 <td>{{ event.created_by.username }}</td>
                 <td>
                     {% if event.image %}
@@ -182,7 +200,6 @@
                 <td>{{ event.start_date }}</td>
                 <td>{{ event.end_date }}</td>
                 <td>{{ event.locations }}</td>
-                <td>{{ event.points }}</td>
                 <td>{{ event.created_by.username }}</td>
                 <td>
                     {% if event.image %}
@@ -203,21 +220,6 @@
         </tbody>
     </table>
 </body>
-
-
-<div style="text-align: right; margin-top: 20px;">
-    <a href="/create-campaign/" 
-       style="background-color: #9a1113; color: white; padding: 8px 20px; border: none; border-radius: 5px; text-decoration: none;">
-        Create New Campaign
-    </a>
-</div>
-
-<div style="text-align: right; margin-top: 20px;">
-    <a href="/create-event/" 
-       style="background-color: #9a1113; color: white; padding: 8px 20px; border: none; border-radius: 5px; text-decoration: none;">
-        Create New Event
-    </a>
-</div>
 
 
 

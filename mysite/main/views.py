@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import EditProfile, CreateCampaign
-from .models import Campaign
+from .forms import EditProfile, CreateCampaign, CreateUpcomingEvents
+from .models import Campaign, UpcomingEvents
 from .models import CustomUser
 from .decorators import supervisor_required
 from datetime import date
@@ -103,6 +103,32 @@ def create_campaign_view(request):
         form = CreateCampaign()
 
     return render(request, 'create_campaign.html', {'form': form})
+
+@supervisor_required
+def create_event_view(request):
+    if request.method == "POST":
+        form = CreateUpcomingEvents(request.POST, request.FILES)
+        if form.is_valid():
+            event = form.save(commit=False)
+            event.created_by = request.user
+
+            # Check `select_green2go` using cleaned_data after form validation
+            if form.cleaned_data.get('select_green2go'):
+                # Set the Green2Go locations if the checkbox is checked
+                green2go_locations = ['LOWER', 'CARNEY', 'STUART', 'ADDIES', 'EAGLES']
+                event.locations = ', '.join(green2go_locations)
+            else:
+                # Save the user-selected locations
+                event.locations = ', '.join(form.cleaned_data['locations'])
+
+            # Log the create action
+            logger.debug(f"Event created by {request.user.username}: {event.name}")
+            event.save()
+            return redirect('campaigns')
+    else:
+        form = CreateUpcomingEvents()
+
+    return render(request, 'create_event.html', {'form': form})
 
 @supervisor_required
 def campaigns_view(request, *args, **kwargs):
