@@ -30,7 +30,7 @@ def login(request):
 def home(request):
     if request.user.is_authenticated:
         campaigns = Campaign.objects.all()
-        top_users = CustomUser.objects.order_by('-points')[:10]
+        top_users = CustomUser.objects.order_by('-points')[:5]
         context = {
             'campaigns' : campaigns,
             'top_users' : top_users,
