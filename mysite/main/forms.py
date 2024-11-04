@@ -1,7 +1,7 @@
 from django import forms
 from .models import CustomUser
 from .majors import MAJORS
-from .models import Campaign
+from .models import Campaign, UpcomingEvents
 
 class EditProfile(forms.ModelForm):
     class Meta:
@@ -53,6 +53,32 @@ class CreateCampaign(forms.ModelForm):
     class Meta:
         model = Campaign
         fields = ['name', 'description', 'start_date', 'end_date', 'locations', 'points', 'show_news', 'integration_method', 'image']
+        widgets = {
+            'start_date': forms.DateInput(attrs={'type': 'date'}),  # HTML5 date picker
+            'end_date': forms.DateInput(attrs={'type': 'date'}),
+        }
+
+        def clean_locations(self):
+            return ', '.join(self.cleaned_data['locations'])
+        
+class CreateUpcomingEvents(forms.ModelForm):
+
+    LOCATION_CHOICES = UpcomingEvents.LOCATION_CHOICES
+    locations = forms.MultipleChoiceField(
+        choices=LOCATION_CHOICES,
+        widget=forms.CheckboxSelectMultiple,
+        required=False,
+        label="OR Manually input locations",  # Custom label here
+    )
+
+    select_green2go = forms.BooleanField(
+        required=False,
+        label="Select All Green2Go Locations"
+    )
+
+    class Meta:
+        model = UpcomingEvents
+        fields = ['name', 'description', 'start_date', 'end_date', 'locations', 'show_news', 'integration_method', 'image']
         widgets = {
             'start_date': forms.DateInput(attrs={'type': 'date'}),  # HTML5 date picker
             'end_date': forms.DateInput(attrs={'type': 'date'}),

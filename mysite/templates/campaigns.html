@@ -114,6 +114,94 @@
             {% endfor %}
         </tbody>
     </table>
+
+    <h1 style="font-size: 3em; border-bottom: 2px solid black; font-family: 'Oswald', sans-serif; font-optical-sizing: auto; font-style: normal; font-weight: 400; padding-bottom: 10px; ">UPCOMING EVENTS</h1>
+    <h2>Active Events</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Locations</th>
+                <th>Created By</th>
+                <th>Image</th> <!-- New column for the image -->
+                <th>Actions</th>  <!-- New column for actions -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for event in active_events %}
+            <tr>
+                <td>{{ event.name }}</td>
+                <td>{{ event.description }}</td>
+                <td>{{ event.start_date }}</td>
+                <td>{{ event.end_date }}</td>
+                <td>{{ event.locations }}</td>
+                <td>{{ event.points }}</td>
+                <td>{{ event.created_by.username }}</td>
+                <td>
+                    {% if event.image %}
+                        <!-- Display a smaller version of the image, e.g., 50x50 pixels -->
+                        <img src="{{ event.image.url }}" width="50" height="50" alt="Event Image">
+                    {% else %}
+                        No Image
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{% url 'edit_campaign' event.id %}">Edit</a> |
+                    <a href="{% url 'delete_campaign' event.id %}">Delete</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="7">No active events available.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+
+    <h2>Inactive Events</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Locations</th>
+                <th>Created By</th>
+                <th>Image</th> <!-- New column for the image -->
+                <th>Actions</th>  <!-- New column for actions -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for event in inactive_events %}
+            <tr>
+                <td>{{ event.name }}</td>
+                <td>{{ event.description }}</td>
+                <td>{{ event.start_date }}</td>
+                <td>{{ event.end_date }}</td>
+                <td>{{ event.locations }}</td>
+                <td>{{ event.points }}</td>
+                <td>{{ event.created_by.username }}</td>
+                <td>
+                    {% if event.image %}
+                        <!-- Display a smaller version of the image, e.g., 50x50 pixels -->
+                        <img src="{{ event.image.url }}" width="50" height="50" alt="Event Image">
+                    {% else %}
+                        No Image
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{% url 'edit_campaign' event.id %}">Edit</a> |
+                    <a href="{% url 'delete_campaign' event.id %}">Delete</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="7">No inactive events available.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </body>
 
 
@@ -123,4 +211,14 @@
         Create New Campaign
     </a>
 </div>
+
+<div style="text-align: right; margin-top: 20px;">
+    <a href="/create-event/" 
+       style="background-color: #9a1113; color: white; padding: 8px 20px; border: none; border-radius: 5px; text-decoration: none;">
+        Create New Event
+    </a>
+</div>
+
+
+
 {% endblock %}

@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import EditProfile, CreateCampaign
-from .models import Campaign
+from .models import Campaign, UpcomingEvents
 from .models import CustomUser
 from .decorators import supervisor_required
 from datetime import date
@@ -115,13 +115,22 @@ def campaigns_view(request, *args, **kwargs):
     active_campaigns = Campaign.objects.filter(start_date__lte=today, end_date__gte=today)
     inactive_campaigns = Campaign.objects.exclude(id__in=active_campaigns)
 
+    active_events = UpcomingEvents.objects.filter(start_date__lte=today, end_date__gte=today)
+    inactive_events = UpcomingEvents.objects.exclude(id__in=active_events)
+
     print("Today's Date:", today)
     print("Active Campaigns Count:", active_campaigns.count())
     print("Inactive Campaigns Count:", inactive_campaigns.count())
+    print("Active Events Count:", active_events.count())
+    print("Inactive Events Count:", inactive_events.count())
     return render(request, 'campaigns.html', {
         'active_campaigns': active_campaigns,
-        'inactive_campaigns': inactive_campaigns
+        'inactive_campaigns': inactive_campaigns,
+        'active_events': active_events,
+        'inactive_events': inactive_events
     })
+
+
 
 @supervisor_required
 def edit_campaign_view(request, id):
