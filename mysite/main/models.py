@@ -16,11 +16,13 @@ class CustomUser(AbstractUser):
     double_major = models.CharField(max_length=50, choices=MAJORS, blank=True)  # Double Major
     minor = models.CharField(max_length=50, choices=MAJORS, blank=True)  # Minor
     double_minor = models.CharField(max_length=50, choices=MAJORS, blank=True)  # Double Minor
-    referral = models.CharField(max_length=50, blank=True)  # The email of the user who referred them
+    referral = models.CharField(max_length=50, null=True, blank=True)  # The email of the user who referred them
     profile_picture = models.ImageField(upload_to='profile_pictures/', blank=True, null=True)  # Profile photo image
     finished_profile = models.BooleanField(default=False)  # Allows a new user to move on from edit profile page
     points = models.IntegerField(default=0)  # The amount of points the user has
     referral_points = models.IntegerField(default=0)  # The amount of times the user has been entered as a referral
+    is_first_login = models.BooleanField(default=True)  # Track first login
+
 
 class UpcomingEvents(models.Model):
     LOCATION_CHOICES = (
