@@ -69,7 +69,7 @@
     <div style="display: flex; justify-content: space-between;">
         <!-- This Week's Challenges -->
         <div style="width: 31%; border: 2px solid #ccc; border-radius: 15px; padding: 20px; background-color: white;">
-            <h3 style="font-size: 1.2em; margin-bottom: 15px;">This Week's Challenges</h3>
+            <h3 style="font-size: 1.2em; margin-bottom: 15px;">Current Challenges</h3>
             
             <div style="display: flex; flex-direction: column; gap: 15px;">
                 {% for campaign in campaigns|slice:":3" %}
@@ -80,7 +80,7 @@
                         </div>
 
                         <div style="width: 80px; height: 80px; margin-left: 15px;">
-                            <img src="{{ campaign.image }}" alt="{{ campaign.name }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;">
+                            <img src="{{ campaign.image.url }}" alt="{{ campaign.name }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;">
                         </div>
                     </div>
                 {% empty %}
