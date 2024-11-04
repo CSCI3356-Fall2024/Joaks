@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
-from main.models import Campaign
+from main.models import Campaign, UpcomingEvents
 from main.models import CustomUser
 from django.utils import timezone
 
@@ -41,8 +41,15 @@ def home(request):
             show_news=True  # Only campaigns with show_news set to True
         )
 
+        active_events = UpcomingEvents.objects.filter(
+            start_date__lte=current_date,
+            end_date__gte=current_date,
+            show_news=True  # Only campaigns with show_news set to True
+        )
+
         context = {
             'campaigns': active_campaigns,
+            'events' : active_events,
             'top_users': top_users,
             'top_referrers': top_referrers,
         }

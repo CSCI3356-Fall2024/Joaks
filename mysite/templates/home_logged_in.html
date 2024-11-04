@@ -102,12 +102,33 @@
         <!-- Upcoming Events -->
         <div style="width: 31%; border: 2px solid #ccc; border-radius: 15px; padding: 20px; background-color: white;">
             <h3 style="font-size: 1.2em; margin-bottom: 15px;">Upcoming Events</h3>
-            <ul style="list-style-type: disc; margin-left: 20px;">
-                <li>Lorem ipsum dolor sit amet.</li>
-                <li>Consectetur adipiscing elit.</li>
-                <li>Sed do eiusmod tempor.</li>
-                <li>Incididunt ut labore et...</li>
-            </ul>
+            
+            <div style="display: flex; flex-direction: column; gap: 15px;">
+                {% for event in events|slice:":3" %}
+                <a href="{% url 'event_detail' event.id %}" style="text-decoration: none; color: inherit;">
+                    <div style="display: flex; align-items: center; border: 1px solid #ddd; border-radius: 10px; padding: 15px; background-color: #f9f9f9; transition: background-color 0.3s ease;"
+                        onmouseover="this.style.backgroundColor='#e0e0e0'"
+                        onmouseout="this.style.backgroundColor='#f9f9f9'">
+                        <div style="flex-grow: 1;">
+                            <h4 style="font-size: 1.1em; margin: 5px 0 10px;">{{ event.name }}</h4>
+                            <p style="margin: 0;">{{ event.description }}</p>
+                        </div>
+
+                        <div style="width: 80px; height: 80px; margin-left: 15px;">
+                            <img src="{{ event.image.url }}" alt="{{ event.name }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;">
+                        </div>
+                    </div>
+                </a>
+                {% empty %}
+                    <p>No current events.</p>
+                {% endfor %}
+            </div>
+
+            {% if events|length > 3 %}
+                <div style="margin-top: 10px; text-align: center">
+                    <a href="{% url 'all_events' %}" style="text-decoration: none; color: #000; font-weight: bold;">See All Events</a>
+                </div>
+            {% endif %}
         </div>
 
         <!-- BC Milestones -->

@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+
+    <!-- Profile Header -->
+    <h1 style="font-size: 3em; border-bottom: 2px solid black; font-family: 'Oswald', sans-serif; font-optical-sizing: auto; font-style: normal; font-weight: 400; padding-bottom: 10px; "> {{ campaign.name }}</h1>
+
+    <!-- Profile Photo Container -->
+    <div style="width: 200px; height: 200px; border: 2px solid #ccc; border-radius: 10px; margin-bottom: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+        {% if event.image %}
+            <!-- Display the uploaded profile picture -->
+            <img src="{{ event.image.url }}" alt="Profile Picture" style="width: 100%; height: 100%; object-fit: cover; border-radius: 10px;">
+        {% else %}
+            <!-- Simple user icon using SVG (fallback) -->
+            <p style="color: #666; margin-top: 10px;">No image</p>
+        {% endif %}
+    </div>
+
+    <!-- User Info -->
+    
+<!-- Form Fields Container -->
+<form method="post">
+    {% csrf_token %}
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 800px;">
+        <!-- Class Year Field -->
+        <div style="border: 2px solid #ddd; border-radius: 10px;">
+            <div style="background-color: #ffd97d; padding: 8px; border-radius: 8px 8px 0 0;">
+                DESCRIPTION
+            </div>
+            <div style="padding: 8px;">
+                {{ event.description }}
+            </div>
+        </div>
+
+        <!-- School Field -->
+        
+
+        <!-- Major(s) Field -->
+        <div style="border: 2px solid #ddd; border-radius: 10px;">
+            <div style="background-color: #ffd97d; padding: 8px; border-radius: 8px 8px 0 0;">
+                START DATE
+            </div>
+            <div style="padding: 8px;">
+                {{ event.start_date }}
+            </div>
+        </div>
+
+        <!-- Minor(s) Field -->
+        <div style="border: 2px solid #ddd; border-radius: 10px;">
+            <div style="background-color: #ffd97d; padding: 8px; border-radius: 8px 8px 0 0;">
+                END DATE
+            </div>
+            <div style="padding: 8px;">
+                {{ event.end_date }}
+            </div>
+        </div>
+
+        <!-- Email of Referrer Field -->
+        <div style="border: 2px solid #ddd; border-radius: 10px;">
+            <div style="background-color: #ffd97d; padding: 8px; border-radius: 8px 8px 0 0;">
+                LOCATIONS
+            </div>
+            <div style="padding: 8px;">
+                {{ event.locations }}
+            </div>
+        </div>
+    </div>
+
+    
+</form>
+
+</div>
+{% endblock %}

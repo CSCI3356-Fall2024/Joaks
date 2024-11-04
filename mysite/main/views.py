@@ -222,3 +222,7 @@ def delete_campaign_view(request, id):
 def campaign_detail(request, campaign_id):
     campaign = get_object_or_404(Campaign, id=campaign_id)
     return render(request, 'campaign_detail.html', {'campaign': campaign})
+
+def event_detail(request, campaign_id):
+    event = get_object_or_404(UpcomingEvents, id=campaign_id)
+    return render(request, 'event_detail.html', {'campaign': event})
