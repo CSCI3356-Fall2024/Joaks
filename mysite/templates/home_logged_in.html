@@ -71,12 +71,17 @@
         <div style="width: 31%; border: 2px solid #ccc; border-radius: 15px; padding: 20px; background-color: white;">
             <h3 style="font-size: 1.2em; margin-bottom: 15px;">This Week's Challenges</h3>
             <ul style="list-style-type: disc; margin-left: 20px;">
-                {% for campaign in campaigns %}
+                {% for campaign in campaigns|slice:":3" %}
                     <li> {{ campaign.name }} - {{ campaign.description }} </li>
                 {% empty %}
                     <li>No current challenges.</li>
                 {% endfor %}
             </ul> 
+            {% if campaigns|length > 3%}
+                <div style="margin-top: 10px; text-align: center;">
+                    <a href="{% url 'all_campaigns'%}" style="text-decoration: none; color: #000; font-weight:bold;">See All Challenges</a>
+                </div>
+            {% endif %}
         </div>
 
         <!-- Upcoming Events -->
