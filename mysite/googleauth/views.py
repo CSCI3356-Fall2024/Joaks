@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from main.models import Campaign
+from main.models import CustomUser
 
 # Login view
 def login(request):
@@ -29,8 +30,10 @@ def login(request):
 def home(request):
     if request.user.is_authenticated:
         campaigns = Campaign.objects.all()
+        top_users = CustomUser.objects.order_by('-points')[:10]
         context = {
-            'campaigns' : campaigns
+            'campaigns' : campaigns,
+            'top_users' : top_users,
         }
         return render(request, 'home_logged_in.html', context)  # Template for logged-in users
     else:
