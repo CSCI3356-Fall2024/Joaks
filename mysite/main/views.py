@@ -57,11 +57,11 @@ def all_events_view(request, *args, **kwargs):
     inactive_events = UpcomingEvents.objects.exclude(id__in=active_events)
 
     print("Today's Date:", today)
-    print("Active Campaigns Count:", active_events.count())
-    print("Inactive Campaigns Count:", inactive_events.count())
-    return render(request, 'all_campaigns.html', {
-        'active_campaigns': active_events,
-        'inactive_campaigns': inactive_events
+    print("Active Events Count:", active_events.count())
+    print("Inactive Events Count:", inactive_events.count())
+    return render(request, 'all_events.html', {
+        'active_events': active_events,
+        'inactive_events': inactive_events
     })
 
 
@@ -222,6 +222,36 @@ def edit_campaign_view(request, id):
         form = CreateCampaign(instance=campaign)
 
     return render(request, 'edit_campaign.html', {'form': form, 'campaign': campaign})
+
+
+@supervisor_required
+def edit_event_view(request, id):
+    event = get_object_or_404(UpcomingEvents, id=id)
+
+    if request.method == "POST":
+        form = CreateUpcomingEvents(request.POST, request.FILES, instance=event)
+        if form.is_valid():
+            event = form.save(commit=False)
+            event.created_by = request.user
+
+            # Check `select_green2go` using cleaned_data after form validation
+            if form.cleaned_data.get('select_green2go'):
+                # Set the Green2Go locations if the checkbox is checked
+                green2go_locations = ['LOWER', 'CARNEY', 'STUART', 'ADDIES', 'EAGLES']
+                event.locations = ', '.join(green2go_locations)
+            else:
+                # Save the user-selected locations
+                event.locations = ', '.join(form.cleaned_data['locations'])
+
+            # Log the edit action
+            logger.debug(f"Event edited by {request.user.username}: {event.name}")
+
+            event.save()
+            return redirect('campaigns')
+    else:
+        form = CreateUpcomingEvents(instance=event)
+
+    return render(request, 'edit_event.html', {'form': form, 'event': event})
 
 @supervisor_required
 def delete_campaign_view(request, id):

@@ -1,0 +1,35 @@
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Event</title>
+</head>
+<body>
+    <h2>Edit Event: {{ event.name }}</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+         <!-- Render each form field individually to control the order -->
+        <p>{{ form.name.label_tag }} {{ form.name }}</p>
+        <p>{{ form.description.label_tag }} {{ form.description }}</p>
+        <p>{{ form.start_date.label_tag }} {{ form.start_date }}</p>
+        <p>{{ form.end_date.label_tag }} {{ form.end_date }}</p>
+        <p>{{ form.show_news.label_tag }} {{ form.show_news }}</p>
+        <p>{{ form.integration_method.label_tag }} {{ form.integration_method }}</p>
+
+        <!-- Place the Green2Go checkbox above the locations field -->
+        <p>{{ form.select_green2go.label_tag }} {{ form.select_green2go }}</p>
+        <p>{{ form.locations.label_tag }} {{ form.locations }}</p>
+
+        <!-- Add the image upload field -->
+        <p>{{ form.image.label_tag }} {{ form.image }}</p>
+
+        {% if event.image %}
+        <img src="{{ event.image.url }}" alt="Event Image" width="300">
+        {% endif %}
+
+
+        <!-- Move submit button to its own line -->
+        <p>
+            <button type="submit">Save Changes</button>
+        </p>
+    </form>
+    <a href="{% url 'campaigns' %}">Back to All Campaigns</a>
+</body>
