@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
-from main.models import Campaign, UpcomingEvents
+from main.models import Campaign, UpcomingEvents, Milestone
 from main.models import CustomUser
 from django.utils import timezone
 
@@ -47,9 +47,12 @@ def home(request):
             show_news=True  # Only campaigns with show_news set to True
         )
 
+        milestones = Milestone.objects.all()
+
         context = {
             'campaigns': active_campaigns,
             'events' : active_events,
+            'milestones' : milestones, 
             'top_users': top_users,
             'top_referrers': top_referrers,
         }
