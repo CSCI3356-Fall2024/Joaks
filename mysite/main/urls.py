@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path
-from .views import home_view, actions_view, rewards_view, profile_view, campaigns_view, edit_profile_view, create_campaign_view, edit_campaign_view, delete_campaign_view, all_campaigns_view, campaign_detail, create_event_view, event_detail
+from .views import home_view, actions_view, rewards_view, profile_view, campaigns_view, edit_profile_view, create_campaign_view, edit_campaign_view, delete_campaign_view, all_campaigns_view, campaign_detail, create_event_view, event_detail, all_events_view
 
 urlpatterns = [
     path('actions/', actions_view, name='actions'),
@@ -15,8 +15,9 @@ urlpatterns = [
     path('campaigns/edit/<int:id>/', edit_campaign_view, name='edit_campaign'),
     path('campaigns/delete/<int:id>/', delete_campaign_view, name='delete_campaign'),
     path('all-campaigns/', all_campaigns_view, name='all_campaigns'),
+    path('all-events/', all_events_view, name='all_events'),
     path('campaign/<int:campaign_id>/', campaign_detail, name='campaign_detail'),
-    path('event/<int:campaign_id>/', event_detail, name='event_detail'),
+    path('event/<int:event_id>/', event_detail, name='event_detail'),
     path('create-event/', create_event_view, name='create_event'),
 ]
 

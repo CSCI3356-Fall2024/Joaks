@@ -48,6 +48,22 @@ def all_campaigns_view(request, *args, **kwargs):
         'inactive_campaigns': inactive_campaigns
     })
 
+def all_events_view(request, *args, **kwargs):
+    print(args, kwargs)
+    print(request.user)
+    today = date.today()  # Get today's date
+    # Filter campaigns based on date
+    active_events = UpcomingEvents.objects.filter(start_date__lte=today, end_date__gte=today)
+    inactive_events = UpcomingEvents.objects.exclude(id__in=active_events)
+
+    print("Today's Date:", today)
+    print("Active Campaigns Count:", active_events.count())
+    print("Inactive Campaigns Count:", inactive_events.count())
+    return render(request, 'all_campaigns.html', {
+        'active_campaigns': active_events,
+        'inactive_campaigns': inactive_events
+    })
+
 
 def profile_view(request, *args, **kwargs):
     print(args, kwargs)
@@ -223,6 +239,6 @@ def campaign_detail(request, campaign_id):
     campaign = get_object_or_404(Campaign, id=campaign_id)
     return render(request, 'campaign_detail.html', {'campaign': campaign})
 
-def event_detail(request, campaign_id):
-    event = get_object_or_404(UpcomingEvents, id=campaign_id)
-    return render(request, 'event_detail.html', {'campaign': event})
+def event_detail(request, event_id):
+    event = get_object_or_404(UpcomingEvents, id=event_id)
+    return render(request, 'event_detail.html', {'event': event})
