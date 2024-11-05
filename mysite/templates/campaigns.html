@@ -219,7 +219,56 @@
             {% endfor %}
         </tbody>
     </table>
+
+    <h1 style="font-size: 3em; border-bottom: 2px solid black; font-family: 'Oswald', sans-serif; font-optical-sizing: auto; font-style: normal; font-weight: 400; padding-bottom: 10px; ">BC MILESTONES</h1>
+    
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px; padding-bottom: 10px;">
+        <h2 style="margin: 0;">Active Milestones</h2>
+        <a href="/create-milestone/" 
+           style="background-color: #9a1113; color: white; padding: 8px 20px; border: none; border-radius: 5px; text-decoration: none;">
+            Create New Milestone
+        </a>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Created By</th>
+                <th>Image</th> <!-- New column for the image -->
+                <th>Actions</th>  <!-- New column for actions -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for milestone in milestones %}
+            <tr>
+                <td>{{ milestone.name }}</td>
+                <td>{{ milestone.description }}</td>
+                <td>{{ milestone.created_by.username }}</td>
+                <td>
+                    {% if milestone.image %}
+                        <!-- Display a smaller version of the image, e.g., 50x50 pixels -->
+                        <img src="{{ milestone.image.url }}" width="50" height="50" alt="Milestone Image">
+                    {% else %}
+                        No Image
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{% url 'edit_event' milestone.id %}">Edit</a> |
+                    <a href="{% url 'delete_event' milestone.id %}">Delete</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="7">No active milestones available.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
 </body>
+
+
+
 
 
 

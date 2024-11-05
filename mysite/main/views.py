@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import EditProfile, CreateCampaign, CreateUpcomingEvents
+from .forms import EditProfile, CreateCampaign, CreateUpcomingEvents, CreateMilestone
 from .models import Campaign, UpcomingEvents
 from .models import CustomUser
 from .models import UpcomingEvents
@@ -168,6 +168,24 @@ def create_event_view(request):
         form = CreateUpcomingEvents()
 
     return render(request, 'create_event.html', {'form': form})
+
+@supervisor_required
+def create_milestone_view(request):
+    if request.method == "POST":
+        form = CreateMilestone(request.POST, request.FILES)
+        if form.is_valid():
+            milestone = form.save(commit=False)
+            milestone.created_by = request.user
+
+            # Check `select_green2go` using cleaned_data after form validation
+            # Log the create action
+            logger.debug(f"Milestone created by {request.user.username}: {milestone.name}")
+            milestone.save()
+            return redirect('campaigns')
+    else:
+        form = CreateMilestone()
+
+    return render(request, 'create_milestone.html', {'form': form})
 
 @supervisor_required
 def campaigns_view(request, *args, **kwargs):

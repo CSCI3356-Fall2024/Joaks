@@ -1,7 +1,7 @@
 from django import forms
 from .models import CustomUser
 from .majors import MAJORS
-from .models import Campaign, UpcomingEvents
+from .models import Campaign, UpcomingEvents, Milestone
 
 class EditProfile(forms.ModelForm):
     class Meta:
@@ -86,3 +86,9 @@ class CreateUpcomingEvents(forms.ModelForm):
 
         def clean_locations(self):
             return ', '.join(self.cleaned_data['locations'])
+        
+class CreateMilestone(forms.ModelForm):
+    class Meta:
+        model = Milestone
+        fields = ['name', 'description', 'show_news', 'image']
+        

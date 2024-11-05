@@ -1,0 +1,29 @@
+<title>Create Milestone</title>
+<h2>Create Milestone</h2>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <!-- Render each form field individually to control the order -->
+    <p>{{ form.name.label_tag }} {{ form.name }}</p>
+    <p>{{ form.description.label_tag }} {{ form.description }}</p>
+    <p>{{ form.show_news.label_tag }} {{ form.show_news }}</p>
+
+
+    <!-- Add the image upload field -->
+    <p>{{ form.image.label_tag }} {{ form.image }}</p>
+
+    
+
+    <button type="submit", name="save">Save</button>
+    <a href="{% url 'campaigns' %}">Cancel</a>
+</form>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 20;
+        padding: 0;
+        background-color: #f0fff0;
+    }
+</style>
