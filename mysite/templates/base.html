@@ -40,7 +40,9 @@
     </style>
 </head>
 <body>
+    {% if user.email %}
     <a href="/logout" class="logout-button">Logout</a>
+    {% endif %}
     
     {% if user.role == "supervisor" %}
         {% include 'supervisor_navbar.html' %}
