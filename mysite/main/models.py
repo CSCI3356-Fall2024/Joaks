@@ -56,6 +56,18 @@ class UpcomingEvents(models.Model):
 
     def __str__(self):
         return self.name
+    
+class Milestone(models.Model):
+    
+    name = models.CharField(max_length=100)  # Name of the campaign
+    description = models.TextField()  # Detailed description of the campaign
+    show_news = models.BooleanField(default=True)  # Boolean field to indicate if the campaign should be showed in the news feed
+    created_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='milestones')
+    image = models.ImageField(upload_to='milestones_images/', null=False, blank=False)  # Mandatory image field
+
+    def __str__(self):
+        return self.name
+
 
 
 class Campaign(models.Model):

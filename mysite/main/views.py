@@ -3,6 +3,7 @@ from .forms import EditProfile, CreateCampaign, CreateUpcomingEvents
 from .models import Campaign, UpcomingEvents
 from .models import CustomUser
 from .models import UpcomingEvents
+from .models import Milestone
 from .decorators import supervisor_required
 from datetime import date
 import logging
@@ -180,16 +181,20 @@ def campaigns_view(request, *args, **kwargs):
     active_events = UpcomingEvents.objects.filter(start_date__lte=today, end_date__gte=today)
     inactive_events = UpcomingEvents.objects.exclude(id__in=active_events)
 
+    milestones = Milestone.objects.all()
+
     print("Today's Date:", today)
     print("Active Campaigns Count:", active_campaigns.count())
     print("Inactive Campaigns Count:", inactive_campaigns.count())
     print("Active Events Count:", active_events.count())
     print("Inactive Events Count:", inactive_events.count())
+    print("Milestones Count: ", milestones.count())
     return render(request, 'campaigns.html', {
         'active_campaigns': active_campaigns,
         'inactive_campaigns': inactive_campaigns,
         'active_events': active_events,
-        'inactive_events': inactive_events
+        'inactive_events': inactive_events,
+        'milestones' : milestones,
     })
 
 
