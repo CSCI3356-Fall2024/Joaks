@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path
-from .views import home_view, actions_view, rewards_view, profile_view, campaigns_view, edit_profile_view, create_campaign_view, edit_campaign_view, delete_campaign_view, all_campaigns_view, campaign_detail, create_event_view, event_detail, all_events_view, edit_event_view, delete_event_view, create_milestone_view
+from .views import home_view, actions_view, rewards_view, profile_view, campaigns_view, edit_profile_view, create_campaign_view, edit_campaign_view, delete_campaign_view, all_campaigns_view, campaign_detail, create_event_view, event_detail, all_events_view, edit_event_view, delete_event_view, create_milestone_view, edit_milestone_view, delete_milestone_view
 
 urlpatterns = [
     path('actions/', actions_view, name='actions'),
@@ -22,6 +22,8 @@ urlpatterns = [
     path('events/edit/<int:id>/', edit_event_view, name='edit_event'),
     path('events/delete/<int:id>/', delete_event_view, name='delete_event'),
     path('create-milestone/', create_milestone_view, name='create_milestone'),
+    path('milestone/edit/<int:id>/', edit_milestone_view, name='edit_milestone'),
+    path('milestone/delete/<int:id>/', delete_milestone_view, name='delete_milestone'),
 ]
 
 

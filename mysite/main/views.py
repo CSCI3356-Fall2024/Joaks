@@ -277,6 +277,28 @@ def edit_event_view(request, id):
     return render(request, 'edit_event.html', {'form': form, 'event': event})
 
 @supervisor_required
+def edit_milestone_view(request, id):
+    milestone = get_object_or_404(Milestone, id=id)
+
+    if request.method == "POST":
+        form = CreateMilestone(request.POST, request.FILES, instance=milestone)
+        if form.is_valid():
+            milestone = form.save(commit=False)
+            milestone.created_by = request.user
+
+            # Check `select_green2go` using cleaned_data after form validation
+
+            # Log the edit action
+            logger.debug(f"Milestone edited by {request.user.username}: {milestone.name}")
+
+            milestone.save()
+            return redirect('campaigns')
+    else:
+        form = CreateMilestone(instance=milestone)
+
+    return render(request, 'edit_event.html', {'form': form, 'event': milestone})
+
+@supervisor_required
 def delete_campaign_view(request, id):
     campaign = get_object_or_404(Campaign, id=id)
 
@@ -299,6 +321,18 @@ def delete_event_view(request, id):
         return redirect('campaigns')
 
     return render(request, 'delete_event.html', {'event': event})
+
+@supervisor_required
+def delete_milestone_view(request, id):
+    milestone = get_object_or_404(Milestone, id=id)
+
+    if request.method == "POST":
+        # Log the delete action before deletion
+        logger.debug(f"Event deleted by {request.user.username}: {milestone.name}")
+        milestone.delete()
+        return redirect('campaigns')
+
+    return render(request, 'delete_milestone.html', {'milestone': milestone})
 
 def campaign_detail(request, campaign_id):
     campaign = get_object_or_404(Campaign, id=campaign_id)

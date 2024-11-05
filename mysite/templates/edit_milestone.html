@@ -1,0 +1,29 @@
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Milestone</title>
+</head>
+<body>
+    <h2>Edit Milestone: {{ milestone.name }}</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+         <!-- Render each form field individually to control the order -->
+        <p>{{ form.name.label_tag }} {{ form.name }}</p>
+        <p>{{ form.description.label_tag }} {{ form.description }}</p>
+        
+        <p>{{ form.show_news.label_tag }} {{ form.show_news }}</p>
+
+        <!-- Add the image upload field -->
+        <p>{{ form.image.label_tag }} {{ form.image }}</p>
+
+        {% if milestone.image %}
+        <img src="{{ milestone.image.url }}" alt="Milestone Image" width="300">
+        {% endif %}
+
+
+        <!-- Move submit button to its own line -->
+        <p>
+            <button type="submit">Save Changes</button>
+        </p>
+    </form>
+    <a href="{% url 'campaigns' %}">Back to All Campaigns</a>
+</body>
