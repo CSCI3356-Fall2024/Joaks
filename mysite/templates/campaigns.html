@@ -168,7 +168,7 @@
                 </td>
                 <td>
                     <a href="{% url 'edit_event' event.id %}">Edit</a> |
-                    <a href="{% url 'delete_campaign' event.id %}">Delete</a>
+                    <a href="{% url 'delete_event' event.id %}">Delete</a>
                 </td>
             </tr>
             {% empty %}
@@ -211,7 +211,7 @@
                 </td>
                 <td>
                     <a href="{% url 'edit_event' event.id %}">Edit</a> |
-                    <a href="{% url 'delete_campaign' event.id %}">Delete</a>
+                    <a href="{% url 'delete_event' event.id %}">Delete</a>
                 </td>
             </tr>
             {% empty %}

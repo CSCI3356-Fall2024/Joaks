@@ -265,6 +265,18 @@ def delete_campaign_view(request, id):
 
     return render(request, 'delete_campaign.html', {'campaign': campaign})
 
+@supervisor_required
+def delete_event_view(request, id):
+    event = get_object_or_404(UpcomingEvents, id=id)
+
+    if request.method == "POST":
+        # Log the delete action before deletion
+        logger.debug(f"Event deleted by {request.user.username}: {event.name}")
+        event.delete()
+        return redirect('campaigns')
+
+    return render(request, 'delete_event.html', {'event': event})
+
 def campaign_detail(request, campaign_id):
     campaign = get_object_or_404(Campaign, id=campaign_id)
     return render(request, 'campaign_detail.html', {'campaign': campaign})
