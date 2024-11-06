@@ -1,12 +1,72 @@
-<head>
-    <meta charset="UTF-8">
-    <title>Delete Milestone</title>
-</head>
-<body>
-    <h2>Are you sure you want to delete the milestone "{{ milestone.name }}"?</h2>
-    <form method="post">
-        {% csrf_token %}
-        <button type="submit">Yes, delete</button>
-    </form>
-    <a href="{% url 'campaigns' %}">Cancel</a>
-</body>
+{% extends 'base.html' %}
+
+{% block title %}Delete Milestone{% endblock %}
+
+{% block content %}
+<div style="padding: 20px;">
+    <h1 style="border-bottom: 2px solid black; margin-bottom: 30px;">Delete Milestone</h1>
+
+    <div style="max-width: 800px;">
+        <!-- Confirmation Box -->
+        <div style="border: 2px solid #ddd; border-radius: 10px; margin-bottom: 20px; background-color: white;">
+            <div style="background-color: #ffd97d; padding: 8px; border-radius: 8px 8px 0 0;">
+                Confirmation Required
+            </div>
+            <div style="padding: 20px;">
+                <p style="font-size: 1.1em; margin-bottom: 20px;">
+                    Are you sure you want to delete the milestone "{{ milestone.name }}"?
+                </p>
+                <p style="color: #dc3545; margin-bottom: 20px;">
+                    This action cannot be undone.
+                </p>
+
+                <!-- Milestone Details -->
+                <div style="margin-bottom: 20px; padding: 15px; background-color: #f8f9fa; border-radius: 5px;">
+                    <h3 style="margin-top: 0; margin-bottom: 10px;">Milestone Details:</h3>
+                    <p><strong>Name:</strong> {{ milestone.name }}</p>
+                    <p><strong>Description:</strong> {{ milestone.description }}</p>
+                    {% if milestone.image %}
+                    <div style="margin-top: 10px;">
+                        <p><strong>Milestone Image:</strong></p>
+                        <img src="{{ milestone.image.url }}" alt="Milestone Image" style="max-width: 200px; border-radius: 5px;">
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Buttons -->
+                <div style="text-align: right;">
+                    <form method="post" style="display: inline;">
+                        {% csrf_token %}
+                        <a href="{% url 'campaigns' %}" style="background-color: #ccc; color: black; padding: 8px 20px; border-radius: 5px; text-decoration: none; margin-right: 10px;">Cancel</a>
+                        <button type="submit" style="background-color: #dc3545; color: white; padding: 8px 20px; border: none; border-radius: 5px; cursor: pointer;">Yes, Delete Milestone</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    form input[type="text"],
+    form input[type="number"],
+    form input[type="email"],
+    form input[type="date"],
+    form textarea,
+    form select {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+    
+    form textarea {
+        min-height: 100px;
+        resize: vertical;
+    }
+    
+    form label {
+        font-weight: bold;
+    }
+</style>
+{% endblock %}

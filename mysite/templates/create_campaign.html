@@ -1,36 +1,139 @@
-<title>Create Campaign</title>
-<h2>Create Campaign</h2>
+{% extends 'base.html' %}
 
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
+{% block title %}Create Campaign{% endblock %}
 
-    <!-- Render each form field individually to control the order -->
-    <p>{{ form.name.label_tag }} {{ form.name }}</p>
-    <p>{{ form.description.label_tag }} {{ form.description }}</p>
-    <p>{{ form.start_date.label_tag }} {{ form.start_date }}</p>
-    <p>{{ form.end_date.label_tag }} {{ form.end_date }}</p>
-    <p>{{ form.points.label_tag }} {{ form.points }}</p>
-    <p>{{ form.show_news.label_tag }} {{ form.show_news }}</p>
-    <p>{{ form.integration_method.label_tag }} {{ form.integration_method }}</p>
+{% block content %}
+<div style="padding: 20px;">
+    <h1 style="border-bottom: 2px solid black; margin-bottom: 30px;">Create Campaign</h1>
 
-    <!-- Place the Green2Go checkbox above the locations field -->
-    <p>{{ form.select_green2go.label_tag }} {{ form.select_green2go }}</p>
-    <p>{{ form.locations.label_tag }} {{ form.locations }}</p>
+    <form method="post" enctype="multipart/form-data" style="max-width: 800px;">
+        {% csrf_token %}
+        
+        <!-- Name Field -->
+        <div style="border: 2px solid #ddd; border-radius: 10px; margin-bottom: 20px;">
+            <div style="background-color: #ffd97d; padding: 8px; border-radius: 8px 8px 0 0;">
+                {{ form.name.label_tag }}
+            </div>
+            <div style="padding: 8px;">
+                {{ form.name }}
+            </div>
+        </div>
 
-    <!-- Add the image upload field -->
-    <p>{{ form.image.label_tag }} {{ form.image }}</p>
+        <!-- Description Field -->
+        <div style="border: 2px solid #ddd; border-radius: 10px; margin-bottom: 20px;">
+            <div style="background-color: #ffd97d; padding: 8px; border-radius: 8px 8px 0 0;">
+                {{ form.description.label_tag }}
+            </div>
+            <div style="padding: 8px;">
+                {{ form.description }}
+            </div>
+        </div>
 
-    
+        <!-- Date Fields Container -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+            <!-- Start Date -->
+            <div style="border: 2px solid #ddd; border-radius: 10px;">
+                <div style="background-color: #ffd97d; padding: 8px; border-radius: 8px 8px 0 0;">
+                    {{ form.start_date.label_tag }}
+                </div>
+                <div style="padding: 8px;">
+                    {{ form.start_date }}
+                </div>
+            </div>
 
-    <button type="submit", name="save">Save</button>
-    <a href="{% url 'campaigns' %}">Cancel</a>
-</form>
+            <!-- End Date -->
+            <div style="border: 2px solid #ddd; border-radius: 10px;">
+                <div style="background-color: #ffd97d; padding: 8px; border-radius: 8px 8px 0 0;">
+                    {{ form.end_date.label_tag }}
+                </div>
+                <div style="padding: 8px;">
+                    {{ form.end_date }}
+                </div>
+            </div>
+        </div>
+
+        <!-- Points and Integration Method Container -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+            <!-- Points -->
+            <div style="border: 2px solid #ddd; border-radius: 10px;">
+                <div style="background-color: #ffd97d; padding: 8px; border-radius: 8px 8px 0 0;">
+                    {{ form.points.label_tag }}
+                </div>
+                <div style="padding: 8px;">
+                    {{ form.points }}
+                </div>
+            </div>
+
+            <!-- Integration Method -->
+            <div style="border: 2px solid #ddd; border-radius: 10px;">
+                <div style="background-color: #ffd97d; padding: 8px; border-radius: 8px 8px 0 0;">
+                    {{ form.integration_method.label_tag }}
+                </div>
+                <div style="padding: 8px;">
+                    {{ form.integration_method }}
+                </div>
+            </div>
+        </div>
+
+        <!-- Locations Section -->
+        <div style="border: 2px solid #ddd; border-radius: 10px; margin-bottom: 20px;">
+            <div style="background-color: #ffd97d; padding: 8px; border-radius: 8px 8px 0 0;">
+                Locations
+            </div>
+            <div style="padding: 15px;">
+                <div style="margin-bottom: 10px;">
+                    {{ form.select_green2go.label_tag }} {{ form.select_green2go }}
+                </div>
+                <div>
+                    {{ form.locations }}
+                </div>
+            </div>
+        </div>
+
+        <!-- Image Upload -->
+        <div style="border: 2px solid #ddd; border-radius: 10px; margin-bottom: 20px;">
+            <div style="background-color: #ffd97d; padding: 8px; border-radius: 8px 8px 0 0;">
+                {{ form.image.label_tag }}
+            </div>
+            <div style="padding: 8px;">
+                {{ form.image }}
+            </div>
+        </div>
+
+        <!-- Show News Checkbox -->
+        <div style="margin-bottom: 20px;">
+            {{ form.show_news }} {{ form.show_news.label_tag }}
+        </div>
+
+        <!-- Buttons -->
+        <div style="text-align: right;">
+            <a href="{% url 'campaigns' %}" style="background-color: #ccc; color: black; padding: 8px 20px; border-radius: 5px; text-decoration: none; margin-right: 10px;">Cancel</a>
+            <button type="submit" style="background-color: #4CAF50; color: white; padding: 8px 20px; border: none; border-radius: 5px; cursor: pointer;">Save</button>
+        </div>
+    </form>
+</div>
 
 <style>
-    body {
-        font-family: Arial, sans-serif;
-        margin: 20;
-        padding: 0;
-        background-color: #f0fff0;
+    form input[type="text"],
+    form input[type="number"],
+    form input[type="email"],
+    form input[type="date"],
+    form textarea,
+    form select {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+    
+    form textarea {
+        min-height: 100px;
+        resize: vertical;
+    }
+    
+    form label {
+        font-weight: bold;
     }
 </style>
+{% endblock %}

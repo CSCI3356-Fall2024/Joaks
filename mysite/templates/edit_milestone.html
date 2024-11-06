@@ -1,29 +1,86 @@
-<head>
-    <meta charset="UTF-8">
-    <title>Edit Milestone</title>
-</head>
-<body>
-    <h2>Edit Milestone: {{ milestone.name }}</h2>
-    <form method="post" enctype="multipart/form-data">
+{% extends 'base.html' %}
+
+{% block title %}Edit Milestone{% endblock %}
+
+{% block content %}
+<div style="padding: 20px;">
+    <h1 style="border-bottom: 2px solid black; margin-bottom: 30px;">Edit Milestone: {{ milestone.name }}</h1>
+
+    <form method="post" enctype="multipart/form-data" style="max-width: 800px;">
         {% csrf_token %}
-         <!-- Render each form field individually to control the order -->
-        <p>{{ form.name.label_tag }} {{ form.name }}</p>
-        <p>{{ form.description.label_tag }} {{ form.description }}</p>
         
-        <p>{{ form.show_news.label_tag }} {{ form.show_news }}</p>
+        <!-- Name Field -->
+        <div style="border: 2px solid #ddd; border-radius: 10px; margin-bottom: 20px;">
+            <div style="background-color: #ffd97d; padding: 8px; border-radius: 8px 8px 0 0;">
+                {{ form.name.label_tag }}
+            </div>
+            <div style="padding: 8px;">
+                {{ form.name }}
+            </div>
+        </div>
 
-        <!-- Add the image upload field -->
-        <p>{{ form.image.label_tag }} {{ form.image }}</p>
+        <!-- Description Field -->
+        <div style="border: 2px solid #ddd; border-radius: 10px; margin-bottom: 20px;">
+            <div style="background-color: #ffd97d; padding: 8px; border-radius: 8px 8px 0 0;">
+                {{ form.description.label_tag }}
+            </div>
+            <div style="padding: 8px;">
+                {{ form.description }}
+            </div>
+        </div>
 
-        {% if milestone.image %}
-        <img src="{{ milestone.image.url }}" alt="Milestone Image" width="300">
-        {% endif %}
+        <!-- Image Upload and Preview -->
+        <div style="border: 2px solid #ddd; border-radius: 10px; margin-bottom: 20px;">
+            <div style="background-color: #ffd97d; padding: 8px; border-radius: 8px 8px 0 0;">
+                {{ form.image.label_tag }}
+            </div>
+            <div style="padding: 15px;">
+                <div style="margin-bottom: 10px;">
+                    {{ form.image }}
+                </div>
+                {% if milestone.image %}
+                <div style="margin-top: 10px;">
+                    <p style="margin-bottom: 8px;">Current Image:</p>
+                    <img src="{{ milestone.image.url }}" alt="Milestone Image" style="max-width: 300px; border-radius: 5px;">
+                </div>
+                {% endif %}
+            </div>
+        </div>
 
+        <!-- Show News Checkbox -->
+        <div style="margin-bottom: 20px;">
+            {{ form.show_news }} {{ form.show_news.label_tag }}
+        </div>
 
-        <!-- Move submit button to its own line -->
-        <p>
-            <button type="submit">Save Changes</button>
-        </p>
+        <!-- Buttons -->
+        <div style="text-align: right;">
+            <a href="{% url 'campaigns' %}" style="background-color: #ccc; color: black; padding: 8px 20px; border-radius: 5px; text-decoration: none; margin-right: 10px;">Back to All Campaigns</a>
+            <button type="submit" style="background-color: #4CAF50; color: white; padding: 8px 20px; border: none; border-radius: 5px; cursor: pointer;">Save Changes</button>
+        </div>
     </form>
-    <a href="{% url 'campaigns' %}">Back to All Campaigns</a>
-</body>
+</div>
+
+<style>
+    form input[type="text"],
+    form input[type="number"],
+    form input[type="email"],
+    form input[type="date"],
+    form textarea,
+    form select {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+    
+    form textarea {
+        min-height: 100px;
+        resize: vertical;
+    }
+    
+    form label {
+        font-weight: bold;
+    }
+</style>
+{% endblock %}
