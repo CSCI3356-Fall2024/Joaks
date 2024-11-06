@@ -308,7 +308,7 @@ def edit_milestone_view(request, id):
     else:
         form = CreateMilestone(instance=milestone)
 
-    return render(request, 'edit_event.html', {'form': form, 'event': milestone})
+    return render(request, 'edit_milestone.html', {'form': form, 'milestone': milestone})
 
 @supervisor_required
 def delete_campaign_view(request, id):

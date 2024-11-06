@@ -54,9 +54,19 @@
 
         <!-- Buttons -->
         <div style="text-align: right;">
-            <a href="{% url 'campaigns' %}" style="background-color: #ccc; color: black; padding: 8px 20px; border-radius: 5px; text-decoration: none; margin-right: 10px;">Back to All Campaigns</a>
-            <button type="submit" style="background-color: #4CAF50; color: white; padding: 8px 20px; border: none; border-radius: 5px; cursor: pointer;">Save Changes</button>
-        </div>
+            <div style="text-align: right;">
+                <a href="{% url 'campaigns' %}" 
+                   style="display: inline-block; padding: 8px 20px; border-radius: 5px; text-decoration: none; margin-right: 10px; 
+                          background-color: #ccc; color: black; font-size: 16px; font-weight: bold; text-align: center; cursor: pointer;">
+                    Cancel
+                </a>
+                <button type="submit" 
+                        style="display: inline-block; padding: 8px 20px; border-radius: 5px; border: none; cursor: pointer; 
+                               background-color: #4CAF50; color: white; font-size: 16px; font-weight: bold; text-align: center;">
+                    Save Changes
+                </button>
+            </div>
+                    </div>
     </form>
 </div>
 
