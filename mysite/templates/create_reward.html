@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}Create Reward{% endblock %}
+
+{% block content %}
+<div style="padding: 20px;">
+    <h1 style="border-bottom: 2px solid black; margin-bottom: 30px;">Create New Reward</h1>
+
+    <form method="post" enctype="multipart/form-data" style="max-width: 800px;">
+        {% csrf_token %}
+        
+        <!-- Render each form field individually -->
+        <div style="margin-bottom: 20px;">
+            {{ form.name.label_tag }}
+            {{ form.name }}
+        </div>
+        <div style="margin-bottom: 20px;">
+            {{ form.point_value.label_tag }}
+            {{ form.point_value }}
+        </div>
+        <div style="margin-bottom: 20px;">
+            {{ form.quantity.label_tag }}
+            {{ form.quantity }}
+        </div>
+        <div style="margin-bottom: 20px;">
+            {{ form.start_date.label_tag }}
+            {{ form.start_date }}
+        </div>
+        <div style="margin-bottom: 20px;">
+            {{ form.end_date.label_tag }}
+            {{ form.end_date }}
+        </div>
+        <div style="margin-bottom: 20px;">
+            {{ form.exchange_method.label_tag }}
+            {{ form.exchange_method }}
+        </div>
+        <div style="margin-bottom: 20px;">
+            {{ form.image.label_tag }}
+            {{ form.image }}
+        </div>
+
+        <!-- Submit Button -->
+        <div style="text-align: right;">
+            <a href="{% url 'rewards' %}" style="background-color: #ccc; color: black; padding: 8px 20px; border-radius: 5px; text-decoration: none; margin-right: 10px;">Cancel</a>
+            <button type="submit" style="background-color: #4CAF50; color: white; padding: 8px 20px; border: none; border-radius: 5px; cursor: pointer;">Create Reward</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
