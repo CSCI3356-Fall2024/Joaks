@@ -33,7 +33,10 @@ def rewards_view(request, *args, **kwargs):
     print(args, kwargs)
     print(request.user)
 
-    rewards = Reward.objects.all()
+    today = date.today()
+
+    active_rewards = Reward.objects.filter(start_date__lte=today, end_date__gte=today)
+    inactive_rewards = Reward.objects.exclude(id__in=active_rewards)
 
     # Check if the user is a supervisor
     if request.user.is_authenticated and request.user.role == 'supervisor':
@@ -41,7 +44,10 @@ def rewards_view(request, *args, **kwargs):
     else:
         template = 'rewards.html'
 
-    return render(request, template, {'rewards': rewards})
+    return render(request, template, {
+        'active_rewards': active_rewards,
+        'inactive_rewards': inactive_rewards,
+    })
 
 def all_campaigns_view(request, *args, **kwargs):
     print(args, kwargs)
@@ -385,3 +391,26 @@ def create_reward_view(request):
         form = CreateReward()  # Initialize the form for a GET request
 
     return render(request, 'create_reward.html', {'form': form})
+
+
+@supervisor_required
+def edit_reward_view(request, id):
+    reward = get_object_or_404(Reward, id=id)
+    if request.method == "POST":
+        form = RewardForm(request.POST, request.FILES, instance=reward)
+        if form.is_valid():
+            form.save()
+            logger.debug(f"Reward edited by {request.user.username}: {reward.name}")
+            return redirect('supervisor_rewards')
+    else:
+        form = RewardForm(instance=reward)
+    return render(request, 'edit_reward.html', {'form': form, 'reward': reward})
+
+@supervisor_required
+def delete_reward_view(request, id):
+    reward = get_object_or_404(Reward, id=id)
+    if request.method == "POST":
+        logger.debug(f"Reward deleted by {request.user.username}: {reward.name}")
+        reward.delete()
+        return redirect('supervisor_rewards')
+    return render(request, 'delete_reward.html', {'reward': reward})

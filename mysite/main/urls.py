@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path
-from .views import home_view, actions_view, rewards_view, profile_view, campaigns_view, edit_profile_view, create_campaign_view, edit_campaign_view, delete_campaign_view, all_campaigns_view, campaign_detail, create_event_view, event_detail, all_events_view, edit_event_view, delete_event_view, create_milestone_view, edit_milestone_view, delete_milestone_view, milestone_detail, all_milestones_view, create_reward_view
+from .views import home_view, actions_view, rewards_view, profile_view, campaigns_view, edit_profile_view, create_campaign_view, edit_campaign_view, delete_campaign_view, all_campaigns_view, campaign_detail, create_event_view, event_detail, all_events_view, edit_event_view, delete_event_view, create_milestone_view, edit_milestone_view, delete_milestone_view, milestone_detail, all_milestones_view, create_reward_view, edit_reward_view, delete_reward_view
 
 urlpatterns = [
     path('actions/', actions_view, name='actions'),
@@ -27,6 +27,8 @@ urlpatterns = [
     path('milestone/<int:milestone_id>/', milestone_detail, name='milestone_detail'),
     path('all-milestones/', all_milestones_view, name='all_milestones'),
     path('create-reward/', create_reward_view, name='create_reward'),
+    path('rewards/edit/<int:id>/', edit_reward_view, name='edit_reward'),
+    path('rewards/delete/<int:id>/', delete_reward_view, name='delete_reward'),
 ]
 
 
