@@ -105,3 +105,17 @@ class Campaign(models.Model):
 
     def __str__(self):
         return self.name
+
+class Reward(models.Model):
+    
+    name = models.CharField(max_length=100)  # Name of the product
+    point_value = models.IntegerField()  # Point value associated with the reward
+    quantity = models.IntegerField()  # How many of these rewards available
+    start_date = models.DateField()  # Reward start date
+    end_date = models.DateField()  # Reward end date
+    exchange_method = models.CharField(max_length=255)
+    created_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='milestones')
+    image = models.ImageField(upload_to='reward_images/', null=False, blank=False)  # Mandatory image field
+
+    def __str__(self):
+        return self.name
