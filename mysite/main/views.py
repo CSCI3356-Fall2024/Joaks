@@ -4,6 +4,7 @@ from .models import Campaign, UpcomingEvents
 from .models import CustomUser
 from .models import UpcomingEvents
 from .models import Milestone
+from .models import Reward
 from .decorators import supervisor_required
 from datetime import date
 import logging
@@ -31,7 +32,16 @@ def actions_view(request, *args, **kwargs):
 def rewards_view(request, *args, **kwargs):
     print(args, kwargs)
     print(request.user)
-    return render(request, 'rewards.html', {})
+
+    rewards = Reward.objects.all()
+
+    # Check if the user is a supervisor
+    if request.user.is_authenticated and request.user.role == 'supervisor':
+        template = 'supervisor_rewards.html'
+    else:
+        template = 'rewards.html'
+
+    return render(request, template, {'rewards': rewards})
 
 def all_campaigns_view(request, *args, **kwargs):
     print(args, kwargs)
@@ -359,20 +369,19 @@ def milestone_detail(request, milestone_id):
     return render(request, 'milestone_detail.html', {'milestone': milestone})
 
 @supervisor_required
-def create_reward(request):
+def create_reward_view(request):
     if request.method == "POST":
-        form = RewardForm(request.POST, request.FILES)
-    if form.is_valid():
+        form = CreateReward(request.POST, request.FILES)
+        if form.is_valid():
             reward = form.save(commit=False)
-            reward.created_by = request.user  # Set the user who created it
+            reward.created_by = request.user
             reward.save()
 
             # Log the creation action
             logger.debug(f"New Reward created by {request.user.username}: {reward.name}")
 
-            return redirect('rewards')  # Redirect to a rewards page (you'll create this later)
+            return redirect('rewards')  # Redirect to the rewards list page
     else:
-        form = RewardForm()
+        form = CreateReward()  # Initialize the form for a GET request
 
     return render(request, 'create_reward.html', {'form': form})
-

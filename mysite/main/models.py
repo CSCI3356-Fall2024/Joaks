@@ -114,7 +114,7 @@ class Reward(models.Model):
     start_date = models.DateField()  # Reward start date
     end_date = models.DateField()  # Reward end date
     exchange_method = models.CharField(max_length=255)
-    created_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='milestones')
+    created_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='rewards')
     image = models.ImageField(upload_to='reward_images/', null=False, blank=False)  # Mandatory image field
 
     def __str__(self):

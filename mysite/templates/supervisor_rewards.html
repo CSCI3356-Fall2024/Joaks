@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Rewards{% endblock %}
+
+{% block content %}
+<h1>Rewards</h1>
+<ul>
+    {% for reward in rewards %}
+        <li>{{ reward.name }} - {{ reward.point_value }} points</li>
+    {% empty %}
+        <li>No rewards available.</li>
+    {% endfor %}
+</ul>
+<a href="{% url 'create_reward' %}">Create New Reward</a>
+{% endblock %}
