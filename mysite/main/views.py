@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import EditProfile, CreateCampaign, CreateUpcomingEvents, CreateMilestone
+from .forms import EditProfile, CreateCampaign, CreateUpcomingEvents, CreateMilestone, CreateReward
 from .models import Campaign, UpcomingEvents
 from .models import CustomUser
 from .models import UpcomingEvents
@@ -357,3 +357,22 @@ def event_detail(request, event_id):
 def milestone_detail(request, milestone_id):
     milestone = get_object_or_404(Milestone, id=milestone_id)
     return render(request, 'milestone_detail.html', {'milestone': milestone})
+
+@supervisor_required
+def create_reward(request):
+    if request.method == "POST":
+        form = RewardForm(request.POST, request.FILES)
+    if form.is_valid():
+            reward = form.save(commit=False)
+            reward.created_by = request.user  # Set the user who created it
+            reward.save()
+
+            # Log the creation action
+            logger.debug(f"New Reward created by {request.user.username}: {reward.name}")
+
+            return redirect('rewards')  # Redirect to a rewards page (you'll create this later)
+    else:
+        form = RewardForm()
+
+    return render(request, 'create_reward.html', {'form': form})
+
