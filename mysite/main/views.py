@@ -49,6 +49,34 @@ def rewards_view(request, *args, **kwargs):
         'inactive_rewards': inactive_rewards,
     })
 
+
+def rewards_view(request, *args, **kwargs):
+    print(args, kwargs)
+    print(request.user)
+
+    today = date.today()
+
+    # Get active rewards based on the current date
+    active_rewards = Reward.objects.filter(start_date__lte=today, end_date__gte=today)
+    inactive_rewards = Reward.objects.exclude(id__in=active_rewards)
+
+    # Check if the user is authenticated and retrieve their points
+    user_points = request.user.points if request.user.is_authenticated else 0
+
+    # Separate active rewards into available and unavailable based on user points
+    available_rewards = active_rewards.filter(point_value__lte=user_points)
+    unavailable_rewards = active_rewards.exclude(id__in=available_rewards)
+
+    # Choose the template based on user role
+    template = 'supervisor_rewards.html' if request.user.is_authenticated and request.user.role == 'supervisor' else 'rewards.html'
+
+    return render(request, template, {
+        'available_rewards': available_rewards,
+        'unavailable_rewards': unavailable_rewards,
+        'active_rewards': active_rewards,
+        'inactive_rewards': inactive_rewards,
+    })
+
 def all_campaigns_view(request, *args, **kwargs):
     print(args, kwargs)
     print(request.user)

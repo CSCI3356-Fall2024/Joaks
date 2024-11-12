@@ -1,22 +1,27 @@
 {% extends 'base.html' %}
 
-{% block title %} Rewards {% endblock %}
+{% block title %}Available Rewards{% endblock %}
 
 {% block content %}
-<h1 style="font-size: 2.5em; border-bottom: 2px solid black; font-family: 'Oswald', sans-serif; font-optical-sizing: auto; font-style: normal; font-weight: 400; padding-bottom: 10px; ">MY REWARDS</h1>
+<h1 style="font-size: 2.5em; border-bottom: 2px solid black; font-family: 'Oswald', sans-serif; font-optical-sizing: auto; font-style: normal; font-weight: 400; padding-bottom: 10px; ">REWARDS</h1>
 
-<h1>Available Rewards</h1>
 
-{% if active_rewards %}
+<!-- Display the user's points balance -->
+{% if user.is_authenticated %}
+    <p><strong>Your Point Balance:</strong> {{ user.points }} points</p>
+{% else %}
+    <p><strong>Your Point Balance:</strong> 0 points (Please log in to view your points)</p>
+{% endif %}
+
+<h2>Rewards You Can Redeem</h2>
+{% if available_rewards %}
     <ul>
-        {% for reward in active_rewards %}
+        {% for reward in available_rewards %}
             <li>
                 <strong>{{ reward.name }}</strong> - {{ reward.point_value }} points
-                <br>
                 <p>{{ reward.description }}</p>
                 <p><strong>Quantity Available:</strong> {{ reward.quantity }}</p>
                 <p><strong>Valid Until:</strong> {{ reward.end_date|date:"M. d, Y" }}</p>
-
                 {% if reward.image %}
                     <img src="{{ reward.image.url }}" width="100" height="100" alt="Reward Image" style="border-radius: 5px;">
                 {% endif %}
@@ -24,7 +29,28 @@
         {% endfor %}
     </ul>
 {% else %}
-    <p>No active rewards are available at the moment. Please check back later!</p>
+    <p>No rewards available for your points at the moment.</p>
 {% endif %}
+
+<h2>Earn More Points to Redeem</h2>
+{% if unavailable_rewards %}
+    <ul>
+        {% for reward in unavailable_rewards %}
+            <li>
+                <strong>{{ reward.name }}</strong> - {{ reward.point_value }} points
+                <p>{{ reward.description }}</p>
+                <p><strong>Quantity Available:</strong> {{ reward.quantity }}</p>
+                <p><strong>Valid Until:</strong> {{ reward.end_date|date:"M. d, Y" }}</p>
+                {% if reward.image %}
+                    <img src="{{ reward.image.url }}" width="100" height="100" alt="Reward Image" style="border-radius: 5px;">
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>All rewards are currently available for your points balance.</p>
+{% endif %}
+
+<p>TO DO: add a button to see your reward history; add buttons to redeem available rewards</p>
 
 {% endblock %}
