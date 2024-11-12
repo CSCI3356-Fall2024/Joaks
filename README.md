@@ -1,7 +1,11 @@
 # Joaks
 
-Things we need to do from previous deliveries feedback:  
-- make the look and feel of ALL pages consistent (ie edit-profile and create/add/delete-campaign); show what fields are mandatory clearly
+Delivery 5 to do:  
+- redeem rewards feature should:
+- subtract point value of reward from students' point balance
+- decrememnt the quantity of that reward remaining
+- should update student's rewards history
+- on the supervisor end: should be able to see who/when redeemed that reward 
 
 
 every time activate virtual environment. on mac:  
