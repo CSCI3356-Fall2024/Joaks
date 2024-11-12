@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import CustomUser, Campaign, UpcomingEvents, Milestone
+from .models import CustomUser, Campaign, UpcomingEvents, Milestone, Reward
 # Register your models here.
 
 @admin.register(CustomUser)
@@ -22,4 +22,8 @@ class UpcomingEventsAdmin(admin.ModelAdmin):
         'name', 'description', 'start_date', 'end_date', 
         'locations', 'show_news', 'integration_method', 'created_by'
     )  # Specify fields to display in the admin list view
+
+@admin.register(Reward)
+class RewardAdmin(admin.ModelAdmin):
+    list_display = ('name', 'point_value', 'quantity', 'start_date', 'end_date', 'created_by')
 

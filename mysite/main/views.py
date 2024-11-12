@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import EditProfile, CreateCampaign, CreateUpcomingEvents, CreateMilestone
+from .forms import EditProfile, CreateCampaign, CreateUpcomingEvents, CreateMilestone, CreateReward
 from .models import Campaign, UpcomingEvents
 from .models import CustomUser
 from .models import UpcomingEvents
 from .models import Milestone
+from .models import Reward
 from .decorators import supervisor_required
 from datetime import date
 import logging
@@ -31,7 +32,50 @@ def actions_view(request, *args, **kwargs):
 def rewards_view(request, *args, **kwargs):
     print(args, kwargs)
     print(request.user)
-    return render(request, 'rewards.html', {})
+
+    today = date.today()
+
+    active_rewards = Reward.objects.filter(start_date__lte=today, end_date__gte=today)
+    inactive_rewards = Reward.objects.exclude(id__in=active_rewards)
+
+    # Check if the user is a supervisor
+    if request.user.is_authenticated and request.user.role == 'supervisor':
+        template = 'supervisor_rewards.html'
+    else:
+        template = 'rewards.html'
+
+    return render(request, template, {
+        'active_rewards': active_rewards,
+        'inactive_rewards': inactive_rewards,
+    })
+
+
+def rewards_view(request, *args, **kwargs):
+    print(args, kwargs)
+    print(request.user)
+
+    today = date.today()
+
+    # Get active rewards based on the current date
+    active_rewards = Reward.objects.filter(start_date__lte=today, end_date__gte=today)
+    inactive_rewards = Reward.objects.exclude(id__in=active_rewards)
+
+    # Check if the user is authenticated and retrieve their points
+    user_points = request.user.points if request.user.is_authenticated else 0
+
+    # Separate active rewards into available and unavailable based on user points
+    available_rewards = active_rewards.filter(point_value__lte=user_points)
+    unavailable_rewards = active_rewards.exclude(id__in=available_rewards)
+
+    # Choose the template based on user role
+    template = 'supervisor_rewards.html' if request.user.is_authenticated and request.user.role == 'supervisor' else 'rewards.html'
+
+    return render(request, template, {
+        'available_rewards': available_rewards,
+        'unavailable_rewards': unavailable_rewards,
+        'active_rewards': active_rewards,
+        'inactive_rewards': inactive_rewards,
+    })
 
 def all_campaigns_view(request, *args, **kwargs):
     print(args, kwargs)
@@ -357,3 +401,44 @@ def event_detail(request, event_id):
 def milestone_detail(request, milestone_id):
     milestone = get_object_or_404(Milestone, id=milestone_id)
     return render(request, 'milestone_detail.html', {'milestone': milestone})
+
+@supervisor_required
+def create_reward_view(request):
+    if request.method == "POST":
+        form = CreateReward(request.POST, request.FILES)
+        if form.is_valid():
+            reward = form.save(commit=False)
+            reward.created_by = request.user
+            reward.save()
+
+            # Log the creation action
+            logger.debug(f"New Reward created by {request.user.username}: {reward.name}")
+
+            return redirect('rewards')  # Redirect to the rewards list page
+    else:
+        form = CreateReward()  # Initialize the form for a GET request
+
+    return render(request, 'create_reward.html', {'form': form})
+
+
+@supervisor_required
+def edit_reward_view(request, id):
+    reward = get_object_or_404(Reward, id=id)
+    if request.method == "POST":
+        form = RewardForm(request.POST, request.FILES, instance=reward)
+        if form.is_valid():
+            form.save()
+            logger.debug(f"Reward edited by {request.user.username}: {reward.name}")
+            return redirect('supervisor_rewards')
+    else:
+        form = RewardForm(instance=reward)
+    return render(request, 'edit_reward.html', {'form': form, 'reward': reward})
+
+@supervisor_required
+def delete_reward_view(request, id):
+    reward = get_object_or_404(Reward, id=id)
+    if request.method == "POST":
+        logger.debug(f"Reward deleted by {request.user.username}: {reward.name}")
+        reward.delete()
+        return redirect('supervisor_rewards')
+    return render(request, 'delete_reward.html', {'reward': reward})

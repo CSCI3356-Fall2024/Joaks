@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+
+{% block title %} Rewards {% endblock %}
+
+{% block content %}
+
+<h1 id="Rewards" style="font-size: 2.5em; border-bottom: 2px solid black; font-family: 'Oswald', sans-serif; font-optical-sizing: auto; font-style: normal; font-weight: 400; padding-top: 0px; padding-bottom: 10px; ">REWARDS</h1>
+
+<head>
+    <meta charset="UTF-8">
+    <title>All Rewards</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+
+
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px; padding-bottom: 10px;">
+        <h2 style="margin: 0;">Active Rewards</h2>
+        <a href="/create-reward/" 
+           style="background-color: #9a1113; color: white; padding: 8px 20px; border: none; border-radius: 5px; text-decoration: none;">
+            Create New Reward
+        </a>
+    </div>
+    
+
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Point Value</th>
+                <th>Quantity</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Exchange Method</th>
+                <th>Created By</th>
+                <th>Image</th> <!-- New column for the image -->
+                <th>Actions</th>  <!-- New column for actions -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for reward in active_rewards %}
+            <tr>
+                <td>{{ reward.name }}</td>
+                <td>{{ reward.point_value }}</td>
+                <td>{{ reward.quantity }}</td>
+                <td>{{ reward.start_date }}</td>
+                <td>{{ reward.end_date }}</td>
+                <td>{{ reward.exchange_method }}</td>
+                <td>{{ reward.created_by.username }}</td>
+                <td>
+                    {% if reward.image %}
+                        <!-- Display a smaller version of the image, e.g., 50x50 pixels -->
+                        <img src="{{ reward.image.url }}" width="50" height="50" alt="Reward Image">
+                    {% else %}
+                        No Image
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{% url 'edit_reward' reward.id %}">Edit</a> |
+                    <a href="{% url 'delete_reward' reward.id %}">Delete</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="7">No active rewards available.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+
+    <h2>Inactive Rewards</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Point Value</th>
+                <th>Quantity</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Exchange Method</th>
+                <th>Created By</th>
+                <th>Image</th> <!-- New column for the image -->
+                <th>Actions</th>  <!-- New column for actions -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for reward in inactive_rewards %}
+            <tr>
+                <td>{{ reward.name }}</td>
+                <td>{{ reward.point_value }}</td>
+                <td>{{ reward.quantity }}</td>
+                <td>{{ reward.start_date }}</td>
+                <td>{{ reward.end_date }}</td>
+                <td>{{ reward.exchange_method }}</td>
+                <td>{{ reward.created_by.username }}</td>
+                <td>
+                    {% if reward.image %}
+                        <!-- Display a smaller version of the image, e.g., 50x50 pixels -->
+                        <img src="{{ reward.image.url }}" width="50" height="50" alt="Reward Image">
+                    {% else %}
+                        No Image
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{% url 'edit_reward' reward.id %}">Edit</a> |
+                    <a href="{% url 'delete_reward' reward.id %}">Delete</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="7">No active rewards available.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

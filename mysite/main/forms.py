@@ -1,7 +1,7 @@
 from django import forms
 from .models import CustomUser
 from .majors import MAJORS
-from .models import Campaign, UpcomingEvents, Milestone
+from .models import Campaign, UpcomingEvents, Milestone, Reward
 
 class EditProfile(forms.ModelForm):
     class Meta:
@@ -92,3 +92,13 @@ class CreateMilestone(forms.ModelForm):
         model = Milestone
         fields = ['name', 'description', 'show_news', 'image']
         
+
+
+class CreateReward(forms.ModelForm):
+    class Meta:
+        model = Reward
+        fields = ['name', 'point_value', 'quantity', 'start_date', 'end_date', 'exchange_method', 'image']
+        widgets = {
+            'start_date': forms.DateInput(attrs={'type': 'date'}),
+            'end_date': forms.DateInput(attrs={'type': 'date'}),
+        }

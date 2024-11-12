@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}Delete Reward{% endblock %}
+
+{% block content %}
+<div style="padding: 20px;">
+    <h1>Are you sure you want to delete {{ reward.name }}?</h1>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" style="background-color: #dc3545; color: white; padding: 8px 20px; border-radius: 5px;">Yes, Delete Reward</button>
+        <a href="{% url 'supervisor_rewards' %}" style="background-color: #ccc; color: black; padding: 8px 20px; border-radius: 5px; text-decoration: none;">Cancel</a>
+    </form>
+</div>
+{% endblock %}
