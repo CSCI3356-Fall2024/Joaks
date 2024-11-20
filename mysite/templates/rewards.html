@@ -5,10 +5,22 @@
 {% block content %}
 <h1 style="font-size: 2.5em; border-bottom: 2px solid black; font-family: 'Oswald', sans-serif; font-optical-sizing: auto; font-style: normal; font-weight: 400; padding-bottom: 10px; ">REWARDS</h1>
 
+{% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li class="{% if message.tags %}{{ message.tags }}{% endif %} p-4 mb-4 rounded
+                       {% if message.tags == 'success' %}bg-green-100 text-green-700{% endif %}
+                       {% if message.tags == 'error' %}bg-red-100 text-red-700{% endif %}">
+                {{ message }}
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}
 
 <!-- Display the user's points balance -->
 {% if user.is_authenticated %}
-    <p><strong>Your Point Balance:</strong> {{ user.points }} points</p>
+    <p><strong>Your Point Balance:</strong> {{ user.points_to_redeem }} points</p>
+    <a href="{% url 'reward_history' %}" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">View Reward History</a>
 {% else %}
     <p><strong>Your Point Balance:</strong> 0 points (Please log in to view your points)</p>
 {% endif %}
@@ -25,6 +37,14 @@
                 {% if reward.image %}
                     <img src="{{ reward.image.url }}" width="100" height="100" alt="Reward Image" style="border-radius: 5px;">
                 {% endif %}
+                <form method="post" action="{% url 'redeem_reward' reward.id %}" class="mt-4">
+                    {% csrf_token %}
+                    <button type="submit"
+                            class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 w-full"
+                            onclick="return confirm('Are you sure you want to redeem this reward?');">
+                        Redeem Reward
+                    </button>
+                </form>
             </li>
         {% endfor %}
     </ul>
@@ -44,13 +64,14 @@
                 {% if reward.image %}
                     <img src="{{ reward.image.url }}" width="100" height="100" alt="Reward Image" style="border-radius: 5px;">
                 {% endif %}
+                <button disabled class="mt-4 px-4 py-2 bg-gray-400 text-white rounded w-full cursor-not-allowed">
+                    Need More Points
+                </button>
             </li>
         {% endfor %}
     </ul>
 {% else %}
     <p>All rewards are currently available for your points balance.</p>
 {% endif %}
-
-<p>TO DO: add a button to see your reward history; add buttons to redeem available rewards</p>
 
 {% endblock %}

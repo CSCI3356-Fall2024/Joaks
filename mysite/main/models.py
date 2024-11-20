@@ -22,6 +22,7 @@ class CustomUser(AbstractUser):
     points = models.IntegerField(default=0)  # The amount of points the user has
     referral_points = models.IntegerField(default=0)  # The amount of times the user has been entered as a referral
     is_first_login = models.BooleanField(default=True)  # Track first login
+    points_to_redeem = models.IntegerField(default=0) # Decrement this when points are redeemed, won't affect leaderboard
 
 
 class UpcomingEvents(models.Model):
@@ -119,3 +120,17 @@ class Reward(models.Model):
 
     def __str__(self):
         return self.name
+
+class RewardRedemption(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='redemptions')
+    reward = models.ForeignKey(Reward, on_delete=models.CASCADE)
+    redemption_date = models.DateTimeField(auto_now_add=True)
+    points_spent = models.IntegerField()
+    status = models.CharField(max_length=20, choices=[
+        ('pending', 'Pending'),
+        ('completed', 'Completed'),
+        ('cancelled', 'Cancelled')
+    ], default='pending')
+
+    def __str__(self):
+        return f"{self.user.username} - {self.reward.name} ({self.redemption_date})"

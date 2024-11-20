@@ -8,6 +8,10 @@ from .models import Reward
 from .decorators import supervisor_required
 from datetime import date
 import logging
+from .models import RewardRedemption
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.db import models
 
 logger = logging.getLogger('campaign_logger')
 
@@ -425,13 +429,13 @@ def create_reward_view(request):
 def edit_reward_view(request, id):
     reward = get_object_or_404(Reward, id=id)
     if request.method == "POST":
-        form = RewardForm(request.POST, request.FILES, instance=reward)
+        form = CreateReward(request.POST, request.FILES, instance=reward)
         if form.is_valid():
             form.save()
             logger.debug(f"Reward edited by {request.user.username}: {reward.name}")
             return redirect('supervisor_rewards')
     else:
-        form = RewardForm(instance=reward)
+        form = CreateReward(instance=reward)
     return render(request, 'edit_reward.html', {'form': form, 'reward': reward})
 
 @supervisor_required
@@ -442,3 +446,44 @@ def delete_reward_view(request, id):
         reward.delete()
         return redirect('supervisor_rewards')
     return render(request, 'delete_reward.html', {'reward': reward})
+
+
+@login_required
+def redeem_reward_view(request, reward_id):
+    if request.method == 'POST':
+        reward = get_object_or_404(Reward, id=reward_id)
+        user = request.user
+
+        # Check if user has enough points
+        if user.points < reward.point_value:
+            messages.error(request, 'Not enough points to redeem this reward.')
+            return redirect('rewards')
+
+        # Check if reward is still available
+        if reward.quantity <= 0:
+            messages.error(request, 'This reward is out of stock.')
+            return redirect('rewards')
+
+        # Create redemption record
+        redemption = RewardRedemption.objects.create(
+            user=user,
+            reward=reward,
+            points_spent=reward.point_value
+        )
+
+        # Update user's points and reward quantity
+        user.points_to_redeem -= reward.point_value
+        user.save()
+        reward.quantity -= 1
+        reward.save()
+
+        messages.success(request, f'Successfully redeemed {reward.name}!')
+        return redirect('rewards')
+
+    return redirect('rewards')
+
+@login_required
+def reward_history_view(request):
+    redemptions = RewardRedemption.objects.filter(user=request.user).order_by('-redemption_date')
+    return render(request, 'reward_history.html', {'redemptions': redemptions})
+

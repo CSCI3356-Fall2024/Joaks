@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Confirm Redemption</h1>
+<div class="redemption-confirmation">
+    <h2>{{ reward.name }}</h2>
+    <p>Points required: {{ reward.point_value }}</p>
+    <p>Your current points: {{ user.points }}</p>
+    <p>Exchange method: {{ reward.exchange_method }}</p>
+    <form method="post">
+        {% csrf_token %}
+        <p>Are you sure you want to redeem this reward?</p>
+        <button type="submit" class="btn btn-primary">Confirm Redemption</button>
+        <a href="{% url 'rewards' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}
