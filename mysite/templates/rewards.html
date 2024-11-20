@@ -20,7 +20,8 @@
 <!-- Display the user's points balance -->
 {% if user.is_authenticated %}
     <p><strong>Your Point Balance:</strong> {{ user.points_to_redeem }} points</p>
-    <button action="{% url 'reward_history' %}" style="
+    <a href="{% url 'reward_history' %}" style="
+       color: black;
        text-decoration: none;
        background-color: #ffd97d;
        padding: 10px 24px;
@@ -31,7 +32,7 @@
        transition: background-color 0.3s;
     ">
         View Reward History
-    </button>
+    </a>
 {% else %}
     <p><strong>Your Point Balance:</strong> 0 points (Please log in to view your points)</p>
 {% endif %}
