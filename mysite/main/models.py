@@ -22,7 +22,7 @@ class CustomUser(AbstractUser):
     points = models.IntegerField(default=0)  # The amount of points the user has
     referral_points = models.IntegerField(default=0)  # The amount of times the user has been entered as a referral
     is_first_login = models.BooleanField(default=True)  # Track first login
-    points_to_redeem = models.IntegerField(default=0) # Decrement this when points are redeemed, won't affect leaderboard
+    points_to_redeem = models.IntegerField(default=0) # Decrement this when points are redeemed, increment when points are earned, won't affect leaderboard
 
 
 class UpcomingEvents(models.Model):
