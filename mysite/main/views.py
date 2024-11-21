@@ -406,6 +406,12 @@ def milestone_detail(request, milestone_id):
     milestone = get_object_or_404(Milestone, id=milestone_id)
     return render(request, 'milestone_detail.html', {'milestone': milestone})
 
+def full_top_users_view(request):
+    top_users = CustomUser.objects.filter(role='student').order_by('-points')
+    top_referrers = CustomUser.objects.filter(role='student').order_by('-referral_points')
+    return render(request, 'full_top_users.html', {'top_users': top_users, 'top_referrers' : top_referrers})
+
+
 @supervisor_required
 def create_reward_view(request):
     if request.method == "POST":
