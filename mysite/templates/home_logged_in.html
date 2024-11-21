@@ -21,13 +21,14 @@
                     </div>
                     {% if top_users %}
                         <ol style="margin-left: 10px;">
-                            {% for user in top_users %}
+                            {% for user in top_users|slice:":3" %}
                                 <li style="display: flex; justify-content: space-between; margin: 10px 0;">
                                     <span>{{ forloop.counter }}. {{ user.username }}</span>
                                     <span>{{ user.points }} points</span>
                                 </li>
                             {% endfor %}
                         </ol>
+                        <a href="{% url 'full_top_users' %}" style="text-decoration: none; color: blue;">See Full Leaderboard</a>
                     {% else %}
                         <p>No users available for the leaderboard.</p>
                     {% endif %}
@@ -43,13 +44,14 @@
                     </div>
                     {% if top_referrers %}
                         <ol style="margin-left: 10px;">
-                            {% for user in top_referrers %}
+                            {% for user in top_referrers|slice:":3" %}
                                 <li style="display: flex; justify-content: space-between; margin: 10px 0;">
                                     <span>{{ forloop.counter }}. {{ user.username }}</span>
                                     <span>{{ user.referral_points }} users</span>
                                 </li>
                             {% endfor %}
                         </ol>
+                        <a href="{% url 'full_top_referrers' %}" style="text-decoration: none; color: blue;">See Full Leaderboard</a>
                     {% else %}
                         <p>No users available for the leaderboard.</p>
                     {% endif %}
