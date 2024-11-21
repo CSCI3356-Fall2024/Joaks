@@ -1,14 +1,135 @@
-{% extends 'base.html' %}
 
 {% block content %}
-<h1>Full Leaderboard - Top Users</h1>
-<o1>
-    {% for user in top_users %}
-    <li>
-        <strong>{{ user.username }}</strong> - {{ user.points }} points
-    </li>
-    {% endfor %}
-</o1>
+<div class = "leaderboard-container">
+    <h1>General Leaderboard - Top Users</h1>
+    <div class="leaderboard-wrapper">
+        <div class="leaderboard-table">
+            <h2>Top Users</h2>
+            <table class="leaderboard">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Points</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in top_users %}
+                    <tr>
+                        <td>{{ forloop.counter}}</td>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.points }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
 
-<a href="{% url 'home' %}">Back to Home</a>
+        <div class="leaderboard-table">
+            <h2>Top Referrers</h2>
+            <table class="leaderboard">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Referrals</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in top_referrers %}
+                    <tr>
+                        <td>{{ forloop.counter}}</td>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.referral_points }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <a href="{% url 'home' %}" class="back-link">Back to Home</a>
+</div>
 {% endblock %}
+
+<style>
+.leaderboard-container {
+    max-width: 1200px; 
+    margin: 20px auto; 
+    padding: 20px; 
+    background-color: #f0f8f0;
+    border-radius: 8px; 
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-family: 'Arial', sans-serif; 
+}
+
+.leaderboard-container h1 {
+    text-align: center; 
+    font-size: 2em; 
+    margin-bottom: 20px;
+    font-weight: bold;  
+}
+
+.leaderboard-wrapper {
+    display: flex; 
+    justify-content: space-between; 
+    gap: 20px; 
+    flex-wrap: wrap; 
+}
+
+.leaderboard-table {
+    flex: 1; 
+    max-width: 40%; 
+    min-width: 300px; 
+    text-align: center; 
+}
+
+.leaderboard-table h2 {
+    text-align: center; 
+    font-size: 1.5em; 
+    margin-bottom: 15px; 
+}
+
+.leaderboard {
+    width: 100%; 
+    border-collapse: collapse; 
+    text-align: center; 
+}
+
+.leaderboard thead th {
+    font-size: 1em; 
+    padding: 10px; 
+    border-bottom: 2px solid #ddd; 
+    background-color: #f8f9fa;
+    text-align: center;
+}
+
+.leaderboard tbody tr {
+    border-bottom: 1px solid #ddd; 
+    transition: background-color 0.3s ease; 
+}
+
+.leaderboard tbody tr:hover {
+    background-color: #f1f3f5; 
+}
+
+.leaderboard td {
+    padding: 10px; 
+    text-align: center; 
+    font-size: 0.9em; 
+}
+
+.back-link {
+    display: block; 
+    text-align: center; 
+    margin-top: 20px; 
+    text-decoration: none; 
+    color: #007bff; 
+    font-size: 1em; 
+}
+
+.back-link:hover {
+    text-decoration: underline; 
+}
+
+
+</style>
