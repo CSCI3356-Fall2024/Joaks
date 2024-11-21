@@ -23,7 +23,14 @@
                         <ol style="margin-left: 10px;">
                             {% for user in top_users|slice:":3" %}
                                 <li style="display: flex; justify-content: space-between; margin: 10px 0;">
-                                    <span>{{ forloop.counter }}. {{ user.username }}</span>
+                                    <span> {{ forloop.counter }}. </span>
+                                    <span> 
+                                        {% if user == request.user %}
+                                            <a href="{% url 'profile' %}" style="color: #9a1113;">{{ user.username }}</a>
+                                        {% else %}
+                                            {{ user.username }}
+                                        {% endif %}
+                                    </span>
                                     <span>{{ user.points }} points</span>
                                 </li>
                             {% endfor %}
@@ -46,8 +53,15 @@
                         <ol style="margin-left: 10px;">
                             {% for user in top_referrers|slice:":3" %}
                                 <li style="display: flex; justify-content: space-between; margin: 10px 0;">
-                                    <span>{{ forloop.counter }}. {{ user.username }}</span>
-                                    <span>{{ user.referral_points }} users</span>
+                                    <span> {{ forloop.counter }}. </span>
+                                    <span> 
+                                        {% if user == request.user %}
+                                            <a href="{% url 'profile' %}" style="color: #9a1113;">{{ user.username }}</a>
+                                        {% else %}
+                                            {{ user.username }}
+                                        {% endif %}
+                                    </span>
+                                    <span>{{ user.referral_points }} referrals</span>
                                 </li>
                             {% endfor %}
                         </ol>

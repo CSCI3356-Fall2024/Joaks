@@ -15,9 +15,15 @@
                 </thead>
                 <tbody>
                     {% for user in top_users %}
-                    <tr>
-                        <td>{{ forloop.counter}}</td>
-                        <td>{{ user.username }}</td>
+                    <tr class="{% if user == request.user %}highlight-user{% endif %}">
+                        <td>{{ forloop.counter }}</td>
+                        <td>
+                            {% if user == request.user %}
+                                <a href="{% url 'profile' %}">{{ user.username }}</a> {# Change to user reward history when done #}
+                            {% else %}
+                                {{ user.username }}
+                            {% endif %}                        
+                        </td>
                         <td>{{ user.points }}</td>
                     </tr>
                     {% endfor %}
@@ -37,9 +43,15 @@
                 </thead>
                 <tbody>
                     {% for user in top_referrers %}
-                    <tr>
-                        <td>{{ forloop.counter}}</td>
-                        <td>{{ user.username }}</td>
+                    <tr class="{% if user == request.user %}highlight-user{% endif %}">
+                        <td>{{ forloop.counter }}</td>
+                        <td>
+                            {% if user == request.user %}
+                                <a href="{% url 'profile' %}">{{ user.username }}</a>
+                            {% else %}
+                                {{ user.username }}
+                            {% endif %}                             
+                        </td>
                         <td>{{ user.referral_points }}</td>
                     </tr>
                     {% endfor %}
@@ -109,7 +121,7 @@
 }
 
 .leaderboard tbody tr:hover {
-    background-color: #f1f3f5; 
+    background-color: #9ea8b1; 
 }
 
 .leaderboard td {
@@ -129,6 +141,15 @@
 
 .back-link:hover {
     text-decoration: underline; 
+}
+
+.highlight-user {
+    background-color: #ffd97d;
+    font-weight: bold; 
+}
+
+.highlight-user a {
+    color: #9A1113
 }
 
 
