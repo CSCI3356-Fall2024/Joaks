@@ -487,3 +487,29 @@ def reward_history_view(request):
     redemptions = RewardRedemption.objects.filter(user=request.user).order_by('-redemption_date')
     return render(request, 'reward_history.html', {'redemptions': redemptions})
 
+@login_required
+def complete_campaign_view(request, campaign_id):
+    if request.method == 'POST':
+        campaign = get_object_or_404(Reward, id=campaign_id)
+        user = request.user
+
+        # Makes sure campaign is only completed once
+        if campaign.completion:
+            messages.error(request, 'Campaign already completed.')
+            return redirect('campaign')
+        
+        # Maybe functionality to make sure it is still in redepmtion time?
+
+        # Create campaign completion record
+
+        # Update user's points and reward quantity
+        user.points += campaign.point_value
+        user.points_to_redeem += campaign.point_value
+        user.save()
+        campaign.completion = True
+        campaign.save()
+
+        messages.success(request, f'Successfully completed {campaign.name}!')
+        return redirect('campaign')
+
+    return redirect('campaign')
