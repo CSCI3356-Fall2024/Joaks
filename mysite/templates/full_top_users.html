@@ -19,7 +19,7 @@
                         <td>{{ forloop.counter }}</td>
                         <td>
                             {% if user == request.user %}
-                                <a href="{% url 'profile' %}">{{ user.username }}</a> {# Change to user reward history when done #}
+                                <a href="{% url 'reward_history' %}">{{ user.username }}</a> {# Change to user reward history when done #}
                             {% else %}
                                 {{ user.username }}
                             {% endif %}                        
@@ -47,7 +47,7 @@
                         <td>{{ forloop.counter }}</td>
                         <td>
                             {% if user == request.user %}
-                                <a href="{% url 'profile' %}">{{ user.username }}</a>
+                                <a href="{% url 'reward_history' %}">{{ user.username }}</a>
                             {% else %}
                                 {{ user.username }}
                             {% endif %}                             
