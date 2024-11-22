@@ -7,6 +7,9 @@ from .models import Milestone
 from .models import Reward
 from .decorators import supervisor_required
 from datetime import date
+from datetime import datetime
+from itertools import chain
+from django.utils import timezone
 import logging
 from .models import RewardRedemption
 from django.contrib.auth.decorators import login_required
@@ -491,36 +494,58 @@ def redeem_reward_view(request, reward_id):
 
 @login_required
 def reward_history_view(request):
-    redemptions = RewardRedemption.objects.filter(user=request.user).order_by('-redemption_date')
-    return render(request, 'reward_history.html', {'redemptions': redemptions})
+    redemptions = RewardRedemption.objects.filter(user=request.user).values(
+        "redemption_date", "reward__name", "points_spent"
+    )
+
+    redemption_data = [
+        {
+            "date": redemption["redemption_date"],
+            "description": f"Redeemed reward: {redemption['reward__name']}",
+            "points": -redemption["points_spent"],
+        }
+        for redemption in redemptions
+    ]
+
+    campaigns = request.user.completed_campaigns.all().values("end_date", "name", "points")
+
+    campaign_data = [
+        {
+            "date": timezone.make_aware(datetime.combine(campaign["end_date"], datetime.min.time())),
+            "description": f"Completed campaign: {campaign['name']}",
+            "points": campaign["points"],
+        }
+        for campaign in campaigns
+    ]
+
+    combined_data = sorted(
+        chain(redemption_data, campaign_data),
+        key=lambda x: x['date'],
+        reverse=True
+    )
+
+    return render(request, "reward_history.html", {"transactions": combined_data})
+
 
 @login_required
 def complete_campaign_view(request, campaign_id):
-    print(f"Received campaign_id: {campaign_id}")
+    campaign = get_object_or_404(Campaign, id=campaign_id)
+    user = request.user
 
-    if request.method == 'POST':
-        campaign = get_object_or_404(Campaign, id=campaign_id)
-        user = request.user
-
-        # Makes sure campaign is only completed once
-        if campaign.completion:
-            messages.error(request, 'Campaign already completed.')
-            return redirect('campaign_detail', campaign_id=campaign_id)
-        
-        # Maybe functionality to make sure it is still in redepmtion time?
-
-        # Create campaign completion record
-
-        # Update user's points and reward quantity
-        user.points += campaign.points
-        user.points_to_redeem += campaign.points
-        user.save()
-        campaign.completion = True
-        campaign.save()
-
-        messages.success(request, f'        Successfully completed {campaign.name}!')
+    # Check if the user has already completed the campaign
+    if campaign in user.completed_campaigns.all():
+        messages.error(request, 'You have already completed this campaign.')
         return redirect('campaign_detail', campaign_id=campaign_id)
 
+    # Add the campaign to the user's completed campaigns
+    user.completed_campaigns.add(campaign)
+
+    # Update user's points
+    user.points += campaign.points
+    user.points_to_redeem += campaign.points
+    user.save()
+
+    messages.success(request, f'Successfully completed {campaign.name}!')
     return redirect('campaign_detail', campaign_id=campaign_id)
 
 def supervisor_rewards_view(request):
