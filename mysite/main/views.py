@@ -517,7 +517,7 @@ def complete_campaign_view(request, campaign_id):
         campaign.completion = True
         campaign.save()
 
-        messages.success(request, f'Successfully completed {campaign.name}!')
+        messages.success(request, f'        Successfully completed {campaign.name}!')
         return redirect('campaign_detail', campaign_id=campaign_id)
 
     return redirect('campaign_detail', campaign_id=campaign_id)
