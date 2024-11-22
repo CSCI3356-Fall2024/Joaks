@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path
-from .views import home_view, actions_view, rewards_view, profile_view, campaigns_view, edit_profile_view, create_campaign_view, edit_campaign_view, delete_campaign_view, all_campaigns_view, campaign_detail, create_event_view, event_detail, all_events_view, edit_event_view, delete_event_view, create_milestone_view, edit_milestone_view, delete_milestone_view, milestone_detail, all_milestones_view, create_reward_view, edit_reward_view, delete_reward_view, redeem_reward_view, reward_history_view, complete_campaign_view, full_top_users_view
+from .views import home_view, actions_view, rewards_view, profile_view, campaigns_view, edit_profile_view, create_campaign_view, edit_campaign_view, delete_campaign_view, all_campaigns_view, campaign_detail, create_event_view, event_detail, all_events_view, edit_event_view, delete_event_view, create_milestone_view, edit_milestone_view, delete_milestone_view, milestone_detail, all_milestones_view, create_reward_view, edit_reward_view, delete_reward_view, redeem_reward_view, reward_history_view, complete_campaign_view, full_top_users_view, supervisor_rewards_view
 
 
 urlpatterns = [
@@ -34,6 +34,7 @@ urlpatterns = [
     path('rewards/history/', reward_history_view, name='reward_history'),
     path('campaign/complete/<int:campaign_id>/', complete_campaign_view, name='complete_campaign'),
     path('leaderboard/top_users/', full_top_users_view, name='full_top_users'),
+    path('rewards/supervisor/', supervisor_rewards_view, name='supervisor_rewards'),
 ]
 
 
