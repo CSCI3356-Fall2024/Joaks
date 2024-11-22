@@ -61,6 +61,10 @@ class CreateCampaign(forms.ModelForm):
         def clean_locations(self):
             return ', '.join(self.cleaned_data['locations'])
         
+    # def __init__(self, *args, **kwargs):
+    #     super().__init__(*args, **kwargs)
+    #     self.fields['completed_by'].queryset = CustomUser.objects.none()
+        
 class CreateUpcomingEvents(forms.ModelForm):
 
     LOCATION_CHOICES = UpcomingEvents.LOCATION_CHOICES

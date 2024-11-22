@@ -1,84 +1,150 @@
 {% extends 'base.html' %}
 
-{% block title %}Available Rewards{% endblock %}
+{% block title %}My Rewards{% endblock %}
 
 {% block content %}
-<h1 style="font-size: 2.5em; border-bottom: 2px solid black; font-family: 'Oswald', sans-serif; font-optical-sizing: auto; font-style: normal; font-weight: 400; padding-bottom: 10px; ">REWARDS</h1>
+<div style="margin: auto; font-family: Arial, sans-serif; color: #333;">
+    <h1 style="font-size: 2.5em; border-bottom: 2px solid black; font-family: 'Oswald', sans-serif; font-optical-sizing: auto; font-style: normal; font-weight: 400; padding-bottom: 10px;">MY REWARDS</h1>
 
-<!-- Display the user's points balance -->
-{% if user.is_authenticated %}
-    <p><strong>Your Point Balance:</strong> {{ user.points_to_redeem }} points</p>
-    <a href="{% url 'reward_history' %}" style="
-       color: black;
-       text-decoration: none;
-       background-color: #ffd97d;
-       padding: 10px 24px;
-       border-radius: 5px;
-       border: 1px solid #8b4513;
-       cursor: pointer;
-       font-size: 16px;
-       transition: background-color 0.3s;
+    <!-- User Points Section -->
+    <div style="
+        background-color: #f7f7f7; 
+        padding: 20px; 
+        border-radius: 10px; 
+        text-align: center; 
+        margin-bottom: 30px;
     ">
-        View Reward History
-    </a>
-{% else %}
-    <p><strong>Your Point Balance:</strong> 0 points (Please log in to view your points)</p>
-{% endif %}
+        {% if user.is_authenticated %}
+            <p style="font-size: 1.8em;">
+                <strong>Your Point Balance:</strong> 
+                <span style="color: #4CAF50; font-weight: bold;">{{ user.points_to_redeem }} points</span>
+            </p>
+            <a href="{% url 'reward_history' %}" style="
+                text-decoration: none;
+                color: white;
+                background-color: #4CAF50;
+                padding: 12px 24px;
+                border-radius: 5px;
+                display: inline-block;
+                font-size: 16px;
+                transition: background-color 0.3s ease;
+            " onmouseover="this.style.backgroundColor='#45a049'" onmouseout="this.style.backgroundColor='#4CAF50'">
+                View Reward History
+            </a>
+        {% else %}
+            <p style="font-size: 1.2em; color: #999;">
+                <strong>Your Point Balance:</strong> 0 points (Please log in to view your points)
+            </p>
+        {% endif %}
+    </div>
 
-<h2>Rewards You Can Redeem</h2>
-{% if available_rewards %}
-    <ul>
-        {% for reward in available_rewards %}
-            <li>
-                <strong>{{ reward.name }}</strong> - {{ reward.point_value }} points
-                <p>{{ reward.description }}</p>
-                <p><strong>Quantity Available:</strong> {{ reward.quantity }}</p>
-                <p><strong>Valid Until:</strong> {{ reward.end_date|date:"M. d, Y" }}</p>
-                {% if reward.image %}
-                    <img src="{{ reward.image.url }}" width="100" height="100" alt="Reward Image" style="border-radius: 5px;">
-                {% endif %}
-                <form method="post" action="{% url 'redeem_reward' reward.id %}" class="mt-4">
-                    {% csrf_token %}
-                    <button type="submit" onclick="return confirm('Are you sure you want to redeem this reward?');" style="
-                        background-color: #4CAF50;
-                        color: white;
-                        padding: 10px 24px;
-                        border: none;
+    <!-- Redeemable Rewards -->
+    <h2 style="color: #333; margin-bottom: 15px;">Rewards You Can Redeem</h2>
+    {% if available_rewards %}
+        <ul style="list-style: none; padding: 0;">
+            {% for reward in available_rewards %}
+                <li style="
+                    background-color: #fff; 
+                    border: 1px solid #ddd; 
+                    border-radius: 10px; 
+                    margin-bottom: 20px; 
+                    padding: 20px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                ">
+                    <div>
+                        <h3 style="margin: 0;">{{ reward.name }}</h3>
+                        <p style="margin: 5px 0;">{{ reward.description }}</p>
+                        <p style="margin: 5px 0; font-size: 0.9em; color: #555;">
+                            <strong>Points:</strong> {{ reward.point_value }} | 
+                            <strong>Available:</strong> {{ reward.quantity }} | 
+                            <strong>Valid Until:</strong> {{ reward.end_date|date:"M. d, Y" }}
+                        </p>
+                    </div>
+                    {% if reward.image %}
+                        <img src="{{ reward.image.url }}" alt="Reward Image" style="
+                            width: 100px; 
+                            height: 100px; 
+                            border-radius: 5px; 
+                            margin-left: 15px;
+                        ">
+                    {% endif %}
+                    <form method="post" action="{% url 'redeem_reward' reward.id %}" style="margin-left: 20px;">
+                        {% csrf_token %}
+                        <button type="submit" onclick="return confirm('Are you sure you want to redeem this reward?');" style="
+                            background-color: #4CAF50;
+                            color: white;
+                            padding: 10px 20px;
+                            border: none;
+                            border-radius: 5px;
+                            cursor: pointer;
+                            font-size: 16px;
+                            transition: background-color 0.3s ease;
+                        " onmouseover="this.style.backgroundColor='#45a049'" onmouseout="this.style.backgroundColor='#4CAF50'">
+                            Redeem
+                        </button>
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p style="color: #999;">No rewards are available for your points at the moment.</p>
+    {% endif %}
+
+    <!-- Unavailable Rewards -->
+    <h2 style="color: #333; margin-top: 40px; margin-bottom: 15px;">Earn More Points to Redeem</h2>
+    {% if unavailable_rewards %}
+        <ul style="list-style: none; padding: 0;">
+            {% for reward in unavailable_rewards %}
+                <li style="
+                    background-color: #f7f7f7; 
+                    border: 1px solid #ddd; 
+                    border-radius: 10px; 
+                    margin-bottom: 20px; 
+                    padding: 20px;
+                ">
+                    <h3 style="margin: 0;">{{ reward.name }}</h3>
+                    <p style="margin: 5px 0;">{{ reward.description }}</p>
+                    <p style="margin: 5px 0; font-size: 0.9em; color: #555;">
+                        <strong>Points:</strong> {{ reward.point_value }} | 
+                        <strong>Available:</strong> {{ reward.quantity }} | 
+                        <strong>Valid Until:</strong> {{ reward.end_date|date:"M. d, Y" }}
+                    </p>
+                    {% if reward.image %}
+                        <img src="{{ reward.image.url }}" alt="Reward Image" style="
+                            width: 100px; 
+                            height: 100px; 
+                            border-radius: 5px;
+                        ">
+                    {% endif %}
+                    <button disabled style="
+                        margin-top: 10px; 
+                        background-color: #ddd; 
+                        color: #666; 
+                        padding: 10px 20px; 
+                        border: none; 
                         border-radius: 5px;
-                        cursor: pointer;
-                        font-size: 16px;
-                        transition: background-color 0.3s;
                     ">
-                        Redeem Reward
+                        Need More Points
                     </button>
-                </form>
-            </li>
-        {% endfor %}
-    </ul>
-{% else %}
-    <p>No rewards available for your points at the moment.</p>
-{% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p style="color: #999;">All rewards are currently available for your points balance.</p>
+    {% endif %}
 
-<h2>Earn More Points to Redeem</h2>
-{% if unavailable_rewards %}
-    <ul>
-        {% for reward in unavailable_rewards %}
-            <li>
-                <strong>{{ reward.name }}</strong> - {{ reward.point_value }} points
-                <p>{{ reward.description }}</p>
-                <p><strong>Quantity Available:</strong> {{ reward.quantity }}</p>
-                <p><strong>Valid Until:</strong> {{ reward.end_date|date:"M. d, Y" }}</p>
-                {% if reward.image %}
-                    <img src="{{ reward.image.url }}" width="100" height="100" alt="Reward Image" style="border-radius: 5px;">
-                {% endif %}
-                <button disabled>
-                    Need More Points
-                </button>
-            </li>
-        {% endfor %}
-    </ul>
-{% else %}
-    <p>All rewards are currently available for your points balance.</p>
-{% endif %}
-
+    <!-- Disclaimer -->
+    <p style="
+        margin-top: 30px; 
+        font-size: 0.9em; 
+        color: #666; 
+        text-align: center;
+        border-top: 1px solid #ddd;
+        padding-top: 15px;
+    ">
+        <strong>Disclaimer:</strong> Points are only redeemable for the semester within which they are earned.
+    </p>
+</div>
 {% endblock %}

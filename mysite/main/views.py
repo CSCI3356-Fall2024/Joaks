@@ -531,9 +531,23 @@ def complete_campaign_view(request, campaign_id):
     campaign = get_object_or_404(Campaign, id=campaign_id)
     user = request.user
 
-    # Check if the user has already completed the campaign
-    if campaign in user.completed_campaigns.all():
-        messages.error(request, 'You have already completed this campaign.')
+        # Makes sure campaign is only completed once
+        if campaign.completion:
+            messages.error(request, 'Campaign already completed.')
+            return redirect('campaign_detail', campaign_id=campaign_id)
+        
+        # Maybe functionality to make sure it is still in redepmtion time?
+
+        # Create campaign completion record
+
+        # Update user's points and reward quantity
+        user.points += campaign.points
+        user.points_to_redeem += campaign.points
+        user.save()
+        campaign.completion = True
+        campaign.save()
+
+        messages.success(request, f'        Successfully completed {campaign.name}!')
         return redirect('campaign_detail', campaign_id=campaign_id)
 
     # Add the campaign to the user's completed campaigns
