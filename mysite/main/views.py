@@ -68,7 +68,7 @@ def rewards_view(request, *args, **kwargs):
     inactive_rewards = Reward.objects.exclude(id__in=active_rewards)
 
     # Check if the user is authenticated and retrieve their points
-    user_points = request.user.points if request.user.is_authenticated else 0
+    user_points = request.user.points_to_redeem if request.user.is_authenticated else 0
 
     # Separate active rewards into available and unavailable based on user points
     available_rewards = active_rewards.filter(point_value__lte=user_points)
@@ -464,7 +464,7 @@ def redeem_reward_view(request, reward_id):
         user = request.user
 
         # Check if user has enough points
-        if user.points < reward.point_value:
+        if user.points_to_redeem < reward.point_value:
             messages.error(request, 'Not enough points to redeem this reward.')
             return redirect('rewards')
 
@@ -481,7 +481,6 @@ def redeem_reward_view(request, reward_id):
         )
 
         # Update user's points and reward quantity
-        user.points -= reward.point_value
         user.points_to_redeem -= reward.point_value
         user.save()
         reward.quantity -= 1
@@ -561,3 +560,16 @@ def supervisor_rewards_view(request):
             'active_rewards': active_rewards, 
             'inactive_rewards': inactive_rewards,
         })
+
+@supervisor_required
+def supervisor_reward_history_view(request):
+    # Get all rewards and prefetch related redemptions
+    rewards = Reward.objects.prefetch_related('rewardredemption_set', 'rewardredemption_set__user').all()
+    
+    # Attach redemptions to each reward
+    for reward in rewards:
+        reward.redemptions = reward.rewardredemption_set.all().order_by('-redemption_date')
+    
+    return render(request, 'supervisor_reward_history.html', {
+        'rewards': rewards
+    })
