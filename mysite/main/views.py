@@ -65,7 +65,7 @@ def rewards_view(request, *args, **kwargs):
     inactive_rewards = Reward.objects.exclude(id__in=active_rewards)
 
     # Check if the user is authenticated and retrieve their points
-    user_points = request.user.points if request.user.is_authenticated else 0
+    user_points = request.user.points_to_redeem if request.user.is_authenticated else 0
 
     # Separate active rewards into available and unavailable based on user points
     available_rewards = active_rewards.filter(point_value__lte=user_points)
@@ -461,7 +461,7 @@ def redeem_reward_view(request, reward_id):
         user = request.user
 
         # Check if user has enough points
-        if user.points < reward.point_value:
+        if user.points_to_redeem < reward.point_value:
             messages.error(request, 'Not enough points to redeem this reward.')
             return redirect('rewards')
 
@@ -478,7 +478,6 @@ def redeem_reward_view(request, reward_id):
         )
 
         # Update user's points and reward quantity
-        user.points -= reward.point_value
         user.points_to_redeem -= reward.point_value
         user.save()
         reward.quantity -= 1
