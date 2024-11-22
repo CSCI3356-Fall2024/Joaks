@@ -536,3 +536,16 @@ def supervisor_rewards_view(request):
             'active_rewards': active_rewards, 
             'inactive_rewards': inactive_rewards,
         })
+
+@supervisor_required
+def supervisor_reward_history_view(request):
+    # Get all rewards and prefetch related redemptions
+    rewards = Reward.objects.prefetch_related('rewardredemption_set', 'rewardredemption_set__user').all()
+    
+    # Attach redemptions to each reward
+    for reward in rewards:
+        reward.redemptions = reward.rewardredemption_set.all().order_by('-redemption_date')
+    
+    return render(request, 'supervisor_reward_history.html', {
+        'rewards': rewards
+    })

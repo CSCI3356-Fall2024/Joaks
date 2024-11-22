@@ -1,129 +1,163 @@
 {% extends 'base.html' %}
 
-{% block title %} Rewards {% endblock %}
+{% block title %}Rewards Management{% endblock %}
 
 {% block content %}
+<h1 style="font-size: 2.5em; border-bottom: 2px solid black; font-family: 'Oswald', sans-serif; font-optical-sizing: auto; font-style: normal; font-weight: 400; padding-bottom: 10px;">
+    REWARDS
+</h1>
 
-<h1 id="Rewards" style="font-size: 2.5em; border-bottom: 2px solid black; font-family: 'Oswald', sans-serif; font-optical-sizing: auto; font-style: normal; font-weight: 400; padding-top: 0px; padding-bottom: 10px; ">REWARDS</h1>
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <a href="{% url 'create_reward' %}" style="
+        background-color: #7c2529;
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 0.25rem;
+        text-decoration: none;
+        transition: background-color 0.3s;
+    ">
+        Create New Reward
+    </a>
+    <a href="{% url 'supervisor_reward_history' %}" style="
+        background-color: #7c2529;
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 0.25rem;
+        text-decoration: none;
+        transition: background-color 0.3s;
+    ">
+        View Redemption History
+    </a>
+</div>
 
-<head>
-    <meta charset="UTF-8">
-    <title>All Rewards</title>
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        table, th, td {
-            border: 1px solid black;
-        }
-        th, td {
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-    </style>
-</head>
-<body>
-
-
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px; padding-bottom: 10px;">
-        <h2 style="margin: 0;">Active Rewards</h2>
-        <a href="/create-reward/" 
-           style="background-color: #9a1113; color: white; padding: 8px 20px; border: none; border-radius: 5px; text-decoration: none;">
-            Create New Reward
-        </a>
-    </div>
-    
-
-    <table>
+<h2>Active Rewards</h2>
+{% if active_rewards %}
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 2rem;">
         <thead>
-            <tr>
-                <th>Name</th>
-                <th>Point Value</th>
-                <th>Quantity Remaining</th>
-                <th>Start Date</th>
-                <th>End Date</th>
-                <th>Exchange Method</th>
-                <th>Created By</th>
-                <th>Image</th> <!-- New column for the image -->
-                <th>Actions</th>  <!-- New column for actions -->
+            <tr style="background-color: #f7fafc;">
+                <th style="padding: 0.75rem; text-align: left; border-bottom: 2px solid #e2e8f0;">Name</th>
+                <th style="padding: 0.75rem; text-align: left; border-bottom: 2px solid #e2e8f0;">Point Value</th>
+                <th style="padding: 0.75rem; text-align: left; border-bottom: 2px solid #e2e8f0;">Quantity Remaining</th>
+                <th style="padding: 0.75rem; text-align: left; border-bottom: 2px solid #e2e8f0;">Start Date</th>
+                <th style="padding: 0.75rem; text-align: left; border-bottom: 2px solid #e2e8f0;">End Date</th>
+                <th style="padding: 0.75rem; text-align: left; border-bottom: 2px solid #e2e8f0;">Exchange Method</th>
+                <th style="padding: 0.75rem; text-align: left; border-bottom: 2px solid #e2e8f0;">Created By</th>
+                <th style="padding: 0.75rem; text-align: left; border-bottom: 2px solid #e2e8f0;">Image</th>
+                <th style="padding: 0.75rem; text-align: left; border-bottom: 2px solid #e2e8f0;">Actions</th>
             </tr>
         </thead>
         <tbody>
             {% for reward in active_rewards %}
-            <tr>
-                <td>{{ reward.name }}</td>
-                <td>{{ reward.point_value }}</td>
-                <td>{{ reward.quantity }}</td>
-                <td>{{ reward.start_date }}</td>
-                <td>{{ reward.end_date }}</td>
-                <td>{{ reward.exchange_method }}</td>
-                <td>{{ reward.created_by.username }}</td>
-                <td>
-                    {% if reward.image %}
-                        <!-- Display a smaller version of the image, e.g., 50x50 pixels -->
-                        <img src="{{ reward.image.url }}" width="50" height="50" alt="Reward Image">
-                    {% else %}
-                        No Image
-                    {% endif %}
-                </td>
-                <td>
-                    <a href="{% url 'edit_reward' reward.id %}">Edit</a> |
-                    <a href="{% url 'delete_reward' reward.id %}">Delete</a>
-                </td>
-            </tr>
-            {% empty %}
-            <tr><td colspan="7">No active rewards available.</td></tr>
+                <tr style="border-bottom: 1px solid #e2e8f0;">
+                    <td style="padding: 0.75rem;">{{ reward.name }}</td>
+                    <td style="padding: 0.75rem;">{{ reward.point_value }}</td>
+                    <td style="padding: 0.75rem;">{{ reward.quantity }}</td>
+                    <td style="padding: 0.75rem;">{{ reward.start_date|date:"M. d, Y" }}</td>
+                    <td style="padding: 0.75rem;">{{ reward.end_date|date:"M. d, Y" }}</td>
+                    <td style="padding: 0.75rem;">{{ reward.exchange_method }}</td>
+                    <td style="padding: 0.75rem;">{{ reward.created_by.email }}</td>
+                    <td style="padding: 0.75rem;">
+                        {% if reward.image %}
+                            <img src="{{ reward.image.url }}" width="50" height="50" alt="Reward Image" style="border-radius: 0.25rem;">
+                        {% else %}
+                            No image
+                        {% endif %}
+                    </td>
+                    <td style="padding: 0.75rem;">
+                        <div style="display: flex; gap: 0.5rem;">
+                            <a href="{% url 'edit_reward' reward.id %}" style="
+                                background-color: #4a5568;
+                                color: white;
+                                padding: 0.25rem 0.5rem;
+                                border-radius: 0.25rem;
+                                text-decoration: none;
+                                font-size: 0.875rem;
+                            ">
+                                Edit
+                            </a>
+                            <a href="{% url 'delete_reward' reward.id %}" style="
+                                background-color: #e53e3e;
+                                color: white;
+                                padding: 0.25rem 0.5rem;
+                                border-radius: 0.25rem;
+                                text-decoration: none;
+                                font-size: 0.875rem;
+                            ">
+                                Delete
+                            </a>
+                        </div>
+                    </td>
+                </tr>
             {% endfor %}
         </tbody>
     </table>
+{% else %}
+    <p>No active rewards available.</p>
+{% endif %}
 
-
-    <h2>Inactive Rewards</h2>
-    <table>
+<h2>Inactive Rewards</h2>
+{% if inactive_rewards %}
+    <table style="width: 100%; border-collapse: collapse;">
         <thead>
-            <tr>
-                <th>Name</th>
-                <th>Point Value</th>
-                <th>Quantity Remaining</th>
-                <th>Start Date</th>
-                <th>End Date</th>
-                <th>Exchange Method</th>
-                <th>Created By</th>
-                <th>Image</th> <!-- New column for the image -->
-                <th>Actions</th>  <!-- New column for actions -->
+            <tr style="background-color: #f7fafc;">
+                <th style="padding: 0.75rem; text-align: left; border-bottom: 2px solid #e2e8f0;">Name</th>
+                <th style="padding: 0.75rem; text-align: left; border-bottom: 2px solid #e2e8f0;">Point Value</th>
+                <th style="padding: 0.75rem; text-align: left; border-bottom: 2px solid #e2e8f0;">Quantity Remaining</th>
+                <th style="padding: 0.75rem; text-align: left; border-bottom: 2px solid #e2e8f0;">Start Date</th>
+                <th style="padding: 0.75rem; text-align: left; border-bottom: 2px solid #e2e8f0;">End Date</th>
+                <th style="padding: 0.75rem; text-align: left; border-bottom: 2px solid #e2e8f0;">Exchange Method</th>
+                <th style="padding: 0.75rem; text-align: left; border-bottom: 2px solid #e2e8f0;">Created By</th>
+                <th style="padding: 0.75rem; text-align: left; border-bottom: 2px solid #e2e8f0;">Image</th>
+                <th style="padding: 0.75rem; text-align: left; border-bottom: 2px solid #e2e8f0;">Actions</th>
             </tr>
         </thead>
         <tbody>
             {% for reward in inactive_rewards %}
-            <tr>
-                <td>{{ reward.name }}</td>
-                <td>{{ reward.point_value }}</td>
-                <td>{{ reward.quantity }}</td>
-                <td>{{ reward.start_date }}</td>
-                <td>{{ reward.end_date }}</td>
-                <td>{{ reward.exchange_method }}</td>
-                <td>{{ reward.created_by.username }}</td>
-                <td>
-                    {% if reward.image %}
-                        <!-- Display a smaller version of the image, e.g., 50x50 pixels -->
-                        <img src="{{ reward.image.url }}" width="50" height="50" alt="Reward Image">
-                    {% else %}
-                        No Image
-                    {% endif %}
-                </td>
-                <td>
-                    <a href="{% url 'edit_reward' reward.id %}">Edit</a> |
-                    <a href="{% url 'delete_reward' reward.id %}">Delete</a>
-                </td>
-            </tr>
-            {% empty %}
-            <tr><td colspan="7">No active rewards available.</td></tr>
+                <tr style="border-bottom: 1px solid #e2e8f0;">
+                    <td style="padding: 0.75rem;">{{ reward.name }}</td>
+                    <td style="padding: 0.75rem;">{{ reward.point_value }}</td>
+                    <td style="padding: 0.75rem;">{{ reward.quantity }}</td>
+                    <td style="padding: 0.75rem;">{{ reward.start_date|date:"M. d, Y" }}</td>
+                    <td style="padding: 0.75rem;">{{ reward.end_date|date:"M. d, Y" }}</td>
+                    <td style="padding: 0.75rem;">{{ reward.exchange_method }}</td>
+                    <td style="padding: 0.75rem;">{{ reward.created_by.email }}</td>
+                    <td style="padding: 0.75rem;">
+                        {% if reward.image %}
+                            <img src="{{ reward.image.url }}" width="50" height="50" alt="Reward Image" style="border-radius: 0.25rem;">
+                        {% else %}
+                            No image
+                        {% endif %}
+                    </td>
+                    <td style="padding: 0.75rem;">
+                        <div style="display: flex; gap: 0.5rem;">
+                            <a href="{% url 'edit_reward' reward.id %}" style="
+                                background-color: #4a5568;
+                                color: white;
+                                padding: 0.25rem 0.5rem;
+                                border-radius: 0.25rem;
+                                text-decoration: none;
+                                font-size: 0.875rem;
+                            ">
+                                Edit
+                            </a>
+                            <a href="{% url 'delete_reward' reward.id %}" style="
+                                background-color: #e53e3e;
+                                color: white;
+                                padding: 0.25rem 0.5rem;
+                                border-radius: 0.25rem;
+                                text-decoration: none;
+                                font-size: 0.875rem;
+                            ">
+                                Delete
+                            </a>
+                        </div>
+                    </td>
+                </tr>
             {% endfor %}
         </tbody>
     </table>
+{% else %}
+    <p>No inactive rewards available.</p>
+{% endif %}
 
 {% endblock %}
