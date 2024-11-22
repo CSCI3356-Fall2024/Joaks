@@ -521,3 +521,17 @@ def complete_campaign_view(request, campaign_id):
         return redirect('campaign_detail', campaign_id=campaign_id)
 
     return redirect('campaign_detail', campaign_id=campaign_id)
+
+def supervisor_rewards_view(request):
+        if request.user.role != 'supervisor':
+            return redirect('home')
+        
+        today = date.today()
+
+        active_rewards = Reward.objects.filter(start_date__lte=today, end_date__gte=today)
+        inactive_rewards = Reward.objects.exclude(id__in=active_rewards)
+
+        return render(request, 'supervisor_rewards.html', {
+            'active_rewards': active_rewards, 
+            'inactive_rewards': inactive_rewards,
+        })
