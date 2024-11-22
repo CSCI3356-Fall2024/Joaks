@@ -9,9 +9,8 @@ class CustomUser(admin.ModelAdmin):
 
 @admin.register(Campaign)
 class CampaignAdmin(admin.ModelAdmin):
-    list_display = ('name', 'description', 'start_date', 'end_date', 'locations', 'points', 'show_news', 'integration_method')  
-
-
+    list_display = ('name', 'description', 'start_date', 'end_date', 'locations', 'points', 'show_news', 'integration_method') 
+    exclude = ('completed_by',)
 @admin.register(Milestone)
 class MilestoneAdmin(admin.ModelAdmin):
     list_display = ('name', 'description', 'created_by', 'show_news')  # Adjust fields as needed

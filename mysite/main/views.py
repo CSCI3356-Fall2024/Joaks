@@ -502,7 +502,7 @@ def complete_campaign_view(request, campaign_id):
         user = request.user
 
         # Makes sure campaign is only completed once
-        if campaign.completion:
+        if request.user in campaign.completed_by.all():
             messages.error(request, 'Campaign already completed.')
             return redirect('campaign_detail', campaign_id=campaign_id)
         
@@ -514,7 +514,7 @@ def complete_campaign_view(request, campaign_id):
         user.points += campaign.points
         user.points_to_redeem += campaign.points
         user.save()
-        campaign.completion = True
+        campaign.completed_by.add(user)
         campaign.save()
 
         messages.success(request, f'Successfully completed {campaign.name}!')
