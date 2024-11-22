@@ -573,3 +573,4 @@ def supervisor_reward_history_view(request):
     return render(request, 'supervisor_reward_history.html', {
         'rewards': rewards
     })
+    
