@@ -51,11 +51,15 @@
     {% endif %}
 
     {% if messages %}
-    <ul class="messages">
-        {% for message in messages %}
-            <li class="{{ message.tags }}">{{ message }}</li>
-        {% endfor %}
-    </ul>
+        <ul class="messages">
+            {% for message in messages %}
+                <li class="{% if message.tags %}{{ message.tags }}{% endif %} p-4 mb-4 rounded
+                        {% if message.tags == 'success' %}bg-green-100 text-green-700{% endif %}
+                        {% if message.tags == 'error' %}bg-red-100 text-red-700{% endif %}">
+                    {{ message }}
+                </li>
+            {% endfor %}
+        </ul>
     {% endif %}
     
     <div class="content-area">
