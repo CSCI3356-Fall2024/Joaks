@@ -478,6 +478,7 @@ def redeem_reward_view(request, reward_id):
         )
 
         # Update user's points and reward quantity
+        user.points -= reward.point_value
         user.points_to_redeem -= reward.point_value
         user.save()
         reward.quantity -= 1
