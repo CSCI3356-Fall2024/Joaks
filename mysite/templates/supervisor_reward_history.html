@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block title %}Reward Redemption History{% endblock %}
+
+{% block content %}
+<h1 style="font-size: 2.5em; border-bottom: 2px solid black; font-family: 'Oswald', sans-serif; font-optical-sizing: auto; font-style: normal; font-weight: 400; padding-bottom: 10px;">
+    REWARD REDEMPTION HISTORY
+</h1>
+
+{% if rewards %}
+    <div class="mb-8">
+        {% for reward in rewards %}
+            <div style="margin-bottom: 2rem; padding: 1.5rem; border: 1px solid #e2e8f0; border-radius: 0.5rem; box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);">
+                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+                    <div>
+                        <h2 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 0.5rem;">{{ reward.name }}</h2>
+                        <p style="color: #4a5568;">Point Value: {{ reward.point_value }}</p>
+                    </div>
+                    {% if reward.image %}
+                        <img src="{{ reward.image.url }}" width="80" height="80" alt="Reward Image" style="border-radius: 0.5rem; object-fit: cover;">
+                    {% endif %}
+                </div>
+
+                {% if reward.redemptions %}
+                    <div style="overflow-x: auto;">
+                        <table style="width: 100%; border-collapse: collapse;">
+                            <thead>
+                                <tr style="background-color: #f7fafc;">
+                                    <th style="padding: 0.75rem; text-align: left; border-bottom: 2px solid #e2e8f0;">Student</th>
+                                    <th style="padding: 0.75rem; text-align: left; border-bottom: 2px solid #e2e8f0;">Redemption Date</th>
+                                    <th style="padding: 0.75rem; text-align: left; border-bottom: 2px solid #e2e8f0;">Status</th>
+                                    <th style="padding: 0.75rem; text-align: left; border-bottom: 2px solid #e2e8f0;">Points Spent</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for redemption in reward.redemptions %}
+                                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                                        <td style="padding: 0.75rem;">{{ redemption.user.email }}</td>
+                                        <td style="padding: 0.75rem;">{{ redemption.redemption_date|date:"M. d, Y H:i" }}</td>
+                                        <td style="padding: 0.75rem;">{{ redemption.status|title }}</td>
+                                        <td style="padding: 0.75rem;">{{ redemption.points_spent }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p style="color: #718096;">No redemptions for this reward</p>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>No rewards have been created yet.</p>
+{% endif %}
+
+<a href="{% url 'supervisor_rewards' %}" style="
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    background-color: #7c2529;
+    color: white;
+    text-decoration: none;
+    border-radius: 0.25rem;
+    transition: background-color 0.3s;
+">
+    Back to Rewards Management
+</a>
+{% endblock %}
