@@ -102,7 +102,7 @@ class Campaign(models.Model):
     integration_method = models.CharField(max_length=255)
     created_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='campaigns')
     image = models.ImageField(upload_to='campaign_images/', null=False, blank=False)  # Mandatory image field
-    completed_by = models.ManyToManyField(CustomUser, related_name='completed_campaigns', blank=True) # Campaign completion tracker
+    completed_by = models.ManyToManyField(CustomUser, related_name='completed_by_campaigns', blank=True) # Campaign completion tracker
 
 
 
