@@ -36,26 +36,6 @@ def actions_view(request, *args, **kwargs):
     return render(request, 'actions.html', {})
 
 
-def rewards_view(request, *args, **kwargs):
-    print(args, kwargs)
-    print(request.user)
-
-    today = date.today()
-
-    active_rewards = Reward.objects.filter(start_date__lte=today, end_date__gte=today)
-    inactive_rewards = Reward.objects.exclude(id__in=active_rewards)
-
-    # Check if the user is a supervisor
-    if request.user.is_authenticated and request.user.role == 'supervisor':
-        template = 'supervisor_rewards.html'
-    else:
-        template = 'rewards.html'
-
-    return render(request, template, {
-        'active_rewards': active_rewards,
-        'inactive_rewards': inactive_rewards,
-    })
-
 
 def rewards_view(request, *args, **kwargs):
     print(args, kwargs)
@@ -70,8 +50,8 @@ def rewards_view(request, *args, **kwargs):
     # Check if the user is authenticated and retrieve their points
     user_points = request.user.points_to_redeem if request.user.is_authenticated else 0
 
-    # Separate active rewards into available and unavailable based on user points
-    available_rewards = active_rewards.filter(point_value__lte=user_points)
+    # Separate active rewards into available and unavailable based on user points and quantity > 0
+    available_rewards = active_rewards.filter(point_value__lte=user_points, quantity__gt=0)
     unavailable_rewards = active_rewards.exclude(id__in=available_rewards)
 
     # Choose the template based on user role
