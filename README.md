@@ -2,7 +2,8 @@
 
 Delivery 6 to do:  
 - campaign completion history for supervisors to see (can see each campaign and which users completed them)
-- some campaigns like green2go can be redeemed more than once 
+- some campaigns like green2go can be redeemed more than once
+- finish student view transaction history (should see +points for completing challenges) 
 
 
 every time activate virtual environment. on mac:  
