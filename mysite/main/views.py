@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import EditProfile, CreateCampaign, CreateUpcomingEvents, CreateMilestone, CreateReward
-from .models import Campaign, UpcomingEvents
+from .models import Campaign, UpcomingEvents, CampaignCompletion
 from .models import CustomUser
 from .models import UpcomingEvents
 from .models import Milestone
@@ -15,6 +15,7 @@ from .models import RewardRedemption
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db import models
+from django.utils.timezone import now
 
 logger = logging.getLogger('campaign_logger')
 
@@ -506,27 +507,42 @@ def reward_history_view(request):
     return render(request, "reward_history.html", {"transactions": combined_data})
 
 
+
 @login_required
 def complete_campaign_view(request, campaign_id):
     campaign = get_object_or_404(Campaign, id=campaign_id)
     user = request.user
 
-    # Makes sure campaign is only completed once
-    if request.user in campaign.completed_by.all():
+    # Ensure the campaign is only completed once by this user
+    if CampaignCompletion.objects.filter(user=user, campaign=campaign, status='completed').exists():
         messages.error(request, 'Campaign already completed.')
         return redirect('campaign_detail', campaign_id=campaign_id)
-        
-    # Maybe functionality to make sure it is still in redepmtion time?
 
-    # Update user's points and reward quantity
+    # Optional: Add validation to ensure the campaign is still active
+    if campaign.end_date and campaign.end_date < now().date():
+        # Do something, like:
+        messages.error(request, 'This campaign is no longer active.')
+        return redirect('campaign_detail', campaign_id=campaign_id)
+
+    # Update user's points
     user.points += campaign.points
     user.points_to_redeem += campaign.points
     user.save()
+
+    # Create a CampaignCompletion record
+    CampaignCompletion.objects.create(
+        user=user,
+        campaign=campaign,
+        points_earned=campaign.points,
+        status='completed'  # Set to 'pending' if there's an approval process
+    )
+
+    # Optional: Update campaign's completed_by if using ManyToManyField
     campaign.completed_by.add(user)
-    campaign.save()
 
     messages.success(request, f'Successfully completed {campaign.name}!')
     return redirect('campaign_detail', campaign_id=campaign_id)
+
 
 def supervisor_rewards_view(request):
         if request.user.role != 'supervisor':
@@ -554,4 +570,16 @@ def supervisor_reward_history_view(request):
     return render(request, 'supervisor_reward_history.html', {
         'rewards': rewards
     })
+
+@supervisor_required
+def supervisor_campaign_history_view(request):
+    # Get all campaigns and prefetch related completions
+    campaigns = Campaign.objects.prefetch_related('campaigncompletion_set', 'campaigncompletion_set__user').all()
     
+    # Attach completions to each campaign
+    for campaign in campaigns:
+        campaign.completions = campaign.campaigncompletion_set.all().order_by('-completion_date')
+    
+    return render(request, 'supervisor_campaign_history.html', {
+        'campaigns': campaigns
+    })

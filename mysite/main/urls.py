@@ -31,12 +31,12 @@ from .views import (
     reward_history_view,
     complete_campaign_view,
     supervisor_rewards_view,
-    supervisor_reward_history_view,  # Add this new import
+    supervisor_reward_history_view, 
+    supervisor_campaign_history_view,
 )
 
 urlpatterns = [
     path('', home_view, name='home'),
-    path('actions/', actions_view, name='actions'),
     path('rewards/', rewards_view, name='rewards'),
     path('campaigns/', campaigns_view, name='campaigns'),
     path('profile/', profile_view, name='profile'),
@@ -64,7 +64,8 @@ urlpatterns = [
     path('rewards/history/', reward_history_view, name='reward_history'),
     path('campaign/<int:campaign_id>/complete/', complete_campaign_view, name='complete_campaign'),
     path('supervisor/rewards/', supervisor_rewards_view, name='supervisor_rewards'),
-    path('rewards/history/supervisor/', supervisor_reward_history_view, name='supervisor_reward_history'),  # Add this new URL pattern
+    path('rewards/history/supervisor/', supervisor_reward_history_view, name='supervisor_reward_history'), 
+    path('campaigns/history/supervisor/', supervisor_campaign_history_view, name='supervisor_campaign_history'), 
 ]
 
 if settings.DEBUG:

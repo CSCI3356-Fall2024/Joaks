@@ -136,3 +136,19 @@ class RewardRedemption(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.reward.name} ({self.redemption_date})"
+
+
+class CampaignCompletion(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='completions')
+    campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE)
+    completion_date = models.DateTimeField(auto_now_add=True)
+    points_earned = models.IntegerField()
+    status = models.CharField(max_length=20, choices=[
+        ('pending', 'Pending'),
+        ('completed', 'Completed'),
+        ('cancelled', 'Cancelled')
+    ], default='pending')
+
+    def __str__(self):
+        return f"{self.user.username} - {self.campaign.name} ({self.redemption_date})"
+
