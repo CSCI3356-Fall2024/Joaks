@@ -23,8 +23,7 @@ class CustomUser(AbstractUser):
     referral_points = models.IntegerField(default=0)  # The amount of times the user has been entered as a referral
     is_first_login = models.BooleanField(default=True)  # Track first login
     points_to_redeem = models.IntegerField(default=0) # Decrement this when points are redeemed, increment when points are earned, won't affect leaderboard
-    completed_campaigns = models.ManyToManyField('Campaign', blank=True, related_name='completed_users')
-
+    completed_campaigns = models.ManyToManyField('CampaignCompletion', blank=True, related_name='completed_users')
 
 class UpcomingEvents(models.Model):
     LOCATION_CHOICES = (
@@ -55,6 +54,7 @@ class UpcomingEvents(models.Model):
     integration_method = models.CharField(max_length=255)
     created_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='upcomingevents')
     image = models.ImageField(upload_to='events_images/', null=False, blank=False)  # Mandatory image field
+    unlimited = models.BooleanField(default=False) # Unlimited campaigns can be completed multiple times
 
     def __str__(self):
         return self.name
@@ -103,6 +103,7 @@ class Campaign(models.Model):
     created_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='campaigns')
     image = models.ImageField(upload_to='campaign_images/', null=False, blank=False)  # Mandatory image field
     completed_by = models.ManyToManyField(CustomUser, related_name='completed_by_campaigns', blank=True) # Campaign completion tracker
+    unlimited = models.BooleanField(default=False)  # Indicates if a given campaign, like G2G, can be completed multiple times
 
 
 
@@ -141,6 +142,7 @@ class RewardRedemption(models.Model):
 class CampaignCompletion(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='completions')
     campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100, null=True)
     completion_date = models.DateTimeField(auto_now_add=True)
     points_earned = models.IntegerField()
     status = models.CharField(max_length=20, choices=[
@@ -148,6 +150,7 @@ class CampaignCompletion(models.Model):
         ('completed', 'Completed'),
         ('cancelled', 'Cancelled')
     ], default='pending')
+    date_completed = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.user.username} - {self.campaign.name} ({self.redemption_date})"

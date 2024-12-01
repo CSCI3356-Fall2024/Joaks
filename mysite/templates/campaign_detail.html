@@ -78,7 +78,7 @@
     
 </form>
     <div style="border: 2px solid #ddd; border-radius: 10px;">
-        {% if user.is_authenticated and user in campaign.completed_by.all %}
+        {% if user.is_authenticated and user in campaign.completed_by.all and not campaign.unlimited %}
             <p>You have already completed this campaign.</p>
         {% else %}
             <form method="post" action="{% url 'complete_campaign' campaign.id %}" class="mt-4">
@@ -98,5 +98,4 @@
             </form>
         {% endif %}
     </div>
-</div>
 {% endblock %}

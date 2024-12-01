@@ -455,7 +455,7 @@ def redeem_reward_view(request, reward_id):
             return redirect('rewards')
 
         # Create redemption record
-        redemption = RewardRedemption.objects.create(
+        RewardRedemption.objects.create(
             user=user,
             reward=reward,
             points_spent=reward.point_value
@@ -487,15 +487,15 @@ def reward_history_view(request):
         for redemption in redemptions
     ]
 
-    campaigns = request.user.completed_campaigns.all().values("end_date", "name", "points")
+    completed_campaigns = request.user.completed_campaigns.all().values("completion_date", "name", "points_earned")
 
     campaign_data = [
         {
-            "date": timezone.make_aware(datetime.combine(campaign["end_date"], datetime.min.time())),
-            "description": f"Completed campaign: {campaign['name']}",
-            "points": campaign["points"],
+            "date": timezone.make_aware(datetime.combine(completed_campaign['completion_date'], datetime.min.time())),
+            "description": f"Completed campaign: {completed_campaign['name']}",
+            "points": completed_campaign['points_earned'],
         }
-        for campaign in campaigns
+        for completed_campaign in completed_campaigns
     ]
 
     combined_data = sorted(
@@ -514,7 +514,7 @@ def complete_campaign_view(request, campaign_id):
     user = request.user
 
     # Ensure the campaign is only completed once by this user
-    if CampaignCompletion.objects.filter(user=user, campaign=campaign, status='completed').exists():
+    if CampaignCompletion.objects.filter(user=user, campaign=campaign, status='completed').exists() and not campaign.unlimited:
         messages.error(request, 'Campaign already completed.')
         return redirect('campaign_detail', campaign_id=campaign_id)
 
@@ -530,12 +530,15 @@ def complete_campaign_view(request, campaign_id):
     user.save()
 
     # Create a CampaignCompletion record
-    CampaignCompletion.objects.create(
+    completion = CampaignCompletion.objects.create(
         user=user,
         campaign=campaign,
+        name=campaign.name,
         points_earned=campaign.points,
         status='completed'  # Set to 'pending' if there's an approval process
     )
+    user.completed_campaigns.add(completion)
+    user.save()
 
     # Optional: Update campaign's completed_by if using ManyToManyField
     campaign.completed_by.add(user)
