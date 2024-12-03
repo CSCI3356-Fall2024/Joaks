@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import EditProfile, CreateCampaign, CreateUpcomingEvents, CreateMilestone, CreateReward
-from .models import Campaign, UpcomingEvents
+from .models import Campaign, UpcomingEvents, CampaignCompletion
 from .models import CustomUser
 from .models import UpcomingEvents
 from .models import Milestone
@@ -15,6 +15,7 @@ from .models import RewardRedemption
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db import models
+from django.utils.timezone import now
 
 logger = logging.getLogger('campaign_logger')
 
@@ -36,26 +37,6 @@ def actions_view(request, *args, **kwargs):
     return render(request, 'actions.html', {})
 
 
-def rewards_view(request, *args, **kwargs):
-    print(args, kwargs)
-    print(request.user)
-
-    today = date.today()
-
-    active_rewards = Reward.objects.filter(start_date__lte=today, end_date__gte=today)
-    inactive_rewards = Reward.objects.exclude(id__in=active_rewards)
-
-    # Check if the user is a supervisor
-    if request.user.is_authenticated and request.user.role == 'supervisor':
-        template = 'supervisor_rewards.html'
-    else:
-        template = 'rewards.html'
-
-    return render(request, template, {
-        'active_rewards': active_rewards,
-        'inactive_rewards': inactive_rewards,
-    })
-
 
 def rewards_view(request, *args, **kwargs):
     print(args, kwargs)
@@ -70,8 +51,8 @@ def rewards_view(request, *args, **kwargs):
     # Check if the user is authenticated and retrieve their points
     user_points = request.user.points_to_redeem if request.user.is_authenticated else 0
 
-    # Separate active rewards into available and unavailable based on user points
-    available_rewards = active_rewards.filter(point_value__lte=user_points)
+    # Separate active rewards into available and unavailable based on user points and quantity > 0
+    available_rewards = active_rewards.filter(point_value__lte=user_points, quantity__gt=0)
     unavailable_rewards = active_rewards.exclude(id__in=available_rewards)
 
     # Choose the template based on user role
@@ -474,7 +455,7 @@ def redeem_reward_view(request, reward_id):
             return redirect('rewards')
 
         # Create redemption record
-        redemption = RewardRedemption.objects.create(
+        RewardRedemption.objects.create(
             user=user,
             reward=reward,
             points_spent=reward.point_value
@@ -506,15 +487,15 @@ def reward_history_view(request):
         for redemption in redemptions
     ]
 
-    campaigns = request.user.completed_campaigns.all().values("end_date", "name", "points")
+    completed_campaigns = request.user.completed_campaigns.all().values("completion_date", "name", "points_earned")
 
     campaign_data = [
         {
-            "date": timezone.make_aware(datetime.combine(campaign["end_date"], datetime.min.time())),
-            "description": f"Completed campaign: {campaign['name']}",
-            "points": campaign["points"],
+            "date": timezone.make_aware(datetime.combine(completed_campaign['completion_date'], datetime.min.time())),
+            "description": f"Completed campaign: {completed_campaign['name']}",
+            "points": completed_campaign['points_earned'],
         }
-        for campaign in campaigns
+        for completed_campaign in completed_campaigns
     ]
 
     combined_data = sorted(
@@ -526,27 +507,45 @@ def reward_history_view(request):
     return render(request, "reward_history.html", {"transactions": combined_data})
 
 
+
 @login_required
 def complete_campaign_view(request, campaign_id):
     campaign = get_object_or_404(Campaign, id=campaign_id)
     user = request.user
 
-    # Makes sure campaign is only completed once
-    if request.user in campaign.completed_by.all():
+    # Ensure the campaign is only completed once by this user
+    if CampaignCompletion.objects.filter(user=user, campaign=campaign, status='completed').exists() and not campaign.unlimited:
         messages.error(request, 'Campaign already completed.')
         return redirect('campaign_detail', campaign_id=campaign_id)
-        
-    # Maybe functionality to make sure it is still in redepmtion time?
 
-    # Update user's points and reward quantity
+    # Optional: Add validation to ensure the campaign is still active
+    if campaign.end_date and campaign.end_date < now().date():
+        # Do something, like:
+        messages.error(request, 'This campaign is no longer active.')
+        return redirect('campaign_detail', campaign_id=campaign_id)
+
+    # Update user's points
     user.points += campaign.points
     user.points_to_redeem += campaign.points
     user.save()
+
+    # Create a CampaignCompletion record
+    completion = CampaignCompletion.objects.create(
+        user=user,
+        campaign=campaign,
+        name=campaign.name,
+        points_earned=campaign.points,
+        status='completed'  # Set to 'pending' if there's an approval process
+    )
+    user.completed_campaigns.add(completion)
+    user.save()
+
+    # Optional: Update campaign's completed_by if using ManyToManyField
     campaign.completed_by.add(user)
-    campaign.save()
 
     messages.success(request, f'Successfully completed {campaign.name}!')
     return redirect('campaign_detail', campaign_id=campaign_id)
+
 
 def supervisor_rewards_view(request):
         if request.user.role != 'supervisor':
@@ -574,4 +573,16 @@ def supervisor_reward_history_view(request):
     return render(request, 'supervisor_reward_history.html', {
         'rewards': rewards
     })
+
+@supervisor_required
+def supervisor_campaign_history_view(request):
+    # Get all campaigns and prefetch related completions
+    campaigns = Campaign.objects.prefetch_related('campaigncompletion_set', 'campaigncompletion_set__user').all()
     
+    # Attach completions to each campaign
+    for campaign in campaigns:
+        campaign.completions = campaign.campaigncompletion_set.all().order_by('-completion_date')
+    
+    return render(request, 'supervisor_campaign_history.html', {
+        'campaigns': campaigns
+    })

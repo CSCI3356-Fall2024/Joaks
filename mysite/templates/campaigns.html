@@ -46,11 +46,18 @@
 
     <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px; padding-bottom: 10px;">
         <h2 style="margin: 0;">Active Campaigns</h2>
-        <a href="/create-campaign/" 
-           style="background-color: #9a1113; color: white; padding: 8px 20px; border: none; border-radius: 5px; text-decoration: none;">
-            Create New Campaign
-        </a>
+        <div style="display: flex; gap: 10px;">
+            <a href="{% url 'supervisor_campaign_history' %}" 
+               style="background-color: #9a1113; color: white; padding: 8px 20px; border: none; border-radius: 5px; text-decoration: none;">
+                View Campaign Completion History
+            </a>
+            <a href="{% url 'create_campaign' %}" 
+               style="background-color: #9a1113; color: white; padding: 8px 20px; border: none; border-radius: 5px; text-decoration: none;">
+                Create New Campaign
+            </a>
+        </div>
     </div>
+    
     
 
     <table>

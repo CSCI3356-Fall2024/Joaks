@@ -3,7 +3,7 @@
 {% block title %}My Rewards{% endblock %}
 
 {% block content %}
-<div style="margin: auto; font-family: Arial, sans-serif; color: #333;">
+<div style="margin: auto; font-family: Arial, sans-serif; color: black;">
     <h1 style="font-size: 2.5em; border-bottom: 2px solid black; font-family: 'Oswald', sans-serif; font-optical-sizing: auto; font-style: normal; font-weight: 400; padding-bottom: 10px;">MY REWARDS</h1>
 
     <!-- User Points Section -->
@@ -93,7 +93,7 @@
     {% endif %}
 
     <!-- Unavailable Rewards -->
-    <h2 style="color: #333; margin-top: 40px; margin-bottom: 15px;">Earn More Points to Redeem</h2>
+    <h2 style="color: #333; margin-top: 40px; margin-bottom: 15px;">Unavailable Rewards</h2>
     {% if unavailable_rewards %}
         <ul style="list-style: none; padding: 0;">
             {% for reward in unavailable_rewards %}
@@ -119,15 +119,19 @@
                         ">
                     {% endif %}
                     <button disabled style="
-                        margin-top: 10px; 
-                        background-color: #ddd; 
-                        color: #666; 
-                        padding: 10px 20px; 
-                        border: none; 
-                        border-radius: 5px;
-                    ">
+                    margin-top: 10px; 
+                    background-color: #ddd; 
+                    color: #666; 
+                    padding: 10px 20px; 
+                    border: none; 
+                    border-radius: 5px;
+                ">
+                    {% if reward.quantity == 0 %}
+                        None remaining
+                    {% else %}
                         Need More Points
-                    </button>
+                    {% endif %}
+                </button>
                 </li>
             {% endfor %}
         </ul>

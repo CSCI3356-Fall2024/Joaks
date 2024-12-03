@@ -1,11 +1,8 @@
 # Joaks
 
-Delivery 5 to do:  
-- redeem rewards feature should:
-- subtract point value of reward from students' point balance
-- decrememnt the quantity of that reward remaining
-- should update student's rewards history
-- on the supervisor end: should be able to see who/when redeemed that reward 
+Delivery 6 to do:  
+- some campaigns like green2go can be redeemed more than once
+- finish student view transaction history (should see +points for completing challenges) 
 
 
 every time activate virtual environment. on mac:  
