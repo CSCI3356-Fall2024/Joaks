@@ -78,24 +78,24 @@
     
 </form>
     <div style="border: 2px solid #ddd; border-radius: 10px;">
-        {% if user.is_authenticated and user in campaign.completed_by.all and not campaign.unlimited %}
+        {% if user.is_authenticated and user in campaign.completed_by.all and not campaign.unlimited %} 
             <p>You have already completed this campaign.</p>
-        {% else %}
-            <form method="post" action="{% url 'complete_campaign' campaign.id %}" class="mt-4">
-                {% csrf_token %}
-                <button type="submit" style="
-                    background-color: #4CAF50;
-                    color: white;
-                    padding: 10px 24px;
-                    border: none;
-                    border-radius: 5px;
-                    cursor: pointer;
-                    font-size: 16px;
-                    transition: background-color 0.3s;
-                ">
-                    Complete Challenge
-                </button>
-            </form>
-        {% endif %}
+        {% elif not user.is_authenticated %}
+            <p><em>You must be logged in to complete this campaign.</em></p>
+    {% else %}
+        <form method="post" action="{% url 'complete_campaign' campaign.id %}" class="mt-4">
+            {% csrf_token %}
+            <button type="submit" style="
+                background-color: #4CAF50;
+                color: white;
+                padding: 10px 24px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 16px;">
+                Complete Campaign
+            </button>
+        </form>
+{% endif %}
     </div>
 {% endblock %}
