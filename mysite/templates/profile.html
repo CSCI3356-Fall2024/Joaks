@@ -24,7 +24,7 @@
 
     <!-- Edit Profile Link -->
     {% if request.user.email %}
-    <a href="/edit-profile/"
+    <a href="{% url 'edit_profile' %}" 
        style="background-color: #4CAF50; color: white; padding: 8px 20px; border: none; border-radius: 5px; text-decoration: none;">
         Edit Profile
     </a>
