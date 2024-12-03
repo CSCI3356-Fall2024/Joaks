@@ -153,7 +153,7 @@
     
     <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px; padding-bottom: 10px;">
         <h2 style="margin: 0;">Active Events</h2>
-        <a href="/create-event/" 
+        <a href="{% url 'create_event' %}"  
            style="background-color: #9a1113; color: white; padding: 8px 20px; border: none; border-radius: 5px; text-decoration: none;">
             Create New Event
         </a>
@@ -247,7 +247,7 @@
     
     <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px; padding-bottom: 10px;">
         <h2 style="margin: 0;">Active Milestones</h2>
-        <a href="/create-milestone/" 
+        <a href="{% url 'create_milestone' %}" 
            style="background-color: #9a1113; color: white; padding: 8px 20px; border: none; border-radius: 5px; text-decoration: none;">
             Create New Milestone
         </a>
