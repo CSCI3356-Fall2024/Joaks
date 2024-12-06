@@ -39,9 +39,6 @@ def actions_view(request, *args, **kwargs):
 
 
 def rewards_view(request, *args, **kwargs):
-    print(args, kwargs)
-    print(request.user)
-
     today = date.today()
 
     # Get active rewards based on the current date
@@ -55,6 +52,22 @@ def rewards_view(request, *args, **kwargs):
     available_rewards = active_rewards.filter(point_value__lte=user_points, quantity__gt=0)
     unavailable_rewards = active_rewards.exclude(id__in=available_rewards)
 
+    # Parse locations for each reward
+    location_dict = dict(Reward.LOCATION_CHOICES)
+    for reward in available_rewards:
+        reward.parsed_locations = [
+            (key.strip(), location_dict[key.strip()])
+            for key in reward.locations.split(',')
+            if key.strip() in location_dict
+        ]
+
+    for reward in unavailable_rewards:
+        reward.parsed_locations = [
+            (key.strip(), location_dict[key.strip()])
+            for key in reward.locations.split(',')
+            if key.strip() in location_dict
+        ]
+
     # Choose the template based on user role
     template = 'supervisor_rewards.html' if request.user.is_authenticated and request.user.role == 'supervisor' else 'rewards.html'
 
@@ -64,6 +77,8 @@ def rewards_view(request, *args, **kwargs):
         'active_rewards': active_rewards,
         'inactive_rewards': inactive_rewards,
     })
+
+
 
 def all_campaigns_view(request, *args, **kwargs):
     print(args, kwargs)
@@ -495,11 +510,18 @@ def redeem_reward_view(request, reward_id):
             messages.error(request, 'This reward is out of stock.')
             return redirect('rewards')
 
+        # Get the selected location
+        location = request.POST.get('location')
+        if location not in dict(Reward.LOCATION_CHOICES):
+            messages.error(request, 'Invalid location selected.')
+            return redirect('rewards')
+
         # Create redemption record
         RewardRedemption.objects.create(
             user=user,
             reward=reward,
-            points_spent=reward.point_value
+            points_spent=reward.point_value,
+            location=location
         )
 
         # Update user's points and reward quantity
@@ -508,10 +530,11 @@ def redeem_reward_view(request, reward_id):
         reward.quantity -= 1
         reward.save()
 
-        messages.success(request, f'Successfully redeemed {reward.name}!')
+        messages.success(request, f'Successfully redeemed {reward.name} at {dict(Reward.LOCATION_CHOICES).get(location)}!')
         return redirect('rewards')
 
     return redirect('rewards')
+
 
 @login_required
 def reward_history_view(request):
