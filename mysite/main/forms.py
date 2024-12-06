@@ -99,10 +99,28 @@ class CreateMilestone(forms.ModelForm):
 
 
 class CreateReward(forms.ModelForm):
+
+    LOCATION_CHOICES = Reward.LOCATION_CHOICES
+    locations = forms.MultipleChoiceField(
+        choices=LOCATION_CHOICES,
+        widget=forms.CheckboxSelectMultiple,
+        required=False,
+        label="OR Manually input locations",  # Custom label here
+    )
+
+    select_green2go = forms.BooleanField(
+        required=False,
+        label="Select All Green2Go Locations"
+    )
+
+  
     class Meta:
         model = Reward
-        fields = ['name', 'point_value', 'quantity', 'start_date', 'end_date', 'exchange_method', 'image']
+        fields = ['name', 'point_value', 'quantity', 'locations', 'start_date', 'end_date', 'exchange_method', 'image']
         widgets = {
             'start_date': forms.DateInput(attrs={'type': 'date'}),
             'end_date': forms.DateInput(attrs={'type': 'date'}),
         }
+
+        def clean_locations(self):
+            return ', '.join(self.cleaned_data['locations'])

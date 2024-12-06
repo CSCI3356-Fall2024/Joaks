@@ -39,7 +39,20 @@
             </div>
         </div>
 
-        
+        <!-- Locations Section -->
+        <div style="border: 2px solid #ddd; border-radius: 10px; margin-bottom: 20px;">
+            <div style="background-color: #ffd97d; padding: 8px; border-radius: 8px 8px 0 0;">
+                Locations
+            </div>
+            <div style="padding: 15px;">
+                <div style="margin-bottom: 10px;">
+                    {{ form.select_green2go.label_tag }} {{ form.select_green2go }}
+                </div>
+                <div>
+                    {{ form.locations }}
+                </div>
+            </div>
+        </div>
 
         <!-- Date Fields Container -->
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">

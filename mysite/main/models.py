@@ -111,9 +111,29 @@ class Campaign(models.Model):
         return self.name
 
 class Reward(models.Model):
+    LOCATION_CHOICES = (
+        ('BEAN', 'The Bean Counter'),
+        ('CARNEY', 'Carney Dining Room'),
+        ('CAFE129', 'Café 129'),
+        ('CHOC', 'Chocolate Bar'),
+        ('CORO', 'CoRo Café & Market'),
+        ('EAGLES', "Eagle's Nest"),
+        ('HILLSIDE', 'Hillside Café'),
+        ('LEGAL', 'Legal Grounds'),
+        ('ADDIES', "The Loft @ Addie's"),
+        ('LOWER', 'Lower Live'),
+        ('LYONS', 'Lyons Hall'),
+        ('STUART', 'Stuart Dining Hall'),
+        ('BAKERY', 'BC Bakery'),
+        ('CONCESSIONS', 'Concessions'),
+        ('MARKET', 'The Market'),
+        ('TULLY', 'Tully Cafe'),
+        ('BROOK', 'Brookline Campus Dining Hall'),
+    )
     name = models.CharField(max_length=100)  # Name of the product
     point_value = models.IntegerField()  # Point value associated with the reward
     quantity = models.IntegerField()  # How many of these rewards available
+    locations = models.CharField(max_length=255)  # Places where the campaign is available
     start_date = models.DateField()  # Reward start date
     end_date = models.DateField()  # Reward end date
     exchange_method = models.CharField(max_length=255)
@@ -133,6 +153,8 @@ class RewardRedemption(models.Model):
         ('completed', 'Completed'),
         ('cancelled', 'Cancelled')
     ], default='pending')
+    location = models.CharField(max_length=255, choices=Reward.LOCATION_CHOICES)  # Add choices for validation
+
 
     def __str__(self):
         return f"{self.user.username} - {self.reward.name} ({self.redemption_date})"

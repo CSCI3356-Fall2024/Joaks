@@ -415,30 +415,59 @@ def create_reward_view(request):
         if form.is_valid():
             reward = form.save(commit=False)
             reward.created_by = request.user
+
+            # Check `select_green2go` using cleaned_data after form validation
+            if form.cleaned_data.get('select_green2go'):
+                # Set the Green2Go locations if the checkbox is checked
+                green2go_locations = ['LOWER', 'CARNEY', 'STUART', 'ADDIES', 'EAGLES']
+                reward.locations = ', '.join(green2go_locations)
+            else:
+                # Save the user-selected locations
+                reward.locations = ', '.join(form.cleaned_data['locations'])
+
+            # Log the create action
+            logger.debug(f"Reward created by {request.user.username}: {reward.name}")
             reward.save()
-
-            # Log the creation action
-            logger.debug(f"New Reward created by {request.user.username}: {reward.name}")
-
-            return redirect('rewards')  # Redirect to the rewards list page
+            return redirect('rewards')
     else:
-        form = CreateReward()  # Initialize the form for a GET request
+        form = CreateReward()
 
     return render(request, 'create_reward.html', {'form': form})
+
+
+
+
 
 
 @supervisor_required
 def edit_reward_view(request, id):
     reward = get_object_or_404(Reward, id=id)
+
     if request.method == "POST":
         form = CreateReward(request.POST, request.FILES, instance=reward)
         if form.is_valid():
-            form.save()
+            reward = form.save(commit=False)
+            reward.created_by = request.user
+
+            # Check `select_green2go` using cleaned_data after form validation
+            if form.cleaned_data.get('select_green2go'):
+                # Set the Green2Go locations if the checkbox is checked
+                green2go_locations = ['LOWER', 'CARNEY', 'STUART', 'ADDIES', 'EAGLES']
+                reward.locations = ', '.join(green2go_locations)
+            else:
+                # Save the user-selected locations
+                reward.locations = ', '.join(form.cleaned_data['locations'])
+
+            # Log the edit action
             logger.debug(f"Reward edited by {request.user.username}: {reward.name}")
-            return redirect('supervisor_rewards')
+
+            reward.save()
+            return redirect('rewards')
     else:
         form = CreateReward(instance=reward)
+
     return render(request, 'edit_reward.html', {'form': form, 'reward': reward})
+
 
 @supervisor_required
 def delete_reward_view(request, id):
