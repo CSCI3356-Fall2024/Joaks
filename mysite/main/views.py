@@ -538,37 +538,49 @@ def redeem_reward_view(request, reward_id):
 
 @login_required
 def reward_history_view(request):
+    # Map location keys to human-readable values
+    location_dict = dict(Reward.LOCATION_CHOICES)
+    campaign_location_dict = dict(Campaign.LOCATION_CHOICES)
+
+    # Fetch redemptions with human-readable locations
     redemptions = RewardRedemption.objects.filter(user=request.user).values(
-        "redemption_date", "reward__name", "points_spent"
+        "redemption_date", "reward__name", "points_spent", "location"
     )
 
     redemption_data = [
         {
             "date": redemption["redemption_date"],
-            "description": f"Redeemed reward: {redemption['reward__name']}",
+            "description": f"Redeemed reward: {redemption['reward__name']} @ {location_dict.get(redemption['location'], 'Unknown')}",
             "points": -redemption["points_spent"],
         }
         for redemption in redemptions
     ]
 
-    completed_campaigns = request.user.completed_campaigns.all().values("completion_date", "name", "points_earned")
+    # Fetch completed campaigns with human-readable locations
+    completed_campaigns = CampaignCompletion.objects.filter(user=request.user).values(
+        "completion_date", "name", "points_earned", "location"
+    )
 
     campaign_data = [
         {
-            "date": timezone.make_aware(datetime.combine(completed_campaign['completion_date'], datetime.min.time())),
-            "description": f"Completed campaign: {completed_campaign['name']}",
-            "points": completed_campaign['points_earned'],
+            "date": timezone.make_aware(
+                datetime.combine(completed_campaign["completion_date"], datetime.min.time())
+            ),
+            "description": f"Completed campaign: {completed_campaign['name']} @ {campaign_location_dict.get(completed_campaign['location'], 'Unknown')}",
+            "points": completed_campaign["points_earned"],
         }
         for completed_campaign in completed_campaigns
     ]
 
+    # Combine and sort data
     combined_data = sorted(
         chain(redemption_data, campaign_data),
-        key=lambda x: x['date'],
-        reverse=True
+        key=lambda x: x["date"],
+        reverse=True,
     )
 
     return render(request, "reward_history.html", {"transactions": combined_data})
+
 
 
 
