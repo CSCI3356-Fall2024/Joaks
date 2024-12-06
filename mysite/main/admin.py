@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import CustomUser, Campaign, UpcomingEvents, Milestone, Reward
+from .models import CustomUser, Campaign, UpcomingEvents, Milestone, Reward, CampaignCompletion
 # Register your models here.
 
 @admin.register(CustomUser)
@@ -26,3 +26,11 @@ class UpcomingEventsAdmin(admin.ModelAdmin):
 class RewardAdmin(admin.ModelAdmin):
     list_display = ('name', 'point_value', 'quantity', 'start_date', 'end_date', 'created_by')
 
+
+
+@admin.register(CampaignCompletion)
+class CampaignCompletionAdmin(admin.ModelAdmin):
+    list_display = ('user', 'campaign', 'completion_date', 'points_earned', 'status', 'location')
+    list_filter = ('status', 'location', 'completion_date')
+    search_fields = ('user__username', 'campaign__name', 'location')
+    ordering = ('-completion_date',)

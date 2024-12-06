@@ -111,7 +111,6 @@ class Campaign(models.Model):
         return self.name
 
 class Reward(models.Model):
-    
     name = models.CharField(max_length=100)  # Name of the product
     point_value = models.IntegerField()  # Point value associated with the reward
     quantity = models.IntegerField()  # How many of these rewards available
@@ -151,7 +150,8 @@ class CampaignCompletion(models.Model):
         ('cancelled', 'Cancelled')
     ], default='pending')
     date_completed = models.DateTimeField(auto_now_add=True)
-
+    location = models.CharField(max_length=255, choices=Campaign.LOCATION_CHOICES)  # Add choices for validation
+    
     def __str__(self):
-        return f"{self.user.username} - {self.campaign.name} ({self.redemption_date})"
+        return f"{self.user.username} - {self.campaign.name} ({self.completion_date})"
 

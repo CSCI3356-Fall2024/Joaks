@@ -380,7 +380,19 @@ def delete_milestone_view(request, id):
 
 def campaign_detail(request, campaign_id):
     campaign = get_object_or_404(Campaign, id=campaign_id)
-    return render(request, 'campaign_detail.html', {'campaign': campaign})
+
+    # Split the locations into a list and trim any extra whitespace
+    available_locations = [loc.strip() for loc in campaign.locations.split(',')] if campaign.locations else []
+
+    # Filter and map to human-readable names
+    location_dict = dict(Campaign.LOCATION_CHOICES)
+    display_locations = [(key, location_dict[key]) for key in available_locations if key in location_dict]
+
+    context = {
+        'campaign': campaign,
+        'display_locations': display_locations,  # Pass only the filtered locations
+    }
+    return render(request, 'campaign_detail.html', context)
 
 def event_detail(request, event_id):
     event = get_object_or_404(UpcomingEvents, id=event_id)
@@ -520,31 +532,38 @@ def complete_campaign_view(request, campaign_id):
 
     # Optional: Add validation to ensure the campaign is still active
     if campaign.end_date and campaign.end_date < now().date():
-        # Do something, like:
         messages.error(request, 'This campaign is no longer active.')
         return redirect('campaign_detail', campaign_id=campaign_id)
 
-    # Update user's points
-    user.points += campaign.points
-    user.points_to_redeem += campaign.points
-    user.save()
+    if request.method == 'POST':
+        location = request.POST.get('location')
+        if location not in dict(Campaign.LOCATION_CHOICES):
+            messages.error(request, 'Invalid location selected.')
+            return redirect('campaign_detail', campaign_id=campaign_id)
 
-    # Create a CampaignCompletion record
-    completion = CampaignCompletion.objects.create(
-        user=user,
-        campaign=campaign,
-        name=campaign.name,
-        points_earned=campaign.points,
-        status='completed'  # Set to 'pending' if there's an approval process
-    )
-    user.completed_campaigns.add(completion)
-    user.save()
+        # Update user's points
+        user.points += campaign.points
+        user.points_to_redeem += campaign.points
+        user.save()
 
-    # Optional: Update campaign's completed_by if using ManyToManyField
-    campaign.completed_by.add(user)
+        # Create a CampaignCompletion record
+        CampaignCompletion.objects.create(
+            user=user,
+            campaign=campaign,
+            name=campaign.name,
+            points_earned=campaign.points,
+            status='completed',
+            location=location
+        )
 
-    messages.success(request, f'Successfully completed {campaign.name}!')
+        # Optional: Update campaign's completed_by if using ManyToManyField
+        campaign.completed_by.add(user)
+
+        messages.success(request, f'Successfully completed {campaign.name} at {dict(Campaign.LOCATION_CHOICES).get(location)}!')
+        return redirect('campaign_detail', campaign_id=campaign_id)
+
     return redirect('campaign_detail', campaign_id=campaign_id)
+
 
 
 def supervisor_rewards_view(request):
