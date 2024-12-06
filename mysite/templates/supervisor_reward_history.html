@@ -28,6 +28,7 @@
                                 <tr style="background-color: #f7fafc;">
                                     <th style="padding: 0.75rem; text-align: left; border-bottom: 2px solid #e2e8f0;">Student</th>
                                     <th style="padding: 0.75rem; text-align: left; border-bottom: 2px solid #e2e8f0;">Redemption Date</th>
+                                    <th style="padding: 0.75rem; text-align: left; border-bottom: 2px solid #e2e8f0;">Location</th>
                                     <th style="padding: 0.75rem; text-align: left; border-bottom: 2px solid #e2e8f0;">Status</th>
                                     <th style="padding: 0.75rem; text-align: left; border-bottom: 2px solid #e2e8f0;">Points Spent</th>
                                 </tr>
@@ -37,6 +38,8 @@
                                     <tr style="border-bottom: 1px solid #e2e8f0;">
                                         <td style="padding: 0.75rem;">{{ redemption.user.email }}</td>
                                         <td style="padding: 0.75rem;">{{ redemption.redemption_date|date:"M. d, Y H:i" }}</td>
+                                        <td style="padding: 0.75rem;">{{ redemption.location }}</td>
+
                                         <td style="padding: 0.75rem;">{{ redemption.status|title }}</td>
                                         <td style="padding: 0.75rem;">{{ redemption.points_spent }}</td>
                                     </tr>
