@@ -56,6 +56,11 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_AUTH_EXTRA_ARGUMENTS = {
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_WHITELISTED_DOMAINS = ['bc.edu']
 
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://mysite-g020.onrender.com'
+]
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
