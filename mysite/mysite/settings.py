@@ -73,9 +73,9 @@ MIDDLEWARE = [
     'social_django.middleware.SocialAuthExceptionMiddleware', # Add this line
 ]
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY='1045629783044-sqdnmj0gqn1c58nihaqk45ave7nef96f.apps.googleusercontent.com'
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'
-SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = 'https://mysite-g020.onrender.com'
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY= '1050369700588-nolj4e938q39rp0gq9r58m5u6p0fnmbn.apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'
+SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = 'https://mysite-g020.onrender.com/social-auth/complete/google-oauth2/'
 
 ROOT_URLCONF = 'mysite.urls'
 
