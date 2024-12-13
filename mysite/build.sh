@@ -6,8 +6,8 @@ set -o errexit
 pip install -r mysite/requirements.txt
 
 # Convert static asset files
-python manage.py collectstatic --no-input
+python mysite/manage.py collectstatic --no-input
 
 # Apply any outstanding database migrations
-python manage.py migrate
+python mysite/manage.py migrate
 
