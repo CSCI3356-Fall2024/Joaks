@@ -9,7 +9,7 @@ services:
     plan: free
     name: mysite
     runtime: python
-    buildCommand: "./build.sh"
+    buildCommand: "mysite/build.sh"
     startCommand: "cd mysite && python3 -m gunicorn mysite.asgi -k uvicorn.workers.UvicornWorker"
     envVars:
       - key: DATABASE_URL
