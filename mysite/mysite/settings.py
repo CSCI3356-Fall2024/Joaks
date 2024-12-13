@@ -75,7 +75,7 @@ MIDDLEWARE = [
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY='1045629783044-sqdnmj0gqn1c58nihaqk45ave7nef96f.apps.googleusercontent.com'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'
-SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = 'http://127.0.0.1:8000/social-auth/complete/google-oauth2/'
+SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = 'http://127.0.0.1:8000/social-auth/complete/google-oauth2/', 'https://mysite-g020.onrender.com'
 
 ROOT_URLCONF = 'mysite.urls'
 
