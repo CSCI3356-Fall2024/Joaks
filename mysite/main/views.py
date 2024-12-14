@@ -670,11 +670,3 @@ def supervisor_campaign_history_view(request):
         'campaigns': campaigns
     })
 
-from django.http import JsonResponse
-from django.contrib.auth import get_user_model
-
-def list_users(request):
-    User = get_user_model()
-    users = User.objects.values("username", "email")
-    return JsonResponse(list(users), safe=False)
-
