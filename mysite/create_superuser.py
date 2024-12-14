@@ -13,4 +13,4 @@ def create_superuser(username, email, password):
         print('Superuser created successfully')
 
 if __name__ == '__main__':
-    create_superuser('andrew', 'drewkallmeyer@gmail.com', 'tessa123')
+    create_superuser('andrew', 'kallmeya@bc.edu', 'tessa123')
