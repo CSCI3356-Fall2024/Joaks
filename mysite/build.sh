@@ -10,6 +10,6 @@ python mysite/manage.py collectstatic --no-input
 
 # Apply any outstanding database migrations
 python mysite/manage.py migrate && 
-python manage.py createsuperuser --no-input || 
+python mysite/manage.py createsuperuser --no-input || 
 echo "Superuser already exists"
 
