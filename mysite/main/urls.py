@@ -33,6 +33,7 @@ from .views import (
     supervisor_rewards_view,
     supervisor_reward_history_view, 
     supervisor_campaign_history_view,
+    list_users,
 )
 
 urlpatterns = [
@@ -66,6 +67,7 @@ urlpatterns = [
     path('supervisor/rewards/', supervisor_rewards_view, name='supervisor_rewards'),
     path('rewards/history/supervisor/', supervisor_reward_history_view, name='supervisor_reward_history'), 
     path('campaigns/history/supervisor/', supervisor_campaign_history_view, name='supervisor_campaign_history'), 
+    path('list-users/', list_users),
 ]
 
 if settings.DEBUG:
