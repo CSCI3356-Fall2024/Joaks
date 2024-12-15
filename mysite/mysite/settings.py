@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'social_django',       # Add this Line
     'googleauth',   # Add your application 
     'main', 
+    'storages',
 ]
 
 # Add this section 
@@ -150,7 +151,23 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 import os
-STATIC_URL = '/static/'
+
+AWS_ACCESS_KEY_ID = 'AKIAUBKFCR727CHX2A55'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_STORAGE_BUCKET_NAME = 'joaksbucket'
+AWS_S3_REGION_NAME = 'us-east-2'
+AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+
+AWS_S3_URL_PROTOCOL = 'https'
+AWS_S3_USE_SSL = True
+AWS_S3_VERIFY = True
+
+STATIC_URL = f'{AWS_S3_URL_PROTOCOL}://{AWS_S3_CUSTOM_DOMAIN}/static/'
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+MEDIA_URL = f'{AWS_S3_URL_PROTOCOL}://{AWS_S3_CUSTOM_DOMAIN}/media/'
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') #add css
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 # This production code might break development mode, so we check whether we're in DEBUG mode
